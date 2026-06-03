@@ -122,6 +122,7 @@ export default function CaseStudyDetail() {
   const navigate = useNavigate()
   const [study, setStudy] = useState(null)
   const [loadState, setLoadState] = useState('loading') // 'loading' | 'success' | 'notfound' | 'error'
+  const [isInteractive, setIsInteractive] = useState(false)
 
   const fetchStudy = async () => {
     setLoadState('loading')
@@ -214,6 +215,7 @@ export default function CaseStudyDetail() {
 
   useEffect(() => { 
     window.scrollTo(0, 0)
+    setIsInteractive(false)
     fetchStudy() 
   }, [id])
 
@@ -260,19 +262,13 @@ export default function CaseStudyDetail() {
 
   const isGoogleDriveLink = !!(study.link && study.link.includes('drive.google.com'))
 
-  // Convert Google Drive view URL to direct embed preview URL with autoplay, mute, and loop enabled
-  const getGoogleDriveEmbedUrl = (url) => {
+  const getGoogleDriveFileId = (url) => {
     if (!url) return ''
-    let embedUrl = url.replace(/\/view(\?usp=sharing)?$/, '/preview')
-                      .replace(/open\?id=/, 'file/d/')
-    if (!embedUrl.includes('/preview') && embedUrl.includes('/file/d/')) {
-      embedUrl = embedUrl.split('?')[0].replace(/\/+$/, '') + '/preview'
-    }
-    const separator = embedUrl.includes('?') ? '&' : '?'
-    return `${embedUrl}${separator}autoplay=1&mute=1&loop=1`
+    const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/)
+    return match ? match[1] : ''
   }
 
-  const googleDriveEmbedUrl = isGoogleDriveLink ? getGoogleDriveEmbedUrl(study.link) : ''
+  const driveFileId = isGoogleDriveLink ? getGoogleDriveFileId(study.link) : ''
 
   // Find direct video source URL if available (actual video files, excluding Google Drive)
   // Prefer an explicit `study.link` when provided (external host), fall back to
@@ -289,11 +285,15 @@ export default function CaseStudyDetail() {
     }
   }
 
+  const directVideoSrc = driveFileId 
+    ? `https://docs.google.com/uc?export=download&id=${driveFileId}` 
+    : videoSrc
+
   // Determine if this is a video case study based on category or project type
   const isVideoCategory = ['reel', 'vlog', 'youtube', 'video'].some(kw => study.category?.toLowerCase().includes(kw)) ||
     ['reels', 'yt videos', 'vlogs'].includes(study.project_type?.toLowerCase())
   
-  const isVideoFile = !!videoSrc
+  const isVideoFile = !!videoSrc // Only direct playable video files (exclude Google Drive from native video element)
 
   return (
     <section className="pt-28 pb-20">
@@ -313,64 +313,79 @@ export default function CaseStudyDetail() {
           </button>
         </motion.div>
 
-        {/* Hero Image */}
+        {/* Hero Image / Video direct preview */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-3xl overflow-hidden mb-12 aspect-21/9 border border-white/10"
+          className="relative rounded-3xl overflow-hidden mb-12 aspect-21/9 border border-white/10 group cursor-pointer"
         >
-          {isVideoCategory && (
-            isGoogleDriveLink ? (
-              <img 
-                src={heroImage} 
-                alt="" 
-                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" 
+          {study.link && (
+            <a 
+              href={study.link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-xs"
+              aria-label={`Open ${study.title}`}
+            >
+              <div className="w-14 h-14 rounded-full bg-cyan-400 text-black flex items-center justify-center shadow-[0_0_25px_rgba(0,240,255,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300">
+                {study.project_type === 'Websites' ? (
+                  <ExternalLink size={22} className="text-black" />
+                ) : (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-black ml-0.5">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                )}
+              </div>
+              <span className="text-sm font-black uppercase tracking-wider text-white">
+                {study.project_type === 'Websites' ? 'Visit Website' : 'Watch Video'}
+              </span>
+              <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">Opens in a new tab</span>
+            </a>
+          )}
+
+          {isGoogleDriveLink ? (
+            <div className="absolute inset-0 w-full h-full z-10 pointer-events-none select-none bg-black">
+              <iframe
+                src={`https://drive.google.com/file/d/${driveFileId}/preview?autoplay=1&mute=1`}
+                className="w-full h-full border-0 scale-102"
+                allow="autoplay; encrypted-media"
+                title={study.title}
               />
-            ) : isVideoFile ? (
-              <video 
-                src={videoSrc}
+            </div>
+          ) : isVideoFile ? (
+            <>
+              {isVideoCategory && (
+                <video 
+                  src={directVideoSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" 
+                />
+              )}
+              <video
+                src={directVideoSrc}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" 
+                className={`relative z-10 w-full h-full transition-transform duration-700 group-hover:scale-102 ${isVideoCategory ? 'object-contain' : 'object-cover'}`}
               />
-            ) : (
-              <img 
-                src={heroImage} 
-                alt="" 
-                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" 
-              />
-            )
-          )}
-          {isGoogleDriveLink ? (
-            <iframe
-              src={googleDriveEmbedUrl}
-              className="relative z-10 w-full h-full border-0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
-          ) : isVideoFile ? (
-            <video
-              src={videoSrc}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className={`relative z-10 w-full h-full ${isVideoCategory ? 'object-contain' : 'object-cover'}`}
-            />
+            </>
           ) : (
             <img
               src={heroImage}
               alt={study.title}
-              className={`relative z-10 w-full h-full ${isVideoCategory ? 'object-contain' : 'object-cover'}`}
+              className={`relative z-10 w-full h-full transition-transform duration-700 group-hover:scale-102 ${isVideoCategory ? 'object-contain' : 'object-cover'}`}
             />
           )}
-          <div className="absolute inset-0 bg-linear-to-t from-(--bg-deep) via-transparent to-transparent z-20 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 p-8 lg:p-12 z-30">
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-[var(--bg-deep)]/40 to-transparent z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
+          <div className="absolute bottom-0 left-0 p-8 lg:p-12 z-30 pointer-events-none">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 mb-3 block">{study.category}</span>
-            <h1 className="text-3xl lg:text-5xl font-black" style={{ color: 'var(--text-primary)' }}>{study.title}</h1>
+            <h1 className="text-3xl lg:text-5xl font-black group-hover:text-cyan-400 transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>{study.title}</h1>
           </div>
         </motion.div>
 
@@ -441,51 +456,20 @@ export default function CaseStudyDetail() {
             </div>
 
             <div className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-3">
-              {study.project_type === 'Websites' && study.link ? (
-                <div className="flex flex-col gap-3">
-                  <div className="w-full aspect-video rounded-xl overflow-hidden border border-white/10 bg-white/5 relative group">
-                    <iframe 
-                      src={study.link} 
-                      width="100%" 
-                      height="100%" 
-                      title={study.title}
-                      style={{ border: 'none' }}
-                    ></iframe>
-                  </div>
-                  <a
-                    href={study.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold bg-cyan-400 text-black hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all"
-                  >
-                    <ExternalLink size={14} />
-                    Open Website in New Tab
-                  </a>
-                </div>
-              ) : study.project_type === 'Websites' ? (
+              {study.link && (
                 <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold transition-all bg-white/5 border border-white/10 text-gray-500 cursor-not-allowed"
-                >
-                  <ExternalLink size={14} />
-                  Website Not Available
-                </a>
-              ) : null}
-              {['Reels', 'YT Videos', 'Vlogs'].includes(study.project_type) && (study.link || study.project_image?.match(/\.(mp4|webm|ogg)$/)) && (
-                <a
-                  href={study.project_image?.match(/\.(mp4|webm|ogg)$/) ? study.project_image : study.link}
+                  href={study.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold bg-cyan-400 text-black hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold bg-cyan-400 text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-[1.01] transition-all cursor-pointer"
                 >
-                  <ExternalLink size={14} />
-                  Watch Video
+                  <ExternalLink size={16} />
+                  {study.project_type === 'Websites' ? 'Visit Live Site' : 'Watch Full Video'}
                 </a>
               )}
               <Link
                 to="/get-started"
-                className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-all text-white hover:bg-cyan-400/5 mt-2"
+                className={`w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-all text-white hover:bg-cyan-400/5 ${study.link ? '' : 'mt-2'}`}
               >
                 Start a Similar Project
               </Link>

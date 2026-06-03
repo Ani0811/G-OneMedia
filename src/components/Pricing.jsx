@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, Sparkles, Zap, Building2, Code, Video, Bot, TrendingUp } from 'lucide-react'
+import { Check, Sparkles, Zap, Building2, Layout, Video, Cpu, Target } from 'lucide-react'
 import PaymentModal from './PaymentModal'
 
 const pricingData = {
   'Websites & Apps': {
-    icon: Code,
+    icon: Layout,
     packages: [
       {
         name: 'Starter', icon: Sparkles,
@@ -57,7 +57,7 @@ const pricingData = {
     ]
   },
   'AI Agents': {
-    icon: Bot,
+    icon: Cpu,
     packages: [
       {
         name: 'Basic Bot', icon: Sparkles,
@@ -83,7 +83,7 @@ const pricingData = {
     ]
   },
   'Digital Marketing': {
-    icon: TrendingUp,
+    icon: Target,
     packages: [
       {
         name: 'Launch', icon: Sparkles,

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Search, Palette, Video, Rocket, CheckCircle } from 'lucide-react'
+import { Search, Palette, Clapperboard, Rocket, CheckCircle } from 'lucide-react'
 
 const steps = [
   {
@@ -16,7 +16,7 @@ const steps = [
     details: ['UI/UX wireframing', 'Design system creation', 'Responsive development', 'Code reviews'],
   },
   {
-    icon: Video,
+    icon: Clapperboard,
     title: 'Content & Media',
     description: 'Engaging video content, brand assets, and marketing collateral crafted for your brand.',
     details: ['Video production', 'Motion graphics', 'Brand guidelines', 'Social media assets'],

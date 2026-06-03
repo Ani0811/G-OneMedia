@@ -4,7 +4,7 @@ import { ArrowRight, Instagram, Linkedin, Youtube, Download, Calendar } from 'lu
 
 export default function Hero({ onScheduleCall }) {
   return (
-    <section className="relative overflow-hidden min-h-screen flex items-center pt-24 pb-8">
+    <section className="relative overflow-hidden min-h-[82vh] lg:min-h-[85vh] flex items-center pt-24 pb-4">
       {/* Background Ambient Glow */}
       <div className="absolute top-0 left-1/4 w-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10" />
       <div className="absolute bottom-0 right-1/4 w-[400px] bg-fuchsia-500/10 rounded-full blur-[120px] -z-10" />
@@ -56,11 +56,11 @@ export default function Hero({ onScheduleCall }) {
             className="flex flex-col justify-center order-2 lg:order-1"
           >
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter" style={{ color: 'var(--text-primary)' }}>
-              We help businesses grow with <span className="gradient-text">high-converting</span> websites
+              We Help Businesses Grow with <span className="gradient-text">High-Converting</span> Websites
             </h1>
 
             <p className="text-base md:text-lg mb-8 leading-relaxed max-w-130" style={{ color: 'var(--text-secondary)' }}>
-              G-One Media bridges the gap between sophisticated engineering and compelling visual narratives. We build digital ecosystems designed to capture attention and convert audiences.
+              G-One Media bridges the gap between Sophisticated Engineering and Compelling Visual Narratives. We design and build elite Digital Ecosystems engineered to capture attention, command authority, and accelerate business growth.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">

@@ -240,3 +240,15 @@ section {
   scrollbar-width: none;  /* Firefox */
 }
 
+/* Website Preview Auto-Scroll Simulation */
+@keyframes autoScrollPreview {
+  0% { transform: translateY(0); }
+  45% { transform: translateY(-50%); }
+  55% { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+
+.animate-scroll-preview {
+  animation: autoScrollPreview 25s ease-in-out infinite;
+}
+

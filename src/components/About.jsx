@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Code, Video, Linkedin, Github, Mail, Instagram, Youtube } from 'lucide-react'
+import { Terminal, Camera, Linkedin, Github, Mail, Instagram, Youtube } from 'lucide-react'
 
 const founders = [
   {
     slug: 'anirudha',
     name: 'Anirudha Basu Thakur',
     role: 'Co-Founder & Lead Engineer',
-    icon: Code,
+    icon: Terminal,
     image: 'Anirudha.jpeg',
     color: 'cyan',
     email: 'anirudha.basuthakur@gmail.com',
@@ -21,7 +21,7 @@ const founders = [
     slug: 'vasudev',
     name: 'Vasudev Sharma',
     role: 'Founder & Agency Owner',
-    icon: Video,
+    icon: Camera,
     image: 'Vasudev.jpeg',
     color: 'fuchsia',
     email: 'vasudevsharma997@gmail.com',

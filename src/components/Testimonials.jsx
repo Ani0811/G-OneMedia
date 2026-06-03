@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Star, ArrowRight } from 'lucide-react'
+import { Star, ArrowRight, ShieldCheck, Quote } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
@@ -87,26 +87,35 @@ export default function Testimonials() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="glass-card p-10"
+                  className="glass-card p-10 relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300"
                 >
-                  <div className="mb-6">
-                    <StarDisplay rating={t.rating} />
+                  {/* Quote Accent */}
+                  <div className="absolute top-8 right-8 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
+                    <Quote size={48} />
                   </div>
 
-                  <p className="text-lg font-medium leading-relaxed mb-8 italic" style={{ color: 'var(--text-primary)' }}>
+                  <div className="mb-6 flex items-center justify-between relative z-10">
+                    <StarDisplay rating={t.rating} />
+                    <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                      <ShieldCheck size={10} className="text-emerald-400" />
+                      Verified
+                    </span>
+                  </div>
+
+                  <p className="text-base leading-relaxed mb-8 italic relative z-10" style={{ color: 'var(--text-primary)' }}>
                     "{t.review}"
                   </p>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 relative z-10">
                     {t.image_url ? (
                       <img
                         src={t.image_url}
                         alt={t.name}
                         loading="lazy"
-                        className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-500/20"
+                        className="w-12 h-12 rounded-full object-cover ring-2 ring-cyan-400/20 group-hover:ring-cyan-400/50 transition-all duration-300"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-purple-500/20"
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-cyan-400/20 group-hover:ring-cyan-400/50 transition-all duration-300"
                         style={{ background: 'var(--bg-secondary)', color: 'var(--accent-blue)' }}>
                         {initials}
                       </div>
@@ -114,7 +123,7 @@ export default function Testimonials() {
                     <div>
                       <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{t.name}</h4>
                       {t.role && (
-                        <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
+                        <p className="text-[11px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
                       )}
                     </div>
                   </div>

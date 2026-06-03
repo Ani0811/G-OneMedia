@@ -67,6 +67,17 @@ export default function App() {
   const handleComplete = useCallback(() => setLoading(false), [])
 
   useEffect(() => {
+    // Wake up backend server to handle cold start delays
+    const API_BASE = import.meta.env.DEV
+      ? 'http://localhost:3001'
+      : (import.meta.env.VITE_API_BACKEND_URL || '')
+    if (API_BASE) {
+      console.log('[API Warmup] Pinged backend base URL to warm it up:', API_BASE);
+      fetch(API_BASE.replace(/\/$/, '')).catch(() => {})
+    }
+  }, [])
+
+  useEffect(() => {
     if (!loading) {
       trackPageView(location.pathname + location.search + location.hash)
     }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, Upload, X, CheckCircle, ChevronLeft, ChevronRight, MessageSquarePlus, Loader2, AlertCircle, ArrowLeft, Pencil, Trash2 } from 'lucide-react'
+import { Star, Upload, X, CheckCircle, ChevronLeft, ChevronRight, MessageSquarePlus, Loader2, AlertCircle, ArrowLeft, Pencil, Trash2, ShieldCheck, Quote } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
@@ -125,23 +125,34 @@ function ReviewCard({ review, index, isOwnReview, onEdit, onDelete }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, duration: 0.4 }}
-      className="glass-card p-8 flex flex-col h-full relative group"
+      className="glass-card p-8 flex flex-col h-full relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300"
     >
+      {/* Quote Accent */}
+      <div className="absolute top-6 right-6 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
+        <Quote size={40} />
+      </div>
+
       {/* Stars & Actions */}
-      <div className="flex justify-between items-start mb-5">
-        <StarDisplay rating={review.rating} />
+      <div className="flex justify-between items-start mb-5 relative z-10">
+        <div className="flex items-center gap-3">
+          <StarDisplay rating={review.rating} />
+          <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/85 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+            <ShieldCheck size={9} className="text-emerald-400" />
+            Verified Client
+          </span>
+        </div>
         {isOwnReview && (
           <div className="flex gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
             <button
               onClick={() => onEdit(review)}
-              className="p-1.5 rounded-lg border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-colors bg-white/5"
+              className="p-1.5 rounded-lg border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-colors bg-white/5 cursor-pointer"
               title="Edit Review"
             >
               <Pencil size={12} />
             </button>
             <button
               onClick={() => onDelete(review.id)}
-              className="p-1.5 rounded-lg border border-white/10 hover:border-red-500 hover:text-red-400 transition-colors bg-white/5"
+              className="p-1.5 rounded-lg border border-white/10 hover:border-red-500 hover:text-red-400 transition-colors bg-white/5 cursor-pointer"
               title="Delete Review"
             >
               <Trash2 size={12} />
@@ -151,12 +162,12 @@ function ReviewCard({ review, index, isOwnReview, onEdit, onDelete }) {
       </div>
 
       {/* Review text */}
-      <p className="text-base leading-relaxed mb-8 flex-1 italic" style={{ color: 'var(--text-primary)' }}>
+      <p className="text-base leading-relaxed mb-8 flex-1 italic relative z-10" style={{ color: 'var(--text-primary)' }}>
         "{review.review}"
       </p>
 
       {/* Author */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 relative z-10">
         <LazyImage
           src={review.image_url}
           alt={review.name}
@@ -167,7 +178,7 @@ function ReviewCard({ review, index, isOwnReview, onEdit, onDelete }) {
         <div>
           <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{review.name}</p>
           {review.role && (
-            <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-[11px] font-semibold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>
               {review.role}
             </p>
           )}
@@ -259,6 +270,7 @@ function ReviewForm({ onSuccess, editReview }) {
             rating: form.rating,
             review: form.review.trim(),
             image_url,
+            is_approved: false, // require re-approval after edits
           })
           .eq('id', editReview.id)
 
@@ -273,6 +285,7 @@ function ReviewForm({ onSuccess, editReview }) {
             rating: form.rating,
             review: form.review.trim(),
             image_url,
+            is_approved: false, // require approval before listing
           }])
           .select()
 
@@ -696,7 +709,9 @@ export default function Reviews() {
               >
                 <CheckCircle size={18} />
                 <span className="font-semibold">
-                  {editingReview ? 'Your review has been updated successfully.' : 'Thank you! Your review has been submitted successfully.'}
+                  {editingReview 
+                    ? 'Your review has been updated and is pending moderation.' 
+                    : 'Thank you! Your review has been submitted and will appear publicly once approved by our team.'}
                 </span>
               </motion.div>
             )}

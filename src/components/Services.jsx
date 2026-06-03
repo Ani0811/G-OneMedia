@@ -1,31 +1,35 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Code2, Video, Rocket, Bot } from 'lucide-react'
+import { Code2, Film, Bot, TrendingUp, ArrowRight } from 'lucide-react'
 
 const services = [
   {
     icon: Code2,
     title: 'Web Engineering',
     slug: 'web-engineering',
-    description: 'High-performance, scalable web solutions built with cutting-edge tech stacks for maximum speed and security.'
+    description: 'High-performance, scalable web solutions built with cutting-edge tech stacks for maximum speed and security.',
+    bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop'
   },
   {
     icon: Bot,
     title: 'AI Agents',
     slug: 'ai-agents',
-    description: 'Custom AI solutions and intelligent agents designed to automate workflows and enhance user interaction through natural language processing.'
+    description: 'Custom AI solutions and intelligent agents designed to automate workflows and enhance user interaction through natural language processing.',
+    bgImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop'
   },
   {
-    icon: Video,
+    icon: Film,
     title: 'Content Creation',
     slug: 'content-creation',
-    description: 'Cinematic storytelling and professional video production that captures your brand essence and engages audiences.'
+    description: 'Cinematic storytelling and professional video production that captures your brand essence and engages audiences.',
+    bgImage: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop'
   },
   {
-    icon: Rocket,
+    icon: TrendingUp,
     title: 'Digital Consultation',
     slug: 'digital-consultation',
-    description: 'Data-driven growth strategies and marketing automation to scale your reach and maximize conversion rates.'
+    description: 'Data-driven growth strategies and marketing automation to scale your reach and maximize conversion rates.',
+    bgImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
   }
 ]
 
@@ -33,7 +37,7 @@ export default function Services() {
   const navigate = useNavigate()
 
   return (
-    <section id="services" className="relative py-24">
+    <section id="services" className="relative pt-12 pb-24">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 z-10" style={{ backgroundColor: 'var(--bg-deep)', opacity: 0.85 }} />
@@ -67,8 +71,17 @@ export default function Services() {
               onClick={() => navigate(`/services/${service.slug}`)}
               className="glass-card p-10 relative overflow-hidden group cursor-pointer hover:ring-1 hover:ring-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all duration-300"
             >
+              {/* Profound background image */}
+              <div 
+                className="absolute inset-0 -z-20 bg-cover bg-center opacity-15 dark:opacity-20 group-hover:opacity-35 dark:group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 pointer-events-none"
+                style={{ backgroundImage: `url(${service.bgImage})` }}
+              />
+
+              {/* Theme-aware gradient overlay for maximum readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-[var(--bg-deep)]/85 to-[var(--bg-deep)]/20 opacity-90 group-hover:opacity-80 transition-opacity duration-500 -z-10 pointer-events-none" />
+
               {/* Hover highlight background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
 
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid var(--border-subtle)', boxShadow: '0 0 15px rgba(0,240,255,0.2)' }}>

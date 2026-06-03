@@ -2,9 +2,11 @@ import { motion } from 'framer-motion'
 import { Instagram, Linkedin, Youtube, Mail, MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
 import LegalModal from './LegalModal'
 
 export default function Footer() {
+  const { theme } = useTheme()
   const currentYear = new Date().getFullYear()
   const location = useLocation()
   const navigate = useNavigate()
@@ -71,6 +73,7 @@ export default function Footer() {
                 src={`${import.meta.env.BASE_URL}G-One.png`.replace(/\/+/g, '/')} 
                 alt="G-One Media Logo" 
                 className="h-12 w-44 object-contain object-left block origin-left" 
+                style={{ filter: theme === 'light' ? 'invert(1)' : 'none' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.parentElement.innerText = 'G-One Media';

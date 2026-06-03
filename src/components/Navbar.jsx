@@ -109,6 +109,7 @@ export default function Navbar({ onScheduleCall }) {
             src={`${import.meta.env.BASE_URL}G-One.png`.replace(/\/+/g, '/')} 
             alt="G-One Media Logo" 
             className="h-10 w-36 object-contain object-left block relative z-10 origin-left" 
+            style={{ filter: theme === 'light' ? 'invert(1)' : 'none' }}
             onError={(e) => {
               console.error("Logo failed to load", e.target.src);
               e.target.style.display = 'none';

@@ -30,7 +30,7 @@ async function main() {
       rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
       review TEXT NOT NULL,
       image_url TEXT,
-      is_approved BOOLEAN DEFAULT TRUE
+      is_approved BOOLEAN DEFAULT FALSE
     );
   `);
 
@@ -47,7 +47,7 @@ async function main() {
     CREATE POLICY "Public read approved reviews"
       ON reviews FOR SELECT
       TO public
-      USING (true);
+      USING (is_approved = true);
   `);
 
   await client.query(`

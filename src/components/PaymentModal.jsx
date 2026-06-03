@@ -26,17 +26,6 @@ export default function PaymentModal({ isOpen, onClose, defaultAmount, planName 
     }
   }, [isOpen])
 
-  useEffect(() => {
-    // Dynamically load Razorpay script
-    if (isOpen && !document.getElementById('razorpay-checkout-js')) {
-      const script = document.createElement('script')
-      script.id = 'razorpay-checkout-js'
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-      script.async = true
-      document.body.appendChild(script)
-    }
-  }, [isOpen])
-
   const handlePayment = async (e) => {
     e.preventDefault()
 
@@ -108,6 +97,22 @@ export default function PaymentModal({ isOpen, onClose, defaultAmount, planName 
         theme: {
           color: '#06b6d4'
         }
+      }
+
+      // Check if Razorpay is loaded; if not, load it as fallback dynamically
+      if (!window.Razorpay) {
+        console.log('[Razorpay] SDK not yet initialized. Triggering on-demand fallback loading...');
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+          script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+          script.async = true
+          script.onload = () => {
+            console.log('[Razorpay] SDK loaded successfully via fallback.');
+            resolve();
+          }
+          script.onerror = () => reject(new Error('Razorpay SDK failed to load. Please check your internet connection.'))
+          document.body.appendChild(script)
+        })
       }
 
       const rzp = new window.Razorpay(options)
