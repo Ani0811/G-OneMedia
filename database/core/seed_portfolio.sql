@@ -8,6 +8,7 @@ truncate table portfolio_projects cascade;
 
 insert into portfolio_projects (title, type, category, description, image, link, case_study_slug, sort_order)
 values
+  (
     'FoodieFrenzy SaaS',
     'Websites',
     'Food SaaS • Full Stack',
@@ -166,5 +167,15 @@ values
     'https://drive.google.com/file/d/1_IgSdGUY0II3z8k82hjgPOfPhVaG4EGB/view',
     'cinematic-showcase',
     25
+  ),
+  (
+    'Cinematic Showcase II',
+    'Reels',
+    'IG Reels • Showcase',
+    'A premium cinematic short-form highlight reel showcasing advanced video editing and post-production techniques.',
+    '/Portfolio_Videos/Portfolio2.jpeg',
+    'https://drive.google.com/file/d/1z_KV3aRscN8YgKBaziwKGFWtOSGtcpD4/view',
+    'cinematic-showcase-2',
+    26
   )
 on conflict do nothing;

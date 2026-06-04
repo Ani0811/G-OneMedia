@@ -252,6 +252,21 @@ values
       {"label": "Engagement", "value": "+60%"},
       {"label": "Audience Retention", "value": "82%"}
     ]'::jsonb
+  ),
+  (
+    'cinematic-showcase-2',
+    'Cinematic Showcase II',
+    'IG Reels • Showcase',
+    '/Portfolio_Videos/Portfolio2.jpeg',
+    'A high-impact cinematic showcase highlighting premium editing techniques, color grading, and dynamic sound design.',
+    'Capturing the viewer''s interest within the first seconds and retaining engagement through fast pacing and creative transitions.',
+    'We developed a high-tempo sequence utilizing speed ramping, match cuts, custom typography overlays, and immersive sound effects.',
+    array['Premiere Pro', 'After Effects', 'DaVinci Resolve'],
+    '[
+      {"label": "Views", "value": "2.0M+"},
+      {"label": "Engagement", "value": "+75%"},
+      {"label": "Audience Retention", "value": "85%"}
+    ]'::jsonb
   )
 on conflict (slug) do update
   set title      = excluded.title,
