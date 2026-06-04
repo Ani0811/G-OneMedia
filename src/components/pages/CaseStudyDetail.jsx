@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink, TrendingUp, Users, Zap, Clock, AlertCircle, RefreshCw } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
@@ -129,6 +129,26 @@ export default function CaseStudyDetail() {
   const [study, setStudy] = useState(null)
   const [loadState, setLoadState] = useState('loading') // 'loading' | 'success' | 'notfound' | 'error'
   const [isInteractive, setIsInteractive] = useState(false)
+  const bgVideoRef = useRef(null)
+  const fgVideoRef = useRef(null)
+
+  const handleFgPlay = () => {
+    if (bgVideoRef.current) bgVideoRef.current.play()
+  }
+
+  const handleFgPause = () => {
+    if (bgVideoRef.current) bgVideoRef.current.pause()
+  }
+
+  const handleFgClick = (e) => {
+    e.stopPropagation()
+    if (!fgVideoRef.current) return
+    if (fgVideoRef.current.paused) {
+      fgVideoRef.current.play()
+    } else {
+      fgVideoRef.current.pause()
+    }
+  }
 
   const fetchStudy = async () => {
     setLoadState('loading')
@@ -324,36 +344,30 @@ export default function CaseStudyDetail() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-3xl overflow-hidden mb-12 aspect-21/9 border border-[var(--border-subtle)] group cursor-pointer"
+          className="relative rounded-3xl overflow-hidden mb-12 aspect-21/9 border border-[var(--border-subtle)] group cursor-pointer bg-black"
           onClick={() => {
-            if (study.link) {
+            if (study.link && study.project_type === 'Websites') {
               window.open(ensureAbsoluteUrl(study.link), '_blank', 'noopener,noreferrer')
             }
           }}
         >
-          {study.link && (
+          {study.link && study.project_type === 'Websites' && (
             <div 
               className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-xs"
               aria-label={`Open ${study.title}`}
             >
               <div className="w-14 h-14 rounded-full bg-cyan-400 text-black flex items-center justify-center shadow-[0_0_25px_rgba(0,240,255,0.4)] transform scale-90 group-hover:scale-100 transition-all duration-300">
-                {study.project_type === 'Websites' ? (
-                  <ExternalLink size={22} className="text-black" />
-                ) : (
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-black ml-0.5">
-                    <polygon points="5 3 19 12 5 21 5 3" />
-                  </svg>
-                )}
+                <ExternalLink size={22} className="text-black" />
               </div>
               <span className="text-sm font-black uppercase tracking-wider text-white">
-                {study.project_type === 'Websites' ? 'Visit Website' : 'Watch Video'}
+                Visit Website
               </span>
               <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">Opens in a new tab</span>
             </div>
           )}
 
           {isGoogleDriveLink ? (
-            <div className="absolute inset-0 w-full h-full z-10 pointer-events-none select-none bg-black">
+            <div className="absolute inset-0 w-full h-full z-10 bg-black">
               <iframe
                 src={`https://drive.google.com/file/d/${driveFileId}/preview?autoplay=1&mute=1`}
                 className="w-full h-full border-0 scale-102"
@@ -365,6 +379,7 @@ export default function CaseStudyDetail() {
             <>
               {isVideoCategory && (
                 <video 
+                  ref={bgVideoRef}
                   src={directVideoSrc}
                   autoPlay
                   loop
@@ -374,11 +389,16 @@ export default function CaseStudyDetail() {
                 />
               )}
               <video
+                ref={fgVideoRef}
                 src={directVideoSrc}
                 autoPlay
                 loop
                 muted
                 playsInline
+                controls
+                onPlay={handleFgPlay}
+                onPause={handleFgPause}
+                onClick={handleFgClick}
                 className={`relative z-10 w-full h-full transition-transform duration-700 group-hover:scale-102 ${isVideoCategory ? 'object-contain' : 'object-cover'}`}
               />
             </>

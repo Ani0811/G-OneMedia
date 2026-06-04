@@ -131,6 +131,7 @@ h1, h2, h3, h4 {
 .gradient-text {
   background: var(--accent-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
   padding-bottom: 0.15em; /* Prevents clipping of descenders like 'g' */
@@ -250,5 +251,57 @@ section {
 
 .animate-scroll-preview {
   animation: autoScrollPreview 25s ease-in-out infinite;
+}
+
+/* Animated Gradient for Heading (Light/Vibrant) */
+.w-gradient-animated {
+  background: linear-gradient(120deg, #ff007f, #ffd700, #00f0ff, #ff007f);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  animation: w-glow 6s ease infinite;
+}
+
+@keyframes w-glow {
+  0% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.5));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.7));
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.5));
+  }
+}
+
+/* Animated Gradient for Heading (Darker/Subtle) */
+.w-gradient-animated-dark {
+  background: linear-gradient(120deg, #4a0072, #9d4edd, #0077b6, #4a0072);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  animation: w-glow-dark 6s ease infinite;
+}
+
+@keyframes w-glow-dark {
+  0% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 5px rgba(74, 0, 114, 0.3));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.5));
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 5px rgba(74, 0, 114, 0.3));
+  }
 }
 
