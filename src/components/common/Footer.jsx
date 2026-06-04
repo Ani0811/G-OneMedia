@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Instagram, Linkedin, Youtube, Mail, MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from '../../context/ThemeContext'
 import LegalModal from './LegalModal'
 
 export default function Footer() {

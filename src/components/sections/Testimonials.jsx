@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Star, ArrowRight, ShieldCheck, Quote } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
 function StarDisplay({ rating }) {

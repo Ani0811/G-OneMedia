@@ -2,7 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ExternalLink, Play, ChevronLeft, ChevronRight, AlertCircle, RefreshCw } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
+
+const ensureAbsoluteUrl = (url) => {
+  if (!url) return ''
+  if (/^https?:\/\//i.test(url)) return url
+  return `https://${url}`
+}
 
 const categories = ['All', 'Websites', 'AI Agents', 'Videos']
 const videoSubCategories = ['All Videos', 'Reels', 'YT Videos', 'Vlogs']
@@ -279,7 +285,7 @@ export default function Portfolio() {
                     href={
                       (project.case_study_slug || isVideoProject(project))
                         ? `/portfolio/${project.case_study_slug || project.id}`
-                        : (project.link || '#')
+                        : (ensureAbsoluteUrl(project.link) || '#')
                     }
                     target={
                       !(project.case_study_slug || isVideoProject(project)) && project.link

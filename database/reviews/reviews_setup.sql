@@ -32,16 +32,16 @@ CREATE POLICY "Public can submit reviews"
   ON reviews FOR INSERT
   WITH CHECK (TRUE);
 
--- Anyone can update a review (to edit their reviews)
-CREATE POLICY "Public can update reviews"
+-- Only authorized admin emails can update reviews
+CREATE POLICY "Admins can update reviews"
   ON reviews FOR UPDATE
-  USING (TRUE)
-  WITH CHECK (TRUE);
+  USING (auth.jwt() ->> 'email' IN ('anirudha.basuthakur@gmail.com', 'vasudevsharma997@gmail.com'))
+  WITH CHECK (auth.jwt() ->> 'email' IN ('anirudha.basuthakur@gmail.com', 'vasudevsharma997@gmail.com'));
 
--- Anyone can delete a review (to delete their reviews)
-CREATE POLICY "Public can delete reviews"
+-- Only authorized admin emails can delete reviews
+CREATE POLICY "Admins can delete reviews"
   ON reviews FOR DELETE
-  USING (TRUE);
+  USING (auth.jwt() ->> 'email' IN ('anirudha.basuthakur@gmail.com', 'vasudevsharma997@gmail.com'));
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 4. Storage bucket: review-avatars (run separately in Supabase Storage UI

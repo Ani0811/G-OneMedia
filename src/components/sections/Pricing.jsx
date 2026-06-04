@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, Sparkles, Zap, Building2, Layout, Video, Cpu, Target } from 'lucide-react'
-import PaymentModal from './PaymentModal'
+import PaymentModal from '../features/PaymentModal'
 
 const pricingData = {
   'Websites & Apps': {

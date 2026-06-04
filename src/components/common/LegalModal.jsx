@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Shield, FileText, Cookie } from 'lucide-react'
 import { useEffect } from 'react'
-import { deleteCookie } from '../utils/cookies'
+import { deleteCookie } from '../../utils/cookies'
 
 export default function LegalModal({ isOpen, onClose, type }) {
   useEffect(() => {

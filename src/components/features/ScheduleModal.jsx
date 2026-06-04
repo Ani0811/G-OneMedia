@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Calendar, User, Mail, Briefcase, DollarSign, Send, CheckCircle, Loader, AlertCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 export default function ScheduleModal({ isOpen, onClose }) {
   const [status, setStatus] = useState('idle') // idle | loading | success

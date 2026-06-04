@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Lock, Mail, ArrowRight, Shield, Eye, EyeOff } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 import { Helmet } from 'react-helmet-async'
 
 export default function ClientLogin() {

@@ -8,13 +8,12 @@ truncate table portfolio_projects cascade;
 
 insert into portfolio_projects (title, type, category, description, image, link, case_study_slug, sort_order)
 values
-  (
     'FoodieFrenzy SaaS',
     'Websites',
     'Food SaaS • Full Stack',
     'High-performance food delivery platform and SaaS dashboard with real-time tracking.',
     '/Agency_Websites/FoodieFrenzy.jpg',
-    null,
+    'https://foodie-frenzy-frontend-hpkf.onrender.com',
     'foodiefrenzy-saas',
     10
   ),
@@ -64,7 +63,7 @@ values
     'Portfolio • Full Stack',
     'Premium developer portfolio featuring advanced system architectures and creative layouts.',
     '/Agency_Websites/ABT_Portfolio.jpg',
-    null,
+    'https://anirudha-basu-thakur-portfolio.vercel.app',
     'abt-developer-portfolio',
     60
   ),

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cookie, X } from 'lucide-react'
-import { getCookie, setCookie, deleteCookie } from '../utils/cookies'
-import { initGA } from '../utils/analytics'
+import { getCookie, setCookie, deleteCookie } from '../../utils/cookies'
+import { initGA } from '../../utils/analytics'
 
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false)

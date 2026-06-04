@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, User, Mail, Building2, Briefcase, DollarSign, MessageSquare, Send, CheckCircle, Loader, AlertCircle } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 const SERVICE_OPTIONS = ['Web Engineering', 'AI Agents', 'Content Creation', 'Digital Consultation', 'Multiple Services']
 const BUDGET_OPTIONS = ['Under ₹15,000', '₹15,000 – ₹50,000', '₹50,000 – ₹1,50,000', '₹1,50,000+', 'Not sure yet']

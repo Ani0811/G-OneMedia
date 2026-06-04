@@ -5,6 +5,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
+import helmet from 'helmet'
+import { rateLimit } from 'express-rate-limit'
 import { createClient } from '@supabase/supabase-js'
 import { getContactEmailTemplate, getPaymentSuccessTemplate, getRefundInitiatedTemplate, getRefundSuccessTemplate, getChatBookingTemplate, getChatRefundRequestTemplate, getDiscoveryEmailTemplate } from './templates/emailTemplates.js';
 import { CHAT_SYSTEM_PROMPT, PRICING_MATRIX, CHAT_TOOLS } from './config/chatConfig.js';
@@ -21,8 +23,45 @@ const app = express()
 const PORT = process.env.PORT || 3001
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173,http://localhost:4173,https://ani0811.github.io'
 
-app.use(cors())
+// Secure HTTP security headers using Helmet
+app.use(helmet())
+
+// Configure CORS to restrict unauthorized origins
+const allowedOrigins = FRONTEND_ORIGIN.split(',')
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true)
+    // Allow localhost/127.0.0.1 for development
+    if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) {
+      return callback(null, true)
+    }
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin)) {
+      return callback(null, true)
+    } else {
+      return callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}))
+
 app.use(express.json())
+
+// Rate Limiting configurations for API security
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 10, // Limit each IP to 10 requests per 15 minutes
+  message: { error: 'Too many requests from this IP, please try again after 15 minutes.' },
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+})
+
+const chatLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  limit: 30, // Limit each IP to 30 requests per minute
+  message: { error: 'Too many messages. Please slow down and try again in a minute.' },
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+})
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -35,7 +74,7 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-app.post('/api/contact', async (req, res) => {
+app.post('/api/contact', contactLimiter, async (req, res) => {
   const { name, email, message, details, service, budget } = req.body
 
   const content = message || details
@@ -66,7 +105,7 @@ app.post('/api/contact', async (req, res) => {
 })
 
 // Dedicated Discovery Call booking form endpoint (saves to DB + sends email notification)
-app.post('/api/discovery', async (req, res) => {
+app.post('/api/discovery', contactLimiter, async (req, res) => {
   const { name, email, company, website, service, budget, details, referral } = req.body
 
   if (!name || !email || !service) {
@@ -383,7 +422,7 @@ async function executeChatFunction(name, args, sessionId) {
   return { result, frontendAction }
 }
 
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', chatLimiter, async (req, res) => {
   const { message, sessionId } = req.body
   if (!message) return res.status(400).json({ error: 'Message is required.' })
 

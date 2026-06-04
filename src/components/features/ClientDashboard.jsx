@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { LogOut, CheckCircle, Circle, Clock, CreditCard, FileText, Rocket, ArrowRight, Trash2, Star, ShieldCheck } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 
 // Demo project data — in production this would come from Supabase
 const demoProject = {

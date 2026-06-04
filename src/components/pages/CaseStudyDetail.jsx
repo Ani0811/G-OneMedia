@@ -2,8 +2,14 @@ import { useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink, TrendingUp, Users, Zap, Clock, AlertCircle, RefreshCw } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
+
+const ensureAbsoluteUrl = (url) => {
+  if (!url) return ''
+  if (/^https?:\/\//i.test(url)) return url
+  return `https://${url}`
+}
 
 const METRIC_ICONS = {
   'Revenue Increase': TrendingUp,
@@ -306,7 +312,7 @@ export default function CaseStudyDetail() {
         >
           <button
             onClick={() => navigate('/#portfolio')}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-colors bg-white/5 cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest border border-[var(--border-subtle)] hover:border-cyan-400 hover:text-cyan-400 transition-colors bg-[var(--text-primary)]/5 cursor-pointer"
             style={{ color: 'var(--text-muted)' }}
           >
             <ArrowLeft size={16} /> Back to Portfolio
@@ -318,13 +324,15 @@ export default function CaseStudyDetail() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-3xl overflow-hidden mb-12 aspect-21/9 border border-white/10 group cursor-pointer"
+          className="relative rounded-3xl overflow-hidden mb-12 aspect-21/9 border border-[var(--border-subtle)] group cursor-pointer"
+          onClick={() => {
+            if (study.link) {
+              window.open(ensureAbsoluteUrl(study.link), '_blank', 'noopener,noreferrer')
+            }
+          }}
         >
           {study.link && (
-            <a 
-              href={study.link} 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <div 
               className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-xs"
               aria-label={`Open ${study.title}`}
             >
@@ -341,7 +349,7 @@ export default function CaseStudyDetail() {
                 {study.project_type === 'Websites' ? 'Visit Website' : 'Watch Video'}
               </span>
               <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">Opens in a new tab</span>
-            </a>
+            </div>
           )}
 
           {isGoogleDriveLink ? (
@@ -382,10 +390,10 @@ export default function CaseStudyDetail() {
             />
           )}
           
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-[var(--bg-deep)]/40 to-transparent z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-90" />
           <div className="absolute bottom-0 left-0 p-8 lg:p-12 z-30 pointer-events-none">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 mb-3 block">{study.category}</span>
-            <h1 className="text-3xl lg:text-5xl font-black group-hover:text-cyan-400 transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>{study.title}</h1>
+            <h1 className="text-3xl lg:text-5xl font-black text-white group-hover:text-cyan-400 transition-colors duration-300">{study.title}</h1>
           </div>
         </motion.div>
 
@@ -455,10 +463,10 @@ export default function CaseStudyDetail() {
               ))}
             </div>
 
-            <div className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-3">
+            <div className="mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-col gap-3">
               {study.link && (
                 <a
-                  href={study.link}
+                  href={ensureAbsoluteUrl(study.link)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold bg-cyan-400 text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-[1.01] transition-all cursor-pointer"
@@ -469,7 +477,7 @@ export default function CaseStudyDetail() {
               )}
               <Link
                 to="/get-started"
-                className={`w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-all text-white hover:bg-cyan-400/5 ${study.link ? '' : 'mt-2'}`}
+                className={`w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold border border-[var(--border-subtle)] hover:border-cyan-400 hover:text-cyan-400 transition-all text-[var(--text-primary)] hover:bg-cyan-400/5 ${study.link ? '' : 'mt-2'}`}
               >
                 Start a Similar Project
               </Link>

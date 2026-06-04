@@ -3,35 +3,35 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { ThemeProvider } from './context/ThemeContext'
 import { trackPageView } from './utils/analytics'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import About from './components/About'
-import Services from './components/Services'
-import Portfolio from './components/Portfolio'
-import Process from './components/Process'
-import Pricing from './components/Pricing'
-import Testimonials from './components/Testimonials'
-import CTA from './components/CTA'
-import RefundSection from './components/RefundSection'
-import Footer from './components/Footer'
-import NotFound from './components/NotFound'
-import BudgetCalculator from './components/BudgetCalculator'
-import AIChatWidget from './components/AIChatWidget'
-import ScheduleModal from './components/ScheduleModal'
-import Loader from './components/Loader'
-import CookieBanner from './components/CookieBanner'
-import ScrollToTop from './components/ScrollToTop'
+import Navbar from './components/common/Navbar'
+import Hero from './components/sections/Hero'
+import About from './components/sections/About'
+import Services from './components/sections/Services'
+import Portfolio from './components/features/Portfolio'
+import Process from './components/sections/Process'
+import Pricing from './components/sections/Pricing'
+import Testimonials from './components/sections/Testimonials'
+import CTA from './components/sections/CTA'
+import RefundSection from './components/sections/RefundSection'
+import Footer from './components/common/Footer'
+import NotFound from './components/pages/NotFound'
+import BudgetCalculator from './components/sections/BudgetCalculator'
+import AIChatWidget from './components/features/AIChatWidget'
+import ScheduleModal from './components/features/ScheduleModal'
+import Loader from './components/common/Loader'
+import CookieBanner from './components/common/CookieBanner'
+import ScrollToTop from './components/common/ScrollToTop'
 
 // Lazy loaded page components
-const GetStarted = lazy(() => import('./components/GetStarted'))
-const ServiceDetail = lazy(() => import('./components/ServiceDetail'))
-const CaseStudyDetail = lazy(() => import('./components/CaseStudyDetail'))
-const ClientLogin = lazy(() => import('./components/ClientLogin'))
-const ClientDashboard = lazy(() => import('./components/ClientDashboard'))
-const RefundRequest = lazy(() => import('./components/RefundRequest'))
-const Reviews = lazy(() => import('./components/Reviews'))
-const DiscoveryCall = lazy(() => import('./components/DiscoveryCall'))
-const FounderProfile = lazy(() => import('./components/FounderProfile'))
+const GetStarted = lazy(() => import('./components/pages/GetStarted'))
+const ServiceDetail = lazy(() => import('./components/pages/ServiceDetail'))
+const CaseStudyDetail = lazy(() => import('./components/pages/CaseStudyDetail'))
+const ClientLogin = lazy(() => import('./components/features/ClientLogin'))
+const ClientDashboard = lazy(() => import('./components/features/ClientDashboard'))
+const RefundRequest = lazy(() => import('./components/pages/RefundRequest'))
+const Reviews = lazy(() => import('./components/pages/Reviews'))
+const DiscoveryCall = lazy(() => import('./components/pages/DiscoveryCall'))
+const FounderProfile = lazy(() => import('./components/pages/FounderProfile'))
 const PageLoader = () => (
   <div className="min-h-screen bg-[#050508] flex items-center justify-center">
     <div className="w-12 h-12 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin" />
