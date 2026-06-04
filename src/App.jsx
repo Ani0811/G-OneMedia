@@ -97,6 +97,8 @@ export default function App() {
             top: elementPosition - offset,
             behavior: 'smooth'
           })
+          // Clear the hash from the URL bar so it doesn't linger on refresh
+          window.history.replaceState(null, null, window.location.pathname + window.location.search)
         }, 150)
         return () => clearTimeout(timer)
       }
