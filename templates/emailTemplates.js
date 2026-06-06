@@ -441,3 +441,92 @@ export const getDiscoveryEmailTemplate = ({ name, email, company, website, servi
   return buildEmailLayout({ title, headerSubtitle, contentHtml, actionHtml, footerContent });
 };
 
+export const getClientConfirmationEmailTemplate = ({ name, service, budget, content }) => {
+  const title = `We've received your inquiry — G-One Media`;
+  const headerSubtitle = `✦ Project Inquiry Confirmation`;
+  
+  const contentHtml = `
+    <h2 style="margin:0 0 20px; font-size:20px; color:#0f172a;">Hi ${name},</h2>
+    <p style="margin:0; font-size:15px; color:#334155; line-height:1.6; margin-bottom:20px;">
+      Thank you for reaching out to G-One Media! We have received your project details and estimate request. Our team is already reviewing your requirements.
+    </p>
+    
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; background-color: #f1f5f9; padding: 20px; border-radius: 6px; border: 1px solid #e2e8f0;">
+      ${service ? `
+      <tr>
+        <td width="150" style="font-size:14px; color:#64748b; padding-bottom:12px;">Service Focus:</td>
+        <td style="font-size:14px; font-weight:600; color:#06b6d4; padding-bottom:12px;">${service}</td>
+      </tr>
+      ` : ''}
+      ${budget ? `
+      <tr>
+        <td width="150" style="font-size:14px; color:#64748b; padding-bottom:12px;">Budget Estimate:</td>
+        <td style="font-size:14px; font-weight:600; color:#0f172a; padding-bottom:12px;">${budget}</td>
+      </tr>
+      ` : ''}
+      <tr>
+        <td width="150" style="font-size:14px; color:#64748b; vertical-align: top;">Your Message:</td>
+        <td style="font-size:14px; color:#334155; white-space:pre-wrap; line-height:1.5;">${content}</td>
+      </tr>
+    </table>
+    
+    <p style="margin:0; font-size:15px; color:#334155; line-height:1.6; margin-bottom:12px;">
+      We will get back to you with a detailed proposal and timeline within 24 hours.
+    </p>
+    <p style="margin:0; font-size:15px; color:#334155; line-height:1.6;">
+      In the meantime, feel free to reply directly to this email if you have any additional notes to add.
+    </p>
+  `;
+
+  const footerContent = `
+    <p style="margin:0; font-size:13px; color:#64748b;">Best regards,<br/>G-One Media Team</p>
+  `;
+
+  return buildEmailLayout({ title, headerSubtitle, contentHtml, footerContent });
+};
+
+export const getClientDiscoveryEmailTemplate = ({ name, service, budget, details }) => {
+  const title = `Discovery Call Request Received — G-One Media`;
+  const headerSubtitle = `✦ Discovery Call Confirmation`;
+  
+  const contentHtml = `
+    <h2 style="margin:0 0 20px; font-size:20px; color:#0f172a;">Hi ${name},</h2>
+    <p style="margin:0; font-size:15px; color:#334155; line-height:1.6; margin-bottom:20px;">
+      Thank you for booking a discovery call request with G-One Media! We have received your booking details and will reach out shortly to confirm a slot.
+    </p>
+    
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; background-color: #f1f5f9; padding: 20px; border-radius: 6px; border: 1px solid #e2e8f0;">
+      <tr>
+        <td width="150" style="font-size:14px; color:#64748b; padding-bottom:12px;">Service Focus:</td>
+        <td style="font-size:14px; font-weight:600; color:#06b6d4; padding-bottom:12px;">${service}</td>
+      </tr>
+      ${budget ? `
+      <tr>
+        <td width="150" style="font-size:14px; color:#64748b; padding-bottom:12px;">Budget Range:</td>
+        <td style="font-size:14px; font-weight:600; color:#0f172a; padding-bottom:12px;">${budget}</td>
+      </tr>
+      ` : ''}
+      ${details ? `
+      <tr>
+        <td width="150" style="font-size:14px; color:#64748b; vertical-align: top;">Project Goals:</td>
+        <td style="font-size:14px; color:#334155; white-space:pre-wrap; line-height:1.5;">${details}</td>
+      </tr>
+      ` : ''}
+    </table>
+    
+    <p style="margin:0; font-size:15px; color:#334155; line-height:1.6; margin-bottom:12px;">
+      One of our founders will review your brand profile and send over a calendar invite link to finalize the call slot.
+    </p>
+    <p style="margin:0; font-size:15px; color:#334155; line-height:1.6;">
+      We look forward to speaking with you!
+    </p>
+  `;
+
+  const footerContent = `
+    <p style="margin:0; font-size:13px; color:#64748b;">Best regards,<br/>G-One Media Team</p>
+  `;
+
+  return buildEmailLayout({ title, headerSubtitle, contentHtml, footerContent });
+};
+
+

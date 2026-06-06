@@ -8,7 +8,7 @@ import crypto from 'crypto'
 import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
 import { createClient } from '@supabase/supabase-js'
-import { getContactEmailTemplate, getPaymentSuccessTemplate, getRefundInitiatedTemplate, getRefundSuccessTemplate, getChatBookingTemplate, getChatRefundRequestTemplate, getDiscoveryEmailTemplate } from './templates/emailTemplates.js';
+import { getContactEmailTemplate, getPaymentSuccessTemplate, getRefundInitiatedTemplate, getRefundSuccessTemplate, getChatBookingTemplate, getChatRefundRequestTemplate, getDiscoveryEmailTemplate, getClientConfirmationEmailTemplate, getClientDiscoveryEmailTemplate } from './templates/emailTemplates.js';
 import { CHAT_SYSTEM_PROMPT, PRICING_MATRIX, CHAT_TOOLS } from './config/chatConfig.js';
 
 dotenv.config()
@@ -87,7 +87,23 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
   const isDiscoveryCall = !!service
 
   try {
-    await transporter.sendMail({
+    // 1. Save to Supabase leads table (fast write)
+    const { error: dbError } = await supabase.from('leads').insert([{
+      name,
+      email,
+      service: service || null,
+      budget: budget || null,
+      description: content
+    }])
+
+    if (dbError) {
+      console.error('[Contact API] Supabase leads insert failed:', dbError.message)
+      // Do not block the response, log it and proceed
+    }
+
+    // 2. Send emails in the background (fire-and-forget, non-blocking)
+    // Send to agency
+    transporter.sendMail({
       from: `"${name}" <${process.env.SMTP_USER}>`,
       to: process.env.AGENCY_EMAIL || 'gmedia774@gmail.com', // sends to agency
       replyTo: email,
@@ -95,12 +111,25 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         ? `✦ Discovery Call Request [${service}] from ${name} — G-One Media`
         : `✦ New Message from ${name} — G-One Media`,
       html: getContactEmailTemplate({ name, email, service, budget, content, isDiscoveryCall }),
+    }).catch(err => {
+      console.error('[Contact API] Nodemailer error sending to agency:', err)
     })
 
+    // Send confirmation to client
+    transporter.sendMail({
+      from: `"G-One Media" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: `We've received your inquiry — G-One Media`,
+      html: getClientConfirmationEmailTemplate({ name, service, budget, content }),
+    }).catch(err => {
+      console.error('[Contact API] Nodemailer error sending client confirmation:', err)
+    })
+
+    // 3. Return response immediately
     res.json({ success: true })
   } catch (err) {
-    console.error('Nodemailer error:', err)
-    res.status(500).json({ error: 'Failed to send email. Check your SMTP credentials.' })
+    console.error('Contact API error:', err)
+    res.status(500).json({ error: 'Failed to process contact request. Please try again.' })
   }
 })
 
@@ -130,15 +159,28 @@ app.post('/api/discovery', contactLimiter, async (req, res) => {
       // We will not block the user response if database fails, but log it.
     }
 
-    // 2. Dispatch email notification to founders
-    await transporter.sendMail({
+    // 2. Dispatch email notification to founders (background)
+    transporter.sendMail({
       from: `"${name}" <${process.env.SMTP_USER}>`,
       to: process.env.AGENCY_EMAIL || 'gmedia774@gmail.com',
       replyTo: email,
       subject: `✦ Discovery Booking Request from ${name} [${service}]`,
       html: getDiscoveryEmailTemplate({ name, email, company, website, service, budget, details, referral })
+    }).catch(err => {
+      console.error('[Discovery] Nodemailer error sending to agency:', err)
     })
 
+    // Send confirmation email to client (background)
+    transporter.sendMail({
+      from: `"G-One Media" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: `Discovery Call Request Received — G-One Media`,
+      html: getClientDiscoveryEmailTemplate({ name, service, budget, details }),
+    }).catch(err => {
+      console.error('[Discovery] Nodemailer error sending client confirmation:', err)
+    })
+
+    // 3. Return response immediately
     res.json({ success: true })
   } catch (err) {
     console.error('[Discovery] API error:', err)
