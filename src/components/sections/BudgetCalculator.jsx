@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Send, Check, Sparkles } from 'lucide-react'
+import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Send, Check, Sparkles, Download, Calendar } from 'lucide-react'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 const serviceOptions = [
   { id: 'website', label: 'Website / Web App', icon: Code, basePrice: 15000, description: 'React, Next.js, full-stack solutions' },
@@ -62,6 +64,20 @@ export default function BudgetCalculator() {
   const [formData, setFormData] = useState({ name: '', email: '', notes: '' })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [currency, setCurrency] = useState('INR')
+  const [generatingPDF, setGeneratingPDF] = useState(false)
+
+  const exchangeRates = {
+    INR: 1,
+    USD: 1 / 83,
+    EUR: 1 / 90
+  }
+
+  const currencySymbols = {
+    INR: '₹',
+    USD: '$',
+    EUR: '€'
+  }
 
   const totalSteps = 4
 
@@ -98,10 +114,53 @@ export default function BudgetCalculator() {
     return Math.round(total * mult)
   }
 
-  const formatINR = (num) => {
-    if (num >= 100000) return `₹${(num / 100000).toFixed(1)}L`
-    if (num >= 1000) return `₹${(num / 1000).toFixed(num % 1000 === 0 ? 0 : 1)}K`
-    return `₹${num}`
+  const getProjectedROI = () => {
+    let roiText = 'High Impact Growth';
+    if (selectedServices.includes('ai')) {
+      // Just an illustrative dynamic calculation
+      roiText = `Saves ~40 hrs/mo + ${formatCurrency(total * 1.5)} revenue`;
+    } else if (selectedServices.includes('website')) {
+      roiText = '2-3x Conversion Rate';
+    } else if (selectedServices.includes('marketing')) {
+      roiText = '300-500% Return on Ad Spend';
+    } else if (selectedServices.includes('video')) {
+      roiText = 'Up to 80% higher engagement';
+    }
+    return roiText;
+  }
+
+  const generatePDF = async () => {
+    const input = document.getElementById('proposal-content');
+    if (!input) return;
+    setGeneratingPDF(true);
+    try {
+      const canvas = await html2canvas(input, { scale: 2, backgroundColor: '#09090b', logging: false });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`G-OneMedia_Proposal_${formData.name.replace(/\s+/g, '_') || 'Client'}.pdf`);
+    } catch (e) {
+      console.error('PDF Generation Failed', e);
+    } finally {
+      setGeneratingPDF(false);
+    }
+  }
+
+  const formatCurrency = (num, curr = currency) => {
+    const value = Math.round(num * exchangeRates[curr])
+    const symbol = currencySymbols[curr]
+    
+    if (curr === 'INR') {
+      if (value >= 100000) return `${symbol}${(value / 100000).toFixed(1)}L`
+      if (value >= 1000) return `${symbol}${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}K`
+      return `${symbol}${value}`
+    } else {
+      if (value >= 1000000) return `${symbol}${(value / 1000000).toFixed(1)}M`
+      if (value >= 1000) return `${symbol}${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}K`
+      return `${symbol}${value}`
+    }
   }
 
   const goNext = () => { setDirection(1); setStep(s => Math.min(s + 1, totalSteps - 1)) }
@@ -131,7 +190,7 @@ export default function BudgetCalculator() {
         `Services: ${serviceNames}`,
         featureNames ? `Add-ons: ${featureNames}` : '',
         `Timeline: ${urgencyLabel}`,
-        `Estimated Budget: ${formatINR(total)}`,
+        `Estimated Budget: ${formatCurrency(total, currency)}`,
         formData.notes ? `Notes: ${formData.notes}` : '',
       ].filter(Boolean).join('\n')
 
@@ -166,9 +225,26 @@ export default function BudgetCalculator() {
           >
             Project <span className="gradient-text">Estimator</span>
           </motion.h2>
-          <p className="max-w-xl mx-auto text-lg" style={{ color: 'var(--text-secondary)' }}>
+          <p className="max-w-xl mx-auto text-lg mb-6" style={{ color: 'var(--text-secondary)' }}>
             Configure your ideal project and get an instant budget estimate.
           </p>
+
+          {/* Currency Toggle */}
+          <div className="flex justify-center items-center gap-2 mb-2">
+            {['INR', 'USD', 'EUR'].map(curr => (
+              <button
+                key={curr}
+                onClick={() => setCurrency(curr)}
+                className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all cursor-pointer ${
+                  currency === curr
+                    ? 'bg-cyan-400 text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                    : 'bg-white/5 text-[var(--text-secondary)] hover:bg-white/10'
+                }`}
+              >
+                {curr}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="max-w-3xl mx-auto">
@@ -186,19 +262,34 @@ export default function BudgetCalculator() {
             ))}
           </div>
 
-          {/* Floating Total Badge */}
+          {/* Floating Total Badge & ROI */}
           {selectedServices.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-center gap-3 mb-8 py-3 px-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md"
-            >
-              <Calculator size={16} className="text-cyan-400" />
-              <span className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Estimated Total:</span>
-              <span className="text-2xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">
-                {formatINR(total)}
-              </span>
-            </motion.div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-3 py-3 px-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md"
+              >
+                <Calculator size={16} className="text-cyan-400" />
+                <span className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Estimated Total:</span>
+                <span className="text-2xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">
+                  {formatCurrency(total)}
+                </span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="flex items-center gap-3 py-3 px-6 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-500/20 backdrop-blur-md"
+              >
+                <TrendingUp size={16} className="text-fuchsia-400" />
+                <span className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Projected ROI:</span>
+                <span className="text-sm font-bold text-fuchsia-400 drop-shadow-[0_0_10px_rgba(232,121,249,0.3)]">
+                  {getProjectedROI()}
+                </span>
+              </motion.div>
+            </div>
           )}
 
           {/* Step Content */}
@@ -239,7 +330,7 @@ export default function BudgetCalculator() {
                           <div>
                             <div className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{service.label}</div>
                             <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{service.description}</div>
-                            <div className="text-xs font-bold text-cyan-400 mt-1.5">from {formatINR(service.basePrice)}</div>
+                            <div className="text-xs font-bold text-cyan-400 mt-1.5">from {formatCurrency(service.basePrice)}</div>
                           </div>
                           {isSelected && (
                             <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-cyan-400 flex items-center justify-center">
@@ -292,7 +383,7 @@ export default function BudgetCalculator() {
                                 >
                                   <span className="font-medium">{addon.label}</span>
                                   <span className={`text-xs font-bold ${isSelected ? 'text-cyan-400' : 'text-[var(--text-muted)]'}`}>
-                                    +{formatINR(addon.price)}
+                                    +{formatCurrency(addon.price)}
                                   </span>
                                 </button>
                               )
@@ -389,15 +480,59 @@ export default function BudgetCalculator() {
                   key="submitted"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center py-10 text-center"
+                  className="flex flex-col items-center justify-center py-4"
                 >
-                  <div className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6">
-                    <Sparkles size={28} className="text-cyan-400" />
+                  <div id="proposal-content" className="w-full text-center flex flex-col items-center p-8 bg-black/40 rounded-2xl border border-white/5 mb-8">
+                    <div className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6">
+                      <Sparkles size={28} className="text-cyan-400" />
+                    </div>
+                    <h3 className="text-2xl font-black mb-3" style={{ color: 'var(--text-primary)' }}>Estimate Sent!</h3>
+                    <p className="text-sm max-w-md mb-8" style={{ color: 'var(--text-secondary)' }}>
+                      Thank you, {formData.name}! We've received your project estimate of <strong className="text-cyan-400">{formatCurrency(total)}</strong> and will reach out within 24 hours.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-y-4 gap-x-8 w-full max-w-md text-left text-sm mb-4 border border-white/10 rounded-xl p-6 bg-white/5">
+                      <div className="text-[var(--text-muted)]">Timeline</div>
+                      <div className="font-bold text-right text-[var(--text-primary)]">{urgencyOptions.find(u => u.id === urgency)?.label}</div>
+                      <div className="col-span-2 h-px bg-white/10"></div>
+                      <div className="text-[var(--text-muted)]">Services</div>
+                      <div className="font-bold text-right text-[var(--text-primary)]">{selectedServices.length} selected</div>
+                      <div className="col-span-2 h-px bg-white/10"></div>
+                      <div className="text-[var(--text-muted)]">Projected ROI</div>
+                      <div className="font-bold text-right text-fuchsia-400">{getProjectedROI()}</div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-black mb-3" style={{ color: 'var(--text-primary)' }}>Estimate Sent!</h3>
-                  <p className="text-sm max-w-md" style={{ color: 'var(--text-secondary)' }}>
-                    Thank you, {formData.name}! We've received your project estimate of <strong className="text-cyan-400">{formatINR(total)}</strong> and will reach out within 24 hours.
-                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl mb-12">
+                    <button
+                      onClick={generatePDF}
+                      disabled={generatingPDF}
+                      className="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 text-[var(--text-primary)] text-sm font-bold transition-all cursor-pointer"
+                    >
+                      {generatingPDF ? 'Generating...' : <><Download size={18} /> Download Proposal</>}
+                    </button>
+                    <a
+                      href="#contact"
+                      className="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-black text-sm font-bold transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] cursor-pointer"
+                    >
+                      <Calendar size={18} /> Book Discovery Call Now
+                    </a>
+                  </div>
+
+                  <div className="w-full max-w-2xl bg-white/5 rounded-2xl border border-white/10 p-2 overflow-hidden shadow-2xl">
+                    <div className="p-6 text-center">
+                      <h4 className="font-bold text-xl mb-2" style={{ color: 'var(--text-primary)' }}>Want to skip the wait?</h4>
+                      <p className="text-sm text-[var(--text-secondary)]">Book a call directly on our calendar below to discuss your project.</p>
+                    </div>
+                    <iframe 
+                      src="https://calendly.com/anirudha-basuthakur/30min?hide_event_type_details=1&hide_gdpr_banner=1" 
+                      width="100%" 
+                      height="650" 
+                      frameBorder="0"
+                      className="rounded-xl bg-white w-full border-none"
+                      title="Book a Discovery Call"
+                    ></iframe>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

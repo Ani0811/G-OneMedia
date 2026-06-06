@@ -640,4 +640,4 @@ app.post('/api/tts', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => console.log(`✅ G-One Media API running on http://localhost:${PORT}`))
+app.listen(PORT, '0.0.0.0', () => console.log(`✅ G-One Media API running on http://localhost:${PORT}`))
