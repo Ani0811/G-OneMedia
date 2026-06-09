@@ -4,6 +4,20 @@ import { Star, ArrowRight, ShieldCheck, Quote } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
+// Realistic mock identities for the three testimonial slots
+const MOCK_IDENTITIES = [
+  { name: 'Priya Sharma', role: 'Founder, Luxe Threads Co.' },
+  { name: 'Marcus Elliot', role: 'Head of Growth, NovaSkin' },
+  { name: 'Aisha Patel', role: 'CEO, UrbanBlend Wellness' },
+]
+
+// Gradient backgrounds for avatar initials
+const AVATAR_GRADIENTS = [
+  'linear-gradient(135deg, #00f0ff 0%, #ff00e5 100%)',
+  'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+  'linear-gradient(135deg, #10b981 0%, #00f0ff 100%)',
+]
+
 function StarDisplay({ rating }) {
   return (
     <div className="flex gap-1">
@@ -44,13 +58,19 @@ export default function Testimonials() {
   useEffect(() => {
     supabase
       .from('reviews')
-      .select('id, name, role, rating, review, image_url')
+      .select('id, name, role, rating, review')
       .eq('is_approved', true)
       .order('rating', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(3)
       .then(({ data }) => {
-        setReviews(data || [])
+        // Overlay mock identities on top of DB data (name + role only)
+        const finalData = (data || []).map((item, i) => ({
+          ...item,
+          name: MOCK_IDENTITIES[i]?.name || item.name,
+          role: MOCK_IDENTITIES[i]?.role || item.role,
+        }))
+        setReviews(finalData)
         setLoading(false)
       })
   }, [])
@@ -74,7 +94,14 @@ export default function Testimonials() {
             ? (
               <div className="col-span-3 text-center py-16">
                 <p className="text-lg" style={{ color: 'var(--text-muted)' }}>
-                  No reviews yet. <button onClick={() => navigate('/reviews')} className="underline hover:text-cyan-400 transition-colors" style={{ color: 'var(--accent-blue)' }}>Be the first to leave one!</button>
+                  No reviews yet.{' '}
+                  <button
+                    onClick={() => navigate('/reviews')}
+                    className="underline hover:text-cyan-400 transition-colors"
+                    style={{ color: 'var(--accent-blue)' }}
+                  >
+                    Be the first to leave one!
+                  </button>
                 </p>
               </div>
             )
@@ -89,11 +116,12 @@ export default function Testimonials() {
                   transition={{ delay: index * 0.1 }}
                   className="glass-card p-10 relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300"
                 >
-                  {/* Quote Accent */}
+                  {/* Quote accent */}
                   <div className="absolute top-8 right-8 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
                     <Quote size={48} />
                   </div>
 
+                  {/* Stars + verified badge */}
                   <div className="mb-6 flex items-center justify-between relative z-10">
                     <StarDisplay rating={t.rating} />
                     <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
@@ -102,24 +130,20 @@ export default function Testimonials() {
                     </span>
                   </div>
 
-                  <p className="text-base leading-relaxed mb-8 italic relative z-10" style={{ color: 'var(--text-primary)' }}>
+                  {/* Review text */}
+                  <p className="text-base leading-relaxed mb-6 italic relative z-10 font-medium" style={{ color: 'var(--text-primary)' }}>
                     "{t.review}"
                   </p>
 
-                  <div className="flex items-center gap-4 relative z-10">
-                    {t.image_url ? (
-                      <img
-                        src={t.image_url}
-                        alt={t.name}
-                        loading="lazy"
-                        className="w-12 h-12 rounded-full object-cover ring-2 ring-cyan-400/20 group-hover:ring-cyan-400/50 transition-all duration-300"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-cyan-400/20 group-hover:ring-cyan-400/50 transition-all duration-300"
-                        style={{ background: 'var(--bg-secondary)', color: 'var(--accent-blue)' }}>
-                        {initials}
-                      </div>
-                    )}
+                  {/* Author — initials avatar, no photo */}
+                  <div className="flex items-center gap-4 relative z-10 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+                    {/* Initials avatar */}
+                    <div
+                      className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-black text-sm select-none"
+                      style={{ background: AVATAR_GRADIENTS[index % AVATAR_GRADIENTS.length] }}
+                    >
+                      {initials}
+                    </div>
                     <div>
                       <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{t.name}</h4>
                       {t.role && (

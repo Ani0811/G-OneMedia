@@ -6,8 +6,8 @@ export default function Hero({ onScheduleCall }) {
   return (
     <section className="relative overflow-hidden min-h-[82vh] lg:min-h-[85vh] flex items-center pt-24 pb-4">
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 left-1/4 w-[500px] bg-cyan-500/10 rounded-full blur-[140px] -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] bg-fuchsia-500/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute top-0 left-1/4 w-125 bg-cyan-500/10 rounded-full blur-[140px] -z-10" />
+      <div className="absolute bottom-0 right-1/4 w-100 bg-fuchsia-500/10 rounded-full blur-[120px] -z-10" />
 
       <div className="container-custom relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
@@ -91,7 +91,7 @@ export default function Hero({ onScheduleCall }) {
               className="mt-8 flex flex-wrap items-center gap-6 border-t border-white/5 pt-6"
             >
               <div className="flex flex-wrap items-center gap-4">
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] opacity-50 text-[var(--text-secondary)]">
+                <span className="text-[10px] font-bold uppercase tracking-[0.25em] opacity-50 text-(--text-secondary)">
                   Follow My Journey
                 </span>
                 <div className="flex items-center gap-3">

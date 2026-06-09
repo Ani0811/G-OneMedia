@@ -16,9 +16,13 @@ import RefundSection from './components/sections/RefundSection'
 import Footer from './components/common/Footer'
 import NotFound from './components/pages/NotFound'
 import BudgetCalculator from './components/sections/BudgetCalculator'
+import ROIEstimator from './components/sections/ROIEstimator'
 import AIChatWidget from './components/features/AIChatWidget'
 import ScheduleModal from './components/features/ScheduleModal'
 import Loader from './components/common/Loader'
+import TrendingBreakdown from './components/sections/TrendingBreakdown'
+import ClientWinsTicker from './components/features/ClientWinsTicker'
+import VisualProof from './components/sections/VisualProof'
 import CookieBanner from './components/common/CookieBanner'
 import ScrollToTop from './components/common/ScrollToTop'
 
@@ -32,6 +36,8 @@ const RefundRequest = lazy(() => import('./components/pages/RefundRequest'))
 const Reviews = lazy(() => import('./components/pages/Reviews'))
 const DiscoveryCall = lazy(() => import('./components/pages/DiscoveryCall'))
 const FounderProfile = lazy(() => import('./components/pages/FounderProfile'))
+const ResourceVault = lazy(() => import('./components/pages/ResourceVault'))
+const AuditWizard = lazy(() => import('./components/pages/AuditWizard'))
 const PageLoader = () => (
   <div className="min-h-screen bg-[#050508] flex items-center justify-center">
     <div className="w-12 h-12 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin" />
@@ -47,9 +53,13 @@ function HomePage({ onScheduleCall }) {
         <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/" />
       </Helmet>
       <Hero onScheduleCall={onScheduleCall} />
+      <ClientWinsTicker />
+      <VisualProof />
+      <TrendingBreakdown />
       <Services />
       <Portfolio />
       <Process />
+      <ROIEstimator />
       <BudgetCalculator />
       <Pricing onScheduleCall={onScheduleCall} />
       <Testimonials />
@@ -139,6 +149,8 @@ export default function App() {
               <Route path="/refund" element={<RefundRequest />} />
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/discovery" element={<DiscoveryCall />} />
+              <Route path="/vault" element={<ResourceVault />} />
+              <Route path="/audit" element={<AuditWizard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

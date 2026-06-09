@@ -46,6 +46,15 @@
   --accent-gradient: linear-gradient(135deg, #00acc1 0%, #d81b60 100%);
 }
 
+@theme {
+  --animate-marquee: marquee 25s linear infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
 /* Default (dark) overlay for image cards */
 :root {
   --image-overlay: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0));
