@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 
 // Realistic mock identities for the three testimonial slots
 const MOCK_IDENTITIES = [
-  { name: 'Priya Sharma', role: 'Founder, Luxe Threads Co.' },
-  { name: 'Marcus Elliot', role: 'Head of Growth, NovaSkin' },
-  { name: 'Aisha Patel', role: 'CEO, UrbanBlend Wellness' },
+  { name: 'Priya Sharma', role: 'Luxe Threads Co.' },
+  { name: 'Marcus Elliot', role: 'NovaSkin' },
+  { name: 'Aisha Patel', role: 'UrbanBlend Wellness' },
 ]
 
 // Gradient backgrounds for avatar initials
@@ -65,11 +65,17 @@ export default function Testimonials() {
       .limit(3)
       .then(({ data }) => {
         // Overlay mock identities on top of DB data (name + role only)
-        const finalData = (data || []).map((item, i) => ({
-          ...item,
-          name: MOCK_IDENTITIES[i]?.name || item.name,
-          role: MOCK_IDENTITIES[i]?.role || item.role,
-        }))
+        const finalData = (data || []).map((item, i) => {
+          const mock = MOCK_IDENTITIES[i] || {};
+          // Assign varied ratings: first and third get 5 stars, second gets 4 stars
+          const rating = i % 2 === 1 ? 4 : 5;
+          return {
+            ...item,
+            name: mock.name || item.name,
+            role: mock.role || item.role,
+            rating,
+          };
+        })
         setReviews(finalData)
         setLoading(false)
       })
@@ -91,69 +97,69 @@ export default function Testimonials() {
           {loading
             ? [...Array(3)].map((_, i) => <SkeletonCard key={i} />)
             : reviews.length === 0
-            ? (
-              <div className="col-span-3 text-center py-16">
-                <p className="text-lg" style={{ color: 'var(--text-muted)' }}>
-                  No reviews yet.{' '}
-                  <button
-                    onClick={() => navigate('/reviews')}
-                    className="underline hover:text-cyan-400 transition-colors"
-                    style={{ color: 'var(--accent-blue)' }}
-                  >
-                    Be the first to leave one!
-                  </button>
-                </p>
-              </div>
-            )
-            : reviews.map((t, index) => {
-              const initials = t.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
-              return (
-                <motion.div
-                  key={t.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="glass-card p-10 relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300"
-                >
-                  {/* Quote accent */}
-                  <div className="absolute top-8 right-8 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
-                    <Quote size={48} />
-                  </div>
-
-                  {/* Stars + verified badge */}
-                  <div className="mb-6 flex items-center justify-between relative z-10">
-                    <StarDisplay rating={t.rating} />
-                    <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                      <ShieldCheck size={10} className="text-emerald-400" />
-                      Verified
-                    </span>
-                  </div>
-
-                  {/* Review text */}
-                  <p className="text-base leading-relaxed mb-6 italic relative z-10 font-medium" style={{ color: 'var(--text-primary)' }}>
-                    "{t.review}"
-                  </p>
-
-                  {/* Author — initials avatar, no photo */}
-                  <div className="flex items-center gap-4 relative z-10 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
-                    {/* Initials avatar */}
-                    <div
-                      className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-black text-sm select-none"
-                      style={{ background: AVATAR_GRADIENTS[index % AVATAR_GRADIENTS.length] }}
+              ? (
+                <div className="col-span-3 text-center py-16">
+                  <p className="text-lg" style={{ color: 'var(--text-muted)' }}>
+                    No reviews yet.{' '}
+                    <button
+                      onClick={() => navigate('/reviews')}
+                      className="underline hover:text-cyan-400 transition-colors"
+                      style={{ color: 'var(--accent-blue)' }}
                     >
-                      {initials}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{t.name}</h4>
-                      {t.role && (
-                        <p className="text-[11px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
+                      Be the first to leave one!
+                    </button>
+                  </p>
+                </div>
               )
-            })
+              : reviews.map((t, index) => {
+                const initials = t.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
+                return (
+                  <motion.div
+                    key={t.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="glass-card p-10 relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300"
+                  >
+                    {/* Quote accent */}
+                    <div className="absolute top-8 right-8 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
+                      <Quote size={48} />
+                    </div>
+
+                    {/* Stars + verified badge */}
+                    <div className="mb-6 flex items-center justify-between relative z-10">
+                      <StarDisplay rating={t.rating} />
+                      <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        <ShieldCheck size={10} className="text-emerald-400" />
+                        Verified
+                      </span>
+                    </div>
+
+                    {/* Review text */}
+                    <p className="text-base leading-relaxed mb-6 italic relative z-10 font-medium" style={{ color: 'var(--text-primary)' }}>
+                      "{t.review}"
+                    </p>
+
+                    {/* Author — initials avatar, no photo */}
+                    <div className="flex items-center gap-4 relative z-10 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+                      {/* Initials avatar */}
+                      <div
+                        className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-black text-sm select-none"
+                        style={{ background: AVATAR_GRADIENTS[index % AVATAR_GRADIENTS.length] }}
+                      >
+                        {initials}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{t.name}</h4>
+                        {t.role && (
+                          <p className="text-[11px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })
           }
         </div>
 
