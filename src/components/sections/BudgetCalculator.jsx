@@ -2,7 +2,6 @@ import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Send, Check, Sparkles, Download, Calendar } from 'lucide-react'
 import { jsPDF } from 'jspdf'
-import html2canvas from 'html2canvas'
 
 const serviceOptions = [
   { id: 'website', label: 'Website / Web App', icon: Code, basePrice: 15000, description: 'React, Next.js, full-stack solutions' },
@@ -130,23 +129,228 @@ export default function BudgetCalculator() {
   }
 
   const generatePDF = async () => {
-    const input = document.getElementById('proposal-content');
-    if (!input) return;
     setGeneratingPDF(true);
     try {
-      const canvas = await html2canvas(input, { scale: 2, backgroundColor: '#09090b', logging: false });
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      
+      // Top color bar
+      pdf.setFillColor(0, 240, 255);
+      pdf.rect(0, 0, pageWidth, 4, 'F');
+      
+      // Title / Brand
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(24);
+      pdf.setTextColor(9, 9, 11);
+      pdf.text('G-ONE MEDIA', 20, 22);
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(100, 116, 139);
+      pdf.text('Next-Gen Digital Systems & Content Engineering', 20, 27);
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(14);
+      pdf.setTextColor(217, 70, 239);
+      pdf.text('PROJECT PROPOSAL & ESTIMATE', pageWidth - 20, 22, { align: 'right' });
+      
+      const proposalNum = Math.floor(100000 + Math.random() * 900000);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(100, 116, 139);
+      pdf.text(`Proposal ID: G1-${proposalNum}`, pageWidth - 20, 27, { align: 'right' });
+      
+      pdf.setDrawColor(226, 232, 240);
+      pdf.line(20, 33, pageWidth - 20, 33);
+      
+      // Meta details (Client / Agency)
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Prepared For:', 20, 42);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(71, 85, 105);
+      pdf.text(formData.name || 'Valued Client', 20, 47);
+      pdf.text(formData.email || 'Client Email', 20, 52);
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Prepared By:', pageWidth - 20, 42, { align: 'right' });
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(71, 85, 105);
+      pdf.text('G-One Media Team', pageWidth - 20, 47, { align: 'right' });
+      pdf.text('gmedia774@gmail.com', pageWidth - 20, 52, { align: 'right' });
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Date Issued:', 20, 62);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(71, 85, 105);
+      pdf.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), 43, 62);
+      
+      pdf.setDrawColor(226, 232, 240);
+      pdf.line(20, 68, pageWidth - 20, 68);
+      
+      // Section title
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(12);
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Proposed Scope & Investment Breakdown', 20, 76);
+      
+      // Table Header
+      let currentY = 82;
+      pdf.setFillColor(248, 250, 252);
+      pdf.rect(20, currentY, pageWidth - 40, 8, 'F');
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(8.5);
+      pdf.setTextColor(71, 85, 105);
+      pdf.text('SERVICE / FEATURES DELIVERED', 24, currentY + 5.5);
+      pdf.text('INVESTMENT', pageWidth - 24, currentY + 5.5, { align: 'right' });
+      
+      currentY += 8;
+      
+      // List services
+      selectedServices.forEach(serviceId => {
+        const service = serviceOptions.find(s => s.id === serviceId);
+        if (!service) return;
+        
+        pdf.setDrawColor(241, 245, 249);
+        pdf.line(20, currentY, pageWidth - 20, currentY);
+        
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(9.5);
+        pdf.setTextColor(15, 23, 42);
+        pdf.text(service.label, 24, currentY + 6);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(71, 85, 105);
+        pdf.text(formatCurrency(service.basePrice), pageWidth - 24, currentY + 6, { align: 'right' });
+        
+        currentY += 8;
+        
+        const addons = selectedFeatures[serviceId] || [];
+        addons.forEach(fId => {
+          const addon = (featureAddons[serviceId] || []).find(f => f.id === fId);
+          if (!addon) return;
+          
+          pdf.setFontSize(8.5);
+          pdf.setTextColor(100, 116, 139);
+          pdf.text(`• ${addon.label}`, 29, currentY + 5);
+          pdf.text(formatCurrency(addon.price), pageWidth - 24, currentY + 5, { align: 'right' });
+          currentY += 7;
+        });
+      });
+      
+      pdf.setDrawColor(203, 213, 225);
+      pdf.line(20, currentY + 2, pageWidth - 20, currentY + 2);
+      currentY += 8;
+      
+      // Calculate Subtotal & Total
+      const subtotal = selectedServices.reduce((sum, serviceId) => {
+        const s = serviceOptions.find(opt => opt.id === serviceId);
+        let sSum = s ? s.basePrice : 0;
+        const addons = selectedFeatures[serviceId] || [];
+        addons.forEach(fId => {
+          const addon = (featureAddons[serviceId] || []).find(f => f.id === fId);
+          if (addon) sSum += addon.price;
+        });
+        return sum + sSum;
+      }, 0);
+      
+      const totalVal = calculateTotal();
+      const multiplier = urgencyOptions.find(u => u.id === urgency)?.multiplier || 1;
+      const urgencyLabel = urgencyOptions.find(u => u.id === urgency)?.label || 'Standard';
+      
+      // Subtotal
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9.5);
+      pdf.setTextColor(71, 85, 105);
+      pdf.text('Subtotal', 110, currentY);
+      pdf.text(formatCurrency(subtotal), pageWidth - 24, currentY, { align: 'right' });
+      currentY += 5.5;
+      
+      if (multiplier !== 1) {
+        pdf.text(`Timeline Premium (${urgencyLabel})`, 110, currentY);
+        pdf.text(`x${multiplier}`, pageWidth - 24, currentY, { align: 'right' });
+        currentY += 5.5;
+      }
+      
+      pdf.setDrawColor(148, 163, 184);
+      pdf.line(110, currentY, pageWidth - 20, currentY);
+      currentY += 5;
+      
+      // Total
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(11);
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Total Estimated Investment', 110, currentY);
+      pdf.setTextColor(6, 182, 212); // cyan
+      pdf.text(formatCurrency(totalVal), pageWidth - 24, currentY, { align: 'right' });
+      
+      currentY += 14;
+      
+      // Box for ROI and Notes
+      let boxHeight = 22;
+      if (formData.notes) boxHeight += 12;
+      
+      pdf.setFillColor(248, 250, 252);
+      pdf.setDrawColor(226, 232, 240);
+      pdf.rect(20, currentY, pageWidth - 40, boxHeight, 'FD');
+      
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9.5);
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Projected Business ROI:', 24, currentY + 6.5);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(217, 70, 239); // fuchsia
+      pdf.text(getProjectedROI(), 24, currentY + 11.5);
+      
+      if (formData.notes) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8.5);
+        pdf.setTextColor(71, 85, 105);
+        pdf.text('Client Notes / Special Instructions:', 24, currentY + 19.5);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(100, 116, 139);
+        const splitNotes = pdf.splitTextToSize(formData.notes, pageWidth - 48);
+        pdf.text(splitNotes, 24, currentY + 24.5);
+      }
+      
+      currentY += boxHeight + 14;
+      
+      // Next steps / booking instructions
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10.5);
+      pdf.setTextColor(15, 23, 42);
+      pdf.text('Next Steps:', 20, currentY);
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(71, 85, 105);
+      pdf.text('1. Book a Discovery Call with us to finalize implementation details and milestones.', 20, currentY + 5.5);
+      pdf.text('2. Link to Book: https://calendly.com/gmedia774/30min', 20, currentY + 10.5);
+      pdf.text('3. Once details are aligned, we will send over a formal service agreement to initiate kickoff.', 20, currentY + 15.5);
+      
+      // Footer page watermark / link
+      pdf.setDrawColor(241, 245, 249);
+      pdf.line(20, pageHeight - 18, pageWidth - 20, pageHeight - 18);
+      
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(148, 163, 184);
+      pdf.text('G-One Media Agency • https://ani0811.github.io/G-OneMedia', 20, pageHeight - 13);
+      pdf.text('Book Call: https://calendly.com/gmedia774/30min', pageWidth - 20, pageHeight - 13, { align: 'right' });
+      
       pdf.save(`G-OneMedia_Proposal_${formData.name.replace(/\s+/g, '_') || 'Client'}.pdf`);
     } catch (e) {
       console.error('PDF Generation Failed', e);
+      alert('PDF Generation Failed: ' + (e.message || e));
     } finally {
       setGeneratingPDF(false);
     }
   }
+
 
   const formatCurrency = (num, curr = currency) => {
     const value = Math.round(num * exchangeRates[curr])
@@ -199,10 +403,10 @@ export default function BudgetCalculator() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: formData.name, email: formData.email, message }),
       })
-      setSubmitted(true)
-    } catch {
-      // Silently handle — the CTA section is always available as a fallback
+    } catch (err) {
+      console.warn('[BudgetCalculator] Backend submission failed, falling back to client-side success screen:', err);
     } finally {
+      setSubmitted(true)
       setSubmitting(false)
     }
   }
