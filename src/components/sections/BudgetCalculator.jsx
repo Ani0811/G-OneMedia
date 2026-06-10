@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Send, Check, Sparkles, Download, Calendar } from 'lucide-react'
-import jsPDF from 'jspdf'
+import { jsPDF } from 'jspdf'
 import html2canvas from 'html2canvas'
 
 const serviceOptions = [
@@ -512,7 +512,9 @@ export default function BudgetCalculator() {
                       {generatingPDF ? 'Generating...' : <><Download size={18} /> Download Proposal</>}
                     </button>
                     <a
-                      href="#contact"
+                      href="https://calendly.com/gmedia774/30min"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-black text-sm font-bold transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] cursor-pointer"
                     >
                       <Calendar size={18} /> Book Discovery Call Now
@@ -525,7 +527,7 @@ export default function BudgetCalculator() {
                       <p className="text-sm text-[var(--text-secondary)]">Book a call directly on our calendar below to discuss your project.</p>
                     </div>
                     <iframe 
-                      src="https://calendly.com/anirudha-basuthakur/30min?hide_event_type_details=1&hide_gdpr_banner=1" 
+                      src="https://calendly.com/gmedia774/30min?hide_event_type_details=1&hide_gdpr_banner=1" 
                       width="100%" 
                       height="650" 
                       frameBorder="0"

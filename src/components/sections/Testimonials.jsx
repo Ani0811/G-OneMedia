@@ -151,9 +151,15 @@ export default function Testimonials() {
           >
             <button
               onClick={() => navigate('/reviews')}
-              className="btn-primary text-sm py-2.5! px-6! inline-flex items-center gap-2"
+              className="btn-secondary text-sm py-2.5! px-6! inline-flex items-center gap-2"
             >
               See All Reviews <ArrowRight size={16} />
+            </button>
+            <button
+              onClick={() => navigate('/reviews?write=true')}
+              className="btn-primary text-sm py-2.5! px-6! inline-flex items-center gap-2"
+            >
+              Write Your Review
             </button>
           </motion.div>
         )}

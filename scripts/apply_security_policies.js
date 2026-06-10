@@ -25,13 +25,13 @@ async function main() {
   await client.query('DROP POLICY IF EXISTS "Admins can delete reviews" ON reviews;');
   await client.query('DROP POLICY IF EXISTS "Admins can insert reviews" ON reviews;');
 
-  console.log("Creating strict Admins-only RLS policies for INSERT, UPDATE, and DELETE operations...");
+  console.log("Creating strict Admins-only RLS policies for UPDATE/DELETE, and moderated public INSERT policy...");
   
   await client.query(`
-    CREATE POLICY "Admins can insert reviews"
+    CREATE POLICY "Public can submit reviews"
       ON reviews FOR INSERT
       TO public
-      WITH CHECK (auth.jwt() ->> 'email' IN ('anirudha.basuthakur@gmail.com', 'vasudevsharma997@gmail.com'));
+      WITH CHECK (is_approved = false);
   `);
 
   await client.query(`
@@ -49,7 +49,7 @@ async function main() {
       USING (auth.jwt() ->> 'email' IN ('anirudha.basuthakur@gmail.com', 'vasudevsharma997@gmail.com'));
   `);
 
-  console.log("Admins-only reviews policies applied successfully.");
+  console.log("Reviews security policies applied successfully.");
   await client.end();
 }
 

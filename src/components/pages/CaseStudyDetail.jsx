@@ -351,7 +351,7 @@ export default function CaseStudyDetail() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="mt-6 mb-10 flex gap-4"
+          className="mt-6 mb-10 hidden md:flex gap-4"
         >
           <button
             onClick={() => navigate('/#portfolio')}
@@ -440,12 +440,38 @@ export default function CaseStudyDetail() {
           </div>
         </motion.div>
 
+        {/* Call to Action Buttons */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="flex flex-col sm:flex-row gap-4 mb-16"
+        >
+          {study.link && (
+            <a
+              href={ensureAbsoluteUrl(study.link)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-base font-bold bg-cyan-400 text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-[1.02] transition-all cursor-pointer"
+            >
+              <ExternalLink size={20} />
+              {study.project_type === 'Websites' ? 'Visit Live Site' : 'Watch Full Video'}
+            </a>
+          )}
+          <Link
+            to="/get-started"
+            className="flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-base font-bold border border-[var(--border-subtle)] hover:border-cyan-400 hover:text-cyan-400 transition-all text-[var(--text-primary)] hover:bg-cyan-400/5 cursor-pointer"
+          >
+            Start a Similar Project
+          </Link>
+        </motion.div>
+
         {/* Metrics Row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16"
         >
           {(study.metrics || []).map((metric, i) => {
             const Icon = getMetricIcon(metric.label)
@@ -504,26 +530,6 @@ export default function CaseStudyDetail() {
                   {tech}
                 </span>
               ))}
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-col gap-3">
-              {study.link && (
-                <a
-                  href={ensureAbsoluteUrl(study.link)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold bg-cyan-400 text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:scale-[1.01] transition-all cursor-pointer"
-                >
-                  <ExternalLink size={16} />
-                  {study.project_type === 'Websites' ? 'Visit Live Site' : 'Watch Full Video'}
-                </a>
-              )}
-              <Link
-                to="/get-started"
-                className={`w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-sm font-bold border border-[var(--border-subtle)] hover:border-cyan-400 hover:text-cyan-400 transition-all text-[var(--text-primary)] hover:bg-cyan-400/5 ${study.link ? '' : 'mt-2'}`}
-              >
-                Start a Similar Project
-              </Link>
             </div>
           </motion.div>
         </div>
