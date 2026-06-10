@@ -72,7 +72,6 @@ export default function Testimonials() {
           return {
             ...item,
             name: mock.name || item.name,
-            role: mock.role || item.role,
             rating,
           };
         })
@@ -152,9 +151,6 @@ export default function Testimonials() {
                       </div>
                       <div>
                         <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{t.name}</h4>
-                        {t.role && (
-                          <p className="text-[11px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
-                        )}
                       </div>
                     </div>
                   </motion.div>
