@@ -119,7 +119,7 @@ export default function Testimonials() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="glass-card p-10 relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300"
+                    className="glass-card p-10 relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300 flex flex-col h-full"
                   >
                     {/* Quote accent */}
                     <div className="absolute top-8 right-8 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
@@ -141,7 +141,7 @@ export default function Testimonials() {
                     </p>
 
                     {/* Author — initials avatar, no photo */}
-                    <div className="flex items-center gap-4 relative z-10 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+                    <div className="flex items-center gap-4 relative z-10 pt-4 border-t mt-auto" style={{ borderColor: 'var(--border-subtle)' }}>
                       {/* Initials avatar */}
                       <div
                         className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-black text-sm select-none"
