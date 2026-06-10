@@ -4,13 +4,6 @@ import { Star, ArrowRight, ShieldCheck, Quote } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
-// Realistic mock identities for the three testimonial slots
-const MOCK_IDENTITIES = [
-  { name: 'Priya Sharma' },
-  { name: 'Mohit Nayar' },
-  { name: 'Aisha Patel' },
-]
-
 // Gradient backgrounds for avatar initials
 const AVATAR_GRADIENTS = [
   'linear-gradient(135deg, #00f0ff 0%, #ff00e5 100%)',
@@ -64,18 +57,7 @@ export default function Testimonials() {
       .order('created_at', { ascending: false })
       .limit(3)
       .then(({ data }) => {
-        // Overlay mock identities on top of DB data (name + role only)
-        const finalData = (data || []).map((item, i) => {
-          const mock = MOCK_IDENTITIES[i] || {};
-          // Assign varied ratings: first and third get 5 stars, second gets 4 stars
-          const rating = i % 2 === 1 ? 4 : 5;
-          return {
-            ...item,
-            name: mock.name || item.name,
-            rating,
-          };
-        })
-        setReviews(finalData)
+        setReviews(data || [])
         setLoading(false)
       })
   }, [])
@@ -169,15 +151,9 @@ export default function Testimonials() {
           >
             <button
               onClick={() => navigate('/reviews')}
-              className="btn-secondary text-sm py-2.5! px-6! inline-flex items-center gap-2"
-            >
-              See All Reviews <ArrowRight size={16} />
-            </button>
-            <button
-              onClick={() => navigate('/reviews?write=true')}
               className="btn-primary text-sm py-2.5! px-6! inline-flex items-center gap-2"
             >
-              Write Your Review
+              See All Reviews <ArrowRight size={16} />
             </button>
           </motion.div>
         )}

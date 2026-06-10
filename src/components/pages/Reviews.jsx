@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, Upload, X, CheckCircle, ChevronLeft, ChevronRight, MessageSquarePlus, Loader2, AlertCircle, ArrowLeft, Pencil, Trash2, ShieldCheck, Quote } from 'lucide-react'
+import { Star, ChevronLeft, ChevronRight, MessageSquarePlus, ArrowLeft, ShieldCheck, Quote } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 
 const REVIEWS_PER_PAGE = 6
@@ -52,30 +52,6 @@ function LazyImage({ src, alt, className, fallback }) {
   )
 }
 
-// ── Star Rating input ─────────────────────────────────────────────────────────
-function StarRatingInput({ value, onChange }) {
-  const [hover, setHover] = useState(0)
-  return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          onMouseEnter={() => setHover(star)}
-          onMouseLeave={() => setHover(0)}
-          className="transition-transform hover:scale-125 active:scale-95"
-        >
-          <Star
-            size={28}
-            className={`transition-colors duration-150 ${(hover || value) >= star ? 'fill-yellow-400 text-yellow-400' : 'text-white/20'}`}
-          />
-        </button>
-      ))}
-    </div>
-  )
-}
-
 // ── Star Display (read-only) ──────────────────────────────────────────────────
 function StarDisplay({ rating, size = 14 }) {
   return (
@@ -117,7 +93,7 @@ function ReviewSkeleton() {
 }
 
 // ── Single Review Card ────────────────────────────────────────────────────────
-function ReviewCard({ review, index, isOwnReview, onEdit, onDelete }) {
+function ReviewCard({ review, index }) {
   const initials = review.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
 
   return (
@@ -141,24 +117,6 @@ function ReviewCard({ review, index, isOwnReview, onEdit, onDelete }) {
             Verified Client
           </span>
         </div>
-        {isOwnReview && (
-          <div className="flex gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
-            <button
-              onClick={() => onEdit(review)}
-              className="p-1.5 rounded-lg border border-white/10 hover:border-cyan-400 hover:text-cyan-400 transition-colors bg-white/5 cursor-pointer"
-              title="Edit Review"
-            >
-              <Pencil size={12} />
-            </button>
-            <button
-              onClick={() => onDelete(review.id)}
-              className="p-1.5 rounded-lg border border-white/10 hover:border-red-500 hover:text-red-400 transition-colors bg-white/5 cursor-pointer"
-              title="Delete Review"
-            >
-              <Trash2 size={12} />
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Review text */}
@@ -191,300 +149,17 @@ function ReviewCard({ review, index, isOwnReview, onEdit, onDelete }) {
   )
 }
 
-// ── Review Submission Form ────────────────────────────────────────────────────
-function ReviewForm({ onSuccess, editReview }) {
-  const [form, setForm] = useState({ name: '', role: '', rating: 0, review: '' })
-  const [file, setFile] = useState(null)
-  const [preview, setPreview] = useState(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const fileInputRef = useRef(null)
-
-  useEffect(() => {
-    if (editReview) {
-      setForm({
-        name: editReview.name || '',
-        role: editReview.role || '',
-        rating: editReview.rating || 0,
-        review: editReview.review || '',
-      })
-      setPreview(editReview.image_url || null)
-      setFile(null)
-    } else {
-      setForm({ name: '', role: '', rating: 0, review: '' })
-      setPreview(null)
-      setFile(null)
-    }
-  }, [editReview])
-
-  const handleFile = (e) => {
-    const f = e.target.files[0]
-    if (!f) return
-    if (f.size > 10 * 1024 * 1024) { setError('Image must be under 10MB.'); return }
-    if (!f.type.startsWith('image/')) { setError('Only image files are allowed.'); return }
-    setFile(f)
-    setPreview(URL.createObjectURL(f))
-    setError('')
-  }
-
-  const clearImage = () => {
-    setFile(null)
-    setPreview(null)
-    if (fileInputRef.current) fileInputRef.current.value = ''
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-
-    if (!form.name.trim()) return setError('Please enter your name.')
-    if (form.rating === 0) return setError('Please select a star rating.')
-    if (form.review.trim().length < 20) return setError('Review must be at least 20 characters.')
-
-    setSubmitting(true)
-    try {
-      let image_url = preview
-
-      // Upload image if provided
-      if (file) {
-        const ext = file.name.split('.').pop()
-        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-        const { error: uploadError } = await supabase.storage
-          .from('review-avatars')
-          .upload(fileName, file, { cacheControl: '3600', upsert: false })
-
-        if (uploadError) throw new Error('Image upload failed: ' + uploadError.message)
-
-        const { data: urlData } = supabase.storage
-          .from('review-avatars')
-          .getPublicUrl(fileName)
-        image_url = urlData.publicUrl
-      }
-
-      if (editReview) {
-        const { error: updateError } = await supabase
-          .from('reviews')
-          .update({
-            name: form.name.trim(),
-            role: form.role.trim() || null,
-            rating: form.rating,
-            review: form.review.trim(),
-            image_url,
-            is_approved: false, // require re-approval after edits
-          })
-          .eq('id', editReview.id)
-
-        if (updateError) throw new Error(updateError.message)
-        onSuccess(editReview.id)
-      } else {
-        const { data, error: insertError } = await supabase
-          .from('reviews')
-          .insert([{
-            name: form.name.trim(),
-            role: form.role.trim() || null,
-            rating: form.rating,
-            review: form.review.trim(),
-            image_url,
-            is_approved: false, // require approval before listing
-          }])
-          .select()
-
-        if (insertError) throw new Error(insertError.message)
-        onSuccess(data?.[0]?.id)
-      }
-    } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 32 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="glass-card p-8 md:p-10"
-    >
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: 'rgba(0,240,255,0.1)', border: '1px solid rgba(0,240,255,0.2)' }}>
-          <MessageSquarePlus size={20} style={{ color: 'var(--accent-blue)' }} />
-        </div>
-        <div>
-          <h3 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            {editReview ? 'Edit Your Review' : 'Leave a Review'}
-          </h3>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-            {editReview ? 'Update your feedback for G-One Media' : 'Share your experience with G-One Media'}
-          </p>
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Image upload */}
-        <div className="flex items-center gap-5">
-          <div className="relative w-20 h-20 shrink-0">
-            {preview ? (
-              <>
-                <img src={preview} alt="preview" className="w-20 h-20 rounded-full object-cover ring-2"
-                  style={{ '--tw-ring-color': 'rgba(0,240,255,0.4)' }} />
-                <button type="button" onClick={clearImage}
-                  className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-white"
-                  style={{ background: '#ef4444' }}>
-                  <X size={12} />
-                </button>
-              </>
-            ) : (
-              <button type="button" onClick={() => fileInputRef.current?.click()}
-                className="w-20 h-20 rounded-full border-2 border-dashed flex flex-col items-center justify-center gap-1 transition-colors hover:border-cyan-400/60 hover:bg-cyan-400/5"
-                style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-muted)' }}>
-                <Upload size={18} />
-                <span className="text-[10px] font-semibold">PHOTO</span>
-              </button>
-            )}
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
-          </div>
-          <div className="flex-1 space-y-3">
-            <input
-              type="text"
-              placeholder="Your name *"
-              value={form.name}
-              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-              style={{
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
-              onFocus={e => e.target.style.borderColor = 'rgba(0,240,255,0.5)'}
-              onBlur={e => e.target.style.borderColor = 'var(--border-subtle)'}
-            />
-            <input
-              type="text"
-              placeholder="Your role / company (optional)"
-              value={form.role}
-              onChange={e => setForm(f => ({ ...f, role: e.target.value }))}
-              className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
-              style={{
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
-              onFocus={e => e.target.style.borderColor = 'rgba(0,240,255,0.5)'}
-              onBlur={e => e.target.style.borderColor = 'var(--border-subtle)'}
-            />
-          </div>
-        </div>
-
-        {/* Star rating */}
-        <div>
-          <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>
-            Your Rating *
-          </label>
-          <StarRatingInput value={form.rating} onChange={r => setForm(f => ({ ...f, rating: r }))} />
-          {form.rating > 0 && (
-            <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
-              {['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent! ⭐'][form.rating]}
-            </p>
-          )}
-        </div>
-
-        {/* Review text */}
-        <div>
-          <label className="block text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>
-            Your Review *
-          </label>
-          <textarea
-            placeholder="Tell us about your experience with G-One Media..."
-            value={form.review}
-            onChange={e => setForm(f => ({ ...f, review: e.target.value }))}
-            rows={4}
-            className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all resize-none"
-            style={{
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border-subtle)',
-              color: 'var(--text-primary)',
-            }}
-            onFocus={e => e.target.style.borderColor = 'rgba(0,240,255,0.5)'}
-            onBlur={e => e.target.style.borderColor = 'var(--border-subtle)'}
-          />
-          <p className="mt-1.5 text-xs text-right" style={{ color: form.review.length < 20 ? 'var(--text-muted)' : '#4ade80' }}>
-            {form.review.length} chars {form.review.length < 20 ? `(min 20)` : '✓'}
-          </p>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm"
-            style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444' }}
-          >
-            <AlertCircle size={16} />
-            {error}
-          </motion.div>
-        )}
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {submitting ? (
-            <><Loader2 size={16} className="animate-spin" /> Submitting...</>
-          ) : (
-            editReview ? 'Update Review' : 'Submit Review'
-          )}
-        </button>
-      </form>
-    </motion.div>
-  )
-}
-
 // ── Main Reviews Page ─────────────────────────────────────────────────────────
 export default function Reviews() {
   const navigate = useNavigate()
-  const location = useLocation()
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
-  const [showForm, setShowForm] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
   const [avgRating, setAvgRating] = useState(null)
-  const [userReviewIds, setUserReviewIds] = useState([])
-  const [editingReview, setEditingReview] = useState(null)
-  const formRef = useRef(null)
 
   const totalPages = Math.ceil(total / REVIEWS_PER_PAGE)
-
-  useEffect(() => {
-    const stored = localStorage.getItem('g_onemedia_user_reviews')
-    if (stored) {
-      try {
-        setUserReviewIds(JSON.parse(stored))
-      } catch (e) {
-        console.error(e)
-      }
-    }
-  }, [])
-
-  const handleShareExperience = useCallback(() => {
-    setShowForm(true)
-    setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }, 150)
-  }, [])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    if (params.get('write') === 'true') {
-      handleShareExperience()
-    }
-  }, [location.search, handleShareExperience])
 
   const fetchReviews = useCallback(async (targetPage = 1, append = false) => {
     if (targetPage === 1) setLoading(true)
@@ -531,55 +206,6 @@ export default function Reviews() {
     setPage(p)
     window.scrollTo({ top: 0, behavior: 'smooth' })
     await fetchReviews(p)
-  }
-
-  const handleEditReview = (review) => {
-    setEditingReview(review)
-    setShowForm(true)
-    setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }, 150)
-  }
-
-  const handleDeleteReview = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this review?')) return
-
-    try {
-      const { error } = await supabase
-        .from('reviews')
-        .delete()
-        .eq('id', id)
-
-      if (error) throw error
-
-      const stored = localStorage.getItem('g_onemedia_user_reviews')
-      if (stored) {
-        const ids = JSON.parse(stored).filter(x => x !== id)
-        localStorage.setItem('g_onemedia_user_reviews', JSON.stringify(ids))
-        setUserReviewIds(ids)
-      }
-
-      fetchReviews(page)
-    } catch (err) {
-      alert('Failed to delete review: ' + err.message)
-    }
-  }
-
-  const handleSuccess = (insertedId) => {
-    if (insertedId) {
-      const stored = localStorage.getItem('g_onemedia_user_reviews')
-      const ids = stored ? JSON.parse(stored) : []
-      if (!ids.includes(insertedId)) {
-        ids.push(insertedId)
-        localStorage.setItem('g_onemedia_user_reviews', JSON.stringify(ids))
-        setUserReviewIds(ids)
-      }
-    }
-    setSubmitted(true)
-    setShowForm(false)
-    setEditingReview(null)
-    fetchReviews(page) // Refresh to show updated review
-    setTimeout(() => setSubmitted(false), 5000)
   }
 
   return (
@@ -697,55 +323,9 @@ export default function Reviews() {
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
               {loading ? 'Loading reviews...' : `Showing ${reviews.length} of ${total} reviews`}
             </p>
-            <button
-              onClick={() => {
-                if (showForm) {
-                  setShowForm(false)
-                  setEditingReview(null)
-                } else {
-                  setShowForm(true)
-                }
-              }}
-              className={showForm ? 'btn-secondary text-sm py-2.5! px-6!' : 'btn-primary text-sm py-2.5! px-6!'}
-            >
-              {editingReview ? 'Cancel Edit' : (showForm ? 'Close Form' : '+ Write a Review')}
-            </button>
           </div>
 
-          {/* Success toast */}
-          <AnimatePresence>
-            {submitted && (
-              <motion.div
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                className="mb-8 flex items-center gap-3 px-6 py-4 rounded-xl"
-                style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.3)', color: '#4ade80' }}
-              >
-                <CheckCircle size={18} />
-                <span className="font-semibold">
-                  {editingReview 
-                    ? 'Your review has been updated and is pending moderation.' 
-                    : 'Thank you! Your review has been submitted and will appear publicly once approved by our team.'}
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
-          {/* Review form */}
-          <AnimatePresence>
-            {showForm && (
-              <motion.div
-                ref={formRef}
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden mb-12"
-              >
-                <ReviewForm onSuccess={handleSuccess} editReview={editingReview} />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Reviews grid */}
           {loading ? (
@@ -765,12 +345,6 @@ export default function Reviews() {
               <h3 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
                 No reviews yet
               </h3>
-              <p className="mb-8" style={{ color: 'var(--text-muted)' }}>
-                Be the first to share your experience with G-One Media!
-              </p>
-              <button onClick={() => setShowForm(true)} className="btn-primary">
-                Write the First Review
-              </button>
             </motion.div>
           ) : (
             <AnimatePresence mode="wait">
@@ -787,9 +361,6 @@ export default function Reviews() {
                     key={review.id}
                     review={review}
                     index={i}
-                    isOwnReview={userReviewIds.includes(review.id)}
-                    onEdit={handleEditReview}
-                    onDelete={handleDeleteReview}
                   />
                 ))}
               </motion.div>
@@ -799,7 +370,7 @@ export default function Reviews() {
           {/* Loading more indicator */}
           {loadingMore && (
             <div className="flex justify-center mt-10">
-              <Loader2 size={32} className="animate-spin" style={{ color: 'var(--accent-blue)' }} />
+              <div className="w-8 h-8 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin" />
             </div>
           )}
 
@@ -858,27 +429,6 @@ export default function Reviews() {
                 style={{ border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}
               >
                 <ChevronRight size={16} />
-              </button>
-            </motion.div>
-          )}
-
-          {/* Bottom CTA */}
-          {!loading && reviews.length > 0 && !showForm && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-center mt-20 py-14 rounded-2xl"
-              style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}
-            >
-              <h3 className="text-2xl font-black mb-3" style={{ color: 'var(--text-primary)' }}>
-                Worked with G-One Media?
-              </h3>
-              <p className="mb-8" style={{ color: 'var(--text-muted)' }}>
-                We'd love to hear your feedback. It only takes a minute!
-              </p>
-              <button onClick={handleShareExperience} className="btn-primary">
-                + Share Your Experience
               </button>
             </motion.div>
           )}
