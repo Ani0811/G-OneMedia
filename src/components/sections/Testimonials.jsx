@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom'
 
 // Realistic mock identities for the three testimonial slots
 const MOCK_IDENTITIES = [
-  { name: 'Priya Sharma', role: 'Luxe Threads Co.' },
-  { name: 'Marcus Elliot', role: 'NovaSkin' },
-  { name: 'Aisha Patel', role: 'UrbanBlend Wellness' },
+  { name: 'Priya Sharma' },
+  { name: 'Mohit Nayar' },
+  { name: 'Aisha Patel' },
 ]
 
 // Gradient backgrounds for avatar initials

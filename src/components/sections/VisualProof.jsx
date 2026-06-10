@@ -1,14 +1,17 @@
 import { useState, useRef } from 'react'
 
 export default function BeforeAfterSlider({ 
-  beforeImage = "https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=1200&auto=format&fit=crop", // Example "Old/Ugly" site 
-  afterImage = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop", // Example "New/Clean" site
+  beforeImage, 
+  afterImage,
   beforeLabel = "Before",
   afterLabel = "After"
 }) {
   const [sliderPosition, setSliderPosition] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
   const containerRef = useRef(null)
+
+  const resolvedBefore = beforeImage || `${import.meta.env.BASE_URL || '/'}before_static_site.png`.replace(/\/+/g, '/')
+  const resolvedAfter = afterImage || `${import.meta.env.BASE_URL || '/'}after_dynamic_site.png`.replace(/\/+/g, '/')
 
   const handleMove = (clientX) => {
     if (!containerRef.current) return
@@ -59,7 +62,7 @@ export default function BeforeAfterSlider({
         >
           {/* AFTER Image (Background) */}
           <img 
-            src={afterImage} 
+            src={resolvedAfter} 
             alt="After" 
             className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none" 
             draggable={false}
@@ -74,7 +77,7 @@ export default function BeforeAfterSlider({
             style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
           >
             <img 
-              src={beforeImage} 
+              src={resolvedBefore} 
               alt="Before" 
               className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none filter grayscale sepia-30" 
               draggable={false}

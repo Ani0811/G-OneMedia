@@ -16,11 +16,9 @@ import RefundSection from './components/sections/RefundSection'
 import Footer from './components/common/Footer'
 import NotFound from './components/pages/NotFound'
 import BudgetCalculator from './components/sections/BudgetCalculator'
-import ROIEstimator from './components/sections/ROIEstimator'
 import AIChatWidget from './components/features/AIChatWidget'
 import ScheduleModal from './components/features/ScheduleModal'
 import Loader from './components/common/Loader'
-import TrendingBreakdown from './components/sections/TrendingBreakdown'
 import ClientWinsTicker from './components/features/ClientWinsTicker'
 import VisualProof from './components/sections/VisualProof'
 import CookieBanner from './components/common/CookieBanner'
@@ -70,11 +68,9 @@ function HomePage({ onScheduleCall }) {
       <Hero onScheduleCall={onScheduleCall} />
       <ClientWinsTicker />
       <VisualProof />
-      <TrendingBreakdown />
       <Services />
       <Portfolio />
       <Process />
-      <ROIEstimator />
       <BudgetCalculator />
       <Pricing onScheduleCall={onScheduleCall} />
       <Testimonials />
