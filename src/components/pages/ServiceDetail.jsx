@@ -2,6 +2,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Code2, Bot, Video, Rocket, Calendar, Database, Server, Smartphone, Globe, Workflow, Activity, Layout, Zap, MessageSquare, Share2, Layers, Search, PenTool, Clapperboard, MonitorPlay, PlaySquare, Settings, Target, TrendingUp, Users, BarChart } from 'lucide-react'
 import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 const services = {
   'web-engineering': {
@@ -165,6 +166,28 @@ export default function ServiceDetail({ onScheduleCall }) {
 
   return (
     <section className="pt-28 pb-24 relative min-h-screen">
+      {service && (
+        <Helmet>
+          <title>{`${service.title} | G-One Media`}</title>
+          <meta name="description" content={service.description} />
+          <meta name="keywords" content={`G-One Media, ${service.title}, ${service.tagline}, ${service.features.map(f => f.text).join(', ')}`} />
+          <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/services/${slug}`} />
+          
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`https://ani0811.github.io/G-OneMedia/services/${slug}`} />
+          <meta property="og:title" content={`${service.title} | G-One Media`} />
+          <meta property="og:description" content={service.description} />
+          <meta property="og:image" content={service.image} />
+
+          {/* Twitter */}
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content={`https://ani0811.github.io/G-OneMedia/services/${slug}`} />
+          <meta property="twitter:title" content={`${service.title} | G-One Media`} />
+          <meta property="twitter:description" content={service.description} />
+          <meta property="twitter:image" content={service.image} />
+        </Helmet>
+      )}
       {/* Background Ambient Glow */}
       <div className={`absolute top-0 left-0 right-0 h-[50vh] bg-gradient-to-b ${service.gradient} opacity-30 -z-20`} />
 

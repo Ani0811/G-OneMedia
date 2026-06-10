@@ -65,8 +65,24 @@ export default function DiscoveryCall() {
       <Helmet>
         <title>Book a Discovery Call | G-One Media</title>
         <meta name="description" content="Schedule a discovery call with G-One Media to discuss your project, business goals, and see how we can help you scale." />
+        <meta name="keywords" content="G-One Media, discovery call, book consultation, marketing strategy call, agency consultation" />
         <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/discovery" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/discovery" />
+        <meta property="og:title" content="Book a Discovery Call | G-One Media" />
+        <meta property="og:description" content="Schedule a discovery call with G-One Media to discuss your project, business goals, and see how we can help you scale." />
+        <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/discovery" />
+        <meta property="twitter:title" content="Book a Discovery Call | G-One Media" />
+        <meta property="twitter:description" content="Schedule a discovery call with G-One Media to discuss your project, business goals, and see how we can help you scale." />
+        <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
       </Helmet>
+
       {/* Ambient background glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-[140px] -z-10" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-fuchsia-500/8 rounded-full blur-[120px] -z-10" />

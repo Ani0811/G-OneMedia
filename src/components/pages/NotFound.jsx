@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { AlertTriangle, Home } from 'lucide-react'
+import { Helmet } from 'react-helmet-async'
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#050508]">
+      <Helmet>
+        <title>Page Not Found | G-One Media</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       {/* Background elements */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
       

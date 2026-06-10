@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RefreshCcw, CheckCircle, Loader, AlertCircle, Mail, Hash, ShieldCheck, ArrowLeft } from 'lucide-react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 export default function RefundRequest() {
   const [searchParams] = useSearchParams()
@@ -66,6 +67,27 @@ export default function RefundRequest() {
 
   return (
     <section className="min-h-screen pt-32 pb-20 flex items-center justify-center relative overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
+      <Helmet>
+        <title>Request Refund | G-One Media</title>
+        <meta name="description" content="Submit a refund request for G-One Media services. Enter your email and payment ID to initiate processing." />
+        <meta name="keywords" content="G-One Media, refund request, payment return, service refund" />
+        <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/refund" />
+        <meta name="robots" content="noindex, nofollow" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/refund" />
+        <meta property="og:title" content="Request Refund | G-One Media" />
+        <meta property="og:description" content="Submit a refund request for G-One Media services. Enter your email and payment ID to initiate processing." />
+        <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/refund" />
+        <meta property="twitter:title" content="Request Refund | G-One Media" />
+        <meta property="twitter:description" content="Submit a refund request for G-One Media services. Enter your email and payment ID to initiate processing." />
+        <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+      </Helmet>
       {/* Background Gradients */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-fuchsia-500/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 

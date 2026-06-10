@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Static Pages -->
   <url>
     <loc>https://ani0811.github.io/G-OneMedia/</loc>
     <changefreq>weekly</changefreq>
@@ -21,8 +22,139 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ani0811.github.io/G-OneMedia/vault</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/audit</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://ani0811.github.io/G-OneMedia/refund</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+
+  <!-- Founder Profiles -->
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/about/anirudha</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/about/vasudev</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Service Details -->
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/services/web-engineering</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/services/ai-agents</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/services/content-creation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/services/digital-consultation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Case Studies -->
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/foodiefrenzy-saas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/abt-developer-portfolio</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/aether-insight-bot</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/nexus-data-agent</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/fitflow-cinematic</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/gone-tech-review</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/digital-nomad-life</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/client-showcase</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/aesthetic-cloth-reel</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/aether-essence</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/production-highlights</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/behind-the-scenes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/agency-lifestyle</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/dynamic-reel</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/rimberio-real-estate</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/cinematic-showcase</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ani0811.github.io/G-OneMedia/portfolio/cinematic-showcase-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

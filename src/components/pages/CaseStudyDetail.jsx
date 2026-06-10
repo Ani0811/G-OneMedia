@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, ExternalLink, TrendingUp, Users, Zap, Clock, AlertCircle, RefreshCw } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 const ensureAbsoluteUrl = (url) => {
   if (!url) return ''
@@ -323,6 +324,28 @@ export default function CaseStudyDetail() {
 
   return (
     <section className="pt-28 pb-20">
+      {study && (
+        <Helmet>
+          <title>{`${study.title} Case Study | G-One Media`}</title>
+          <meta name="description" content={study.description} />
+          <meta name="keywords" content={`G-One Media, ${study.title}, ${study.category}, ${study.project_type || ''}, case study, portfolio, ${study.tech_stack ? study.tech_stack.join(', ') : ''}`} />
+          <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/portfolio/${id}`} />
+          
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={`https://ani0811.github.io/G-OneMedia/portfolio/${id}`} />
+          <meta property="og:title" content={`${study.title} Case Study | G-One Media`} />
+          <meta property="og:description" content={study.description} />
+          <meta property="og:image" content={heroImage} />
+
+          {/* Twitter */}
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content={`https://ani0811.github.io/G-OneMedia/portfolio/${id}`} />
+          <meta property="twitter:title" content={`${study.title} Case Study | G-One Media`} />
+          <meta property="twitter:description" content={study.description} />
+          <meta property="twitter:image" content={heroImage} />
+        </Helmet>
+      )}
       <div className="container-custom">
         {/* Back Button */}
         <motion.div

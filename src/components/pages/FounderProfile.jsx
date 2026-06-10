@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Code, Video, Mail, ExternalLink, Github, Linkedin, Instagram, Youtube, Zap, Star } from 'lucide-react'
+import { Helmet } from 'react-helmet-async'
 
 const founders = {
   anirudha: {
@@ -91,6 +92,28 @@ export default function FounderProfile() {
 
   return (
     <section className="pt-28 pb-24 relative min-h-screen overflow-hidden">
+      {founder && (
+        <Helmet>
+          <title>{`${founder.name} | G-One Media`}</title>
+          <meta name="description" content={founder.tagline} />
+          <meta name="keywords" content={`G-One Media, ${founder.name}, ${founder.role}, ${founder.tagline}, team, founder, ${founder.skills.map(s => s.label).join(', ')}`} />
+          <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
+          
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="profile" />
+          <meta property="og:url" content={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
+          <meta property="og:title" content={`${founder.name} | G-One Media`} />
+          <meta property="og:description" content={founder.tagline} />
+          <meta property="og:image" content={`https://ani0811.github.io/G-OneMedia/${founder.image}`} />
+
+          {/* Twitter */}
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:url" content={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
+          <meta property="twitter:title" content={`${founder.name} | G-One Media`} />
+          <meta property="twitter:description" content={founder.tagline} />
+          <meta property="twitter:image" content={`https://ani0811.github.io/G-OneMedia/${founder.image}`} />
+        </Helmet>
+      )}
       {/* Ambient BG */}
       <div className={`absolute top-0 left-0 right-0 h-[60vh] bg-gradient-to-b ${gradientFrom} to-[var(--bg-deep)] opacity-40 -z-20 pointer-events-none`} />
       

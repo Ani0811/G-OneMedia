@@ -50,7 +50,22 @@ function HomePage({ onScheduleCall }) {
       <Helmet>
         <title>G-One Media | High-Performance Digital Agency</title>
         <meta name="description" content="G-One Media — A digital agency crafting high-converting websites and engaging video content that drives business growth." />
+        <meta name="keywords" content="G-One Media, digital marketing agency, web design agency, app development, AI agents, video production, video editing, social media growth, SEO optimization, high-converting websites" />
         <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/" />
+        <meta property="og:title" content="G-One Media | High-Performance Digital Agency" />
+        <meta property="og:description" content="G-One Media — A digital agency crafting high-converting websites and engaging video content that drives business growth." />
+        <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/" />
+        <meta property="twitter:title" content="G-One Media | High-Performance Digital Agency" />
+        <meta property="twitter:description" content="G-One Media — A digital agency crafting high-converting websites and engaging video content that drives business growth." />
+        <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
       </Helmet>
       <Hero onScheduleCall={onScheduleCall} />
       <ClientWinsTicker />
