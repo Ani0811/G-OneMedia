@@ -34,15 +34,15 @@ const pricingData = {
 
 const individualServicesData = {
   'Development': [
-    { name: 'Landing Page', price: { INR: '15K - 30K', USD: '$200 - $400' } },
-    { name: 'Business Website', price: { INR: '30K - 80K', USD: '$400 - $1,000' } },
-    { name: 'Custom Dashboard / Web App', price: { INR: '80K - 2L', USD: '$1,000 - $2,500' } },
-    { name: 'MVP Development', price: { INR: '1L - 4L', USD: '$1,200 - $5,000' } },
-    { name: 'AI Chatbot Integration', price: { INR: '25K - 75K', USD: '$300 - $900' } },
-    { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800' } },
-    { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000' } },
-    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo' } },
-    { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins' }, link: 'https://calendly.com/g-onemedia/discovery-call' }
+    { name: 'Landing Page', price: { INR: '15K - 30K', USD: '$200 - $400' }, icon: 'landing-page.png' },
+    { name: 'Business Website', price: { INR: '30K - 80K', USD: '$400 - $1,000' }, icon: 'software-application.png' },
+    { name: 'Custom Dashboard / Web App', price: { INR: '80K - 2L', USD: '$1,000 - $2,500' }, icon: 'business-intelligence.png' },
+    { name: 'MVP Development', price: { INR: '1L - 4L', USD: '$1,200 - $5,000' }, icon: 'innovation.png' },
+    { name: 'AI Chatbot Integration', price: { INR: '25K - 75K', USD: '$300 - $900' }, icon: 'chatbot.png' },
+    { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800' }, icon: 'robot.png' },
+    { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000' }, icon: 'whatsapp.png' },
+    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo' }, icon: 'mechanic.png' },
+    { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins' }, icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' }
   ]
 }
 
@@ -219,8 +219,16 @@ export default function Pricing({ onScheduleCall }) {
                       <h4 className="font-bold text-xl leading-tight" style={{ color: 'var(--text-primary)' }}>
                         {service.name}
                       </h4>
-                      <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:bg-cyan-400 group-hover:text-black transition-all shrink-0">
-                        <Sparkles size={16} />
+                      <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center transition-all shrink-0 overflow-hidden p-2 group-hover:scale-110 group-hover:bg-cyan-400">
+                        {service.icon ? (
+                          <img 
+                            src={`${import.meta.env.BASE_URL || '/'}Archive/${service.icon}`.replace(/\/+/g, '/')} 
+                            alt={service.name} 
+                            className="w-5 h-5 object-contain opacity-80 group-hover:opacity-100 group-hover:brightness-0 transition-all" 
+                          />
+                        ) : (
+                          <Sparkles size={16} className="text-cyan-400 group-hover:text-black transition-colors" />
+                        )}
                       </div>
                     </div>
                     
