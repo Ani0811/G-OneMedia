@@ -161,7 +161,7 @@ export default function Pricing({ onScheduleCall }) {
                       setDefaultAmount(initialAmt)
                       setIsPaymentOpen(true)
                     }}
-                    className="w-full py-4 text-sm font-bold rounded-xl transition-all duration-300 bg-transparent border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/10 text-(--text-primary) flex items-center justify-center"
+                    className="w-full py-4 text-sm font-bold rounded-xl transition-all duration-300 bg-transparent border border-[var(--border-subtle)] hover:border-cyan-500/50 hover:bg-cyan-500/10 text-(--text-primary) flex items-center justify-center"
                   >
                     Pay Now
                   </a>
@@ -266,7 +266,7 @@ export default function Pricing({ onScheduleCall }) {
                             setDefaultAmount(initialAmt)
                             setIsPaymentOpen(true)
                           }}
-                          className="w-full py-3 px-6 text-sm font-bold rounded-xl transition-all duration-300 border border-white/10 hover:border-cyan-400/50 bg-white/5 hover:bg-cyan-400 text-[var(--text-primary)] hover:text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] flex justify-center items-center gap-2 group-hover:border-cyan-400/30"
+                          className="w-full py-3 px-6 text-sm font-bold rounded-xl transition-all duration-300 border border-[var(--border-subtle)] hover:border-cyan-400/50 bg-white/5 hover:bg-cyan-400 text-[var(--text-primary)] hover:text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] flex justify-center items-center gap-2 group-hover:border-cyan-400/30"
                         >
                           Select Service
                         </button>

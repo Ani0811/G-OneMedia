@@ -52,15 +52,15 @@ export default function Services() {
             >
               {/* Profound background image */}
               <div 
-                className="absolute inset-0 -z-20 bg-cover bg-center opacity-15 dark:opacity-20 group-hover:opacity-35 dark:group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 pointer-events-none"
+                className="absolute inset-0 bg-cover bg-center opacity-15 dark:opacity-20 group-hover:opacity-35 dark:group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 pointer-events-none"
                 style={{ backgroundImage: `url(${service.bgImage})` }}
               />
 
               {/* Theme-aware gradient overlay for maximum readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-[var(--bg-deep)]/85 to-[var(--bg-deep)]/20 opacity-90 group-hover:opacity-80 transition-opacity duration-500 -z-10 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-deep)] via-[var(--bg-deep)]/85 to-[var(--bg-deep)]/20 opacity-90 group-hover:opacity-80 transition-opacity duration-500 pointer-events-none" />
 
               {/* Hover highlight background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" style={{ background: 'rgba(0, 240, 255, 0.1)', border: '1px solid var(--border-subtle)', boxShadow: '0 0 15px rgba(0,240,255,0.2)' }}>

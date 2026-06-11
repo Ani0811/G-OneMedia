@@ -125,7 +125,7 @@ export default function ServiceDetail({ onScheduleCall }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center order-2 lg:order-1"
           >
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${service.accentBg} border ${service.accentBorder} ${service.accentGlow}`}>
               <Icon size={28} className={service.accentColor} />
@@ -164,7 +164,7 @@ export default function ServiceDetail({ onScheduleCall }) {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-lg mx-auto lg:ml-auto lg:mr-0 mt-8 lg:mt-0"
+            className="relative w-full max-w-lg mx-auto lg:ml-auto lg:mr-0 mt-8 lg:mt-0 order-1 lg:order-2"
           >
             <div className="relative z-10 rounded-[40px] overflow-hidden shadow-2xl p-2" style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-subtle)' }}>
               <div className="rounded-[32px] overflow-hidden aspect-[4/3]">

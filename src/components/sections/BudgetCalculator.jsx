@@ -492,7 +492,7 @@ export default function BudgetCalculator() {
                           className={`group relative flex items-start gap-4 p-5 rounded-xl border transition-all duration-300 text-left cursor-pointer w-full ${
                             isSelected
                               ? 'border-cyan-500/50 bg-cyan-500/10 shadow-[0_0_20px_rgba(0,240,255,0.1)]'
-                              : 'border-white/10 hover:border-white/20 hover:bg-white/5'
+                              : 'border-[var(--border-subtle)] hover:border-[var(--text-muted)]/30 hover:bg-[var(--text-primary)]/[0.02]'
                           }`}
                         >
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all ${
@@ -551,7 +551,7 @@ export default function BudgetCalculator() {
                                   className={`flex items-center justify-between px-4 py-3 rounded-lg border text-sm transition-all cursor-pointer ${
                                     isSelected
                                       ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-400'
-                                      : 'border-white/5 hover:border-white/15 text-[var(--text-secondary)]'
+                                      : 'border-[var(--border-subtle)] hover:border-[var(--text-muted)]/30 text-[var(--text-secondary)]'
                                   }`}
                                 >
                                   <span className="font-medium">{addon.label}</span>
@@ -591,7 +591,7 @@ export default function BudgetCalculator() {
                         className={`w-full flex items-center justify-between px-6 py-5 rounded-xl border transition-all cursor-pointer ${
                           urgency === opt.id
                             ? 'border-cyan-500/50 bg-cyan-500/10 shadow-[0_0_20px_rgba(0,240,255,0.1)]'
-                            : 'border-white/10 hover:border-white/20'
+                            : 'border-[var(--border-subtle)] hover:border-[var(--text-muted)]/30'
                         }`}
                       >
                         <div className="text-left">
@@ -628,21 +628,21 @@ export default function BudgetCalculator() {
                       placeholder="Your name"
                       value={formData.name}
                       onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full px-5 py-4 rounded-xl border border-white/10 bg-white/5 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
+                      className="w-full px-5 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--text-primary)]/[0.02] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
                     />
                     <input
                       type="email"
                       placeholder="Email address"
                       value={formData.email}
                       onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full px-5 py-4 rounded-xl border border-white/10 bg-white/5 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
+                      className="w-full px-5 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--text-primary)]/[0.02] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
                     />
                     <textarea
                       placeholder="Additional notes (optional)"
                       value={formData.notes}
                       onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
                       rows={3}
-                      className="w-full px-5 py-4 rounded-xl border border-white/10 bg-white/5 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all resize-none"
+                      className="w-full px-5 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--text-primary)]/[0.02] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all resize-none"
                     />
                   </div>
                 </motion.div>
