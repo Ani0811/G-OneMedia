@@ -9,27 +9,6 @@ const services = [
     slug: 'web-engineering',
     description: 'High-performance, scalable web solutions built with cutting-edge tech stacks for maximum speed and security.',
     bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop'
-  },
-  {
-    icon: Bot,
-    title: 'AI Agents',
-    slug: 'ai-agents',
-    description: 'Custom AI solutions and intelligent agents designed to automate workflows and enhance user interaction through natural language processing.',
-    bgImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop'
-  },
-  {
-    icon: Film,
-    title: 'Content Creation',
-    slug: 'content-creation',
-    description: 'Cinematic storytelling and professional video production that captures your brand essence and engages audiences.',
-    bgImage: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    icon: TrendingUp,
-    title: 'Digital Consultation',
-    slug: 'digital-consultation',
-    description: 'Data-driven growth strategies and marketing automation to scale your reach and maximize conversion rates.',
-    bgImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop'
   }
 ]
 

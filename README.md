@@ -12,15 +12,6 @@ In an era of digital noise, we focus on **Engineering Impact**. Our work is a fu
 ### 💻 Websites & Apps
 From high-converting landing pages to complex enterprise dashboards and MVPs. We build responsive, performant, and visually stunning web experiences.
 
-### 🎬 Video Editing & Content
-Consistent content engines for the modern era. We specialize in high-retention Reels, Shorts, and long-form YouTube content with advanced motion graphics and cinematic pacing.
-
-### 🤖 AI Agents & Automations
-Intelligent systems that handle customer support, appointment scheduling, and complex business workflows autonomously.
-
-### 📊 Individual Solutions
-Bespoke digital consultation and specialized services tailored to your specific brand goals.
-
 ## 💻 Technology Stack
 
 - **Core**: [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)

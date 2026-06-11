@@ -29,84 +29,6 @@ const pricingData = {
         features: ['Advanced Integrations', 'Custom Dashboards', 'Workflow Automations', 'AI Features']
       }
     ]
-  },
-  'Video Editing': {
-    icon: Video,
-    packages: [
-      {
-        name: 'Starter Package', icon: Sparkles,
-        price: { INR: '₹10K - ₹15K', USD: '$120 - $200' },
-        period: '/ month',
-        description: 'Consistent content engine',
-        features: ['12 Reels / Shorts per month', 'Standard Pacing & Cuts', 'Basic Motion Graphics', 'Trending Audio']
-      },
-      {
-        name: 'Growth Package', icon: Zap,
-        price: { INR: '₹20K - ₹35K', USD: '$250 - $450' },
-        period: '/ month',
-        description: 'Aggressive reach',
-        features: ['20 Reels / Shorts per month', 'Advanced Motion Graphics', 'Retention Hooks', 'Scripting Assistance']
-      },
-      {
-        name: 'Premium Package', icon: Building2,
-        price: { INR: '₹50K - ₹100K+', USD: '$600 - $1,200+' },
-        period: '/ month',
-        description: 'Full channel dominance',
-        features: ['30+ Reels / Shorts per month', 'Full Channel Management', 'Cinematic Edits', 'Dedicated Content Strategist']
-      }
-    ]
-  },
-  'AI Agents': {
-    icon: Cpu,
-    packages: [
-      {
-        name: 'Basic Bot', icon: Sparkles,
-        price: { INR: '₹10,000', USD: '$150' },
-        period: 'starts from',
-        description: 'Customer Support and FAQs',
-        features: ['Website Integration', 'Knowledge Base Training', 'Lead Capture Form', 'Email Notifications']
-      },
-      {
-        name: 'Advanced Agent', icon: Zap,
-        price: { INR: '₹20,000', USD: '$250' },
-        period: 'starts from',
-        description: 'Complex intelligent flows',
-        features: ['API Integrations (CRM/ERP)', 'Appointment Scheduling', 'Sentiment Analysis', 'Multi-channel (Web, WA)']
-      },
-      {
-        name: 'Full AI Ecosystem', icon: Building2,
-        price: { INR: '₹50,000+', USD: '$600+' },
-        period: 'starts from',
-        description: 'Enterprise automation',
-        features: ['Autonomous multi-agent', 'Custom AI Pipelines', 'Internal Team Tools', 'Ongoing Optimization']
-      }
-    ]
-  },
-  'Digital Marketing': {
-    icon: Target,
-    packages: [
-      {
-        name: 'Launch', icon: Sparkles,
-        price: { INR: '₹10,000', USD: '$150' },
-        period: '/ month',
-        description: 'Establish your presence',
-        features: ['Social Media Management', '8 Posts per month', 'Basic Engagement Strategy', 'Monthly Report']
-      },
-      {
-        name: 'Scale', icon: Zap,
-        price: { INR: '₹20,000', USD: '$250' },
-        period: '/ month',
-        description: 'Drive traffic and leads',
-        features: ['Advanced SEO Implementation', '15 Social Posts / mo', 'Ad Campaign Management', 'Bi-weekly Strategy Call']
-      },
-      {
-        name: 'Dominate', icon: Building2,
-        price: { INR: '₹50,000+', USD: '$600+' },
-        period: '/ month',
-        description: 'Market leadership',
-        features: ['Omnichannel Strategy', 'Unlimited Ad Management', 'Daily Content Publishing', 'Advanced Analytics Dashboard']
-      }
-    ]
   }
 }
 
@@ -120,15 +42,6 @@ const individualServicesData = {
     { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800' } },
     { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000' } },
     { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo' } },
-    { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins' }, link: 'https://calendly.com/g-onemedia/discovery-call' }
-  ],
-  'Video Editing': [
-    { name: 'Reels Editing', price: { INR: '500 - 4K+ / video', USD: '$30 - $150 / video' } },
-    { name: 'YouTube Editing', price: { INR: '2K - 20K+ / video', USD: '$100 - $500 / video' } },
-    { name: 'Podcast Editing', price: { INR: '2K - 15K+ / episode', USD: '$150 - $1,000 / episode' } },
-    { name: 'Thumbnail Design', price: { INR: '500 - 2K+ / unit', USD: '$10 - $30 / unit' } },
-    { name: 'Captions Only', price: { INR: '300 - 1.5K+ / unit', USD: '$5 - $20 / unit' } },
-    { name: 'Full Video Retainer', price: { INR: '40K - 4L+ / mo', USD: '$500 - $5,000 / mo' } },
     { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins' }, link: 'https://calendly.com/g-onemedia/discovery-call' }
   ]
 }
@@ -274,7 +187,7 @@ export default function Pricing({ onScheduleCall }) {
               
               {/* Sub-section swap toggle */}
               <div className="inline-flex p-1 rounded-xl bg-black/10 border border-white/5 backdrop-blur-sm mx-auto">
-                {['Development', 'Video Editing'].map((sub) => {
+                {['Development'].map((sub) => {
                   const isActive = activeIndividualSub === sub
                   return (
                     <button

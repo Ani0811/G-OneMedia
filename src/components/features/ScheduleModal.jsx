@@ -178,9 +178,6 @@ export default function ScheduleModal({ isOpen, onClose }) {
                           onChange={e => setFields({...fields, service: e.target.value})}
                         >
                           <option value="Websites" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>Websites</option>
-                          <option value="AI Agents" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>AI Agents</option>
-                          <option value="Videos" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>Videos</option>
-                          <option value="Consultation" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>Consultation</option>
                         </select>
                       </div>
                       <div className="space-y-2">

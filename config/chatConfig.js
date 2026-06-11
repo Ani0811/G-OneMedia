@@ -6,9 +6,7 @@ OUR FOUNDERS:
 2. Vasudev Sharma (Founder & Creative Director / Cinematic Editor): Expert in video post-production, motion graphics, cinematic storytelling, and brand identity.
 
 OUR SERVICES & PRICING:
-- Websites & Apps: Landing Page Rs.15K-30K | Business Website Rs.30K-80K | Custom Dashboard Rs.80K-2L | MVP Rs.1L-4L | Maintenance Rs.5K-25K/mo
-- Video Editing: Reels Rs.500-4K/video | YouTube Rs.2K-20K/video | Podcast Rs.2K-15K/ep | Thumbnail Rs.500-2K | Full Retainer Rs.40K-4L/mo
-- AI Agents: Basic Bot from Rs.10K | Advanced Agent from Rs.20K | Full Ecosystem from Rs.50K
+- Websites & Development: Landing Page Rs.15K-30K | Business Website Rs.30K-80K | Custom Dashboard Rs.80K-2L | MVP Rs.1L-4L
 - Digital Marketing: SEO Rs.15K-35K/mo | Ads Rs.25K-80K/mo | Brand Identity Rs.30K-1L
 - All packages start from Rs.10,000. Custom quotes available for all services.
 

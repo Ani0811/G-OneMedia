@@ -45,7 +45,7 @@ export default function BeforeAfterSlider({
 
         <div 
           ref={containerRef}
-          className="relative w-full max-w-5xl mx-auto aspect-video sm:aspect-21/9 rounded-2xl overflow-hidden cursor-ew-resize select-none touch-none shadow-2xl shadow-primary/20 border border-border-subtle bg-black"
+          className="relative w-full max-w-2xl md:max-w-3xl mx-auto aspect-square rounded-2xl overflow-hidden cursor-ew-resize select-none touch-none shadow-2xl shadow-primary/20 border border-border-subtle bg-neutral-950"
           onMouseMove={onMouseMove}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
@@ -64,7 +64,7 @@ export default function BeforeAfterSlider({
           <img 
             src={resolvedAfter} 
             alt="After" 
-            className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none" 
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none" 
             draggable={false}
           />
           <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full text-white text-sm font-bold shadow-lg z-10 border border-white/10">
@@ -79,7 +79,7 @@ export default function BeforeAfterSlider({
             <img 
               src={resolvedBefore} 
               alt="Before" 
-              className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none filter grayscale sepia-30" 
+              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none filter grayscale sepia-30" 
               draggable={false}
             />
             <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full text-white text-sm font-bold shadow-lg z-10 border border-white/10">

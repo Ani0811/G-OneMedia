@@ -5,9 +5,6 @@ import { jsPDF } from 'jspdf'
 
 const serviceOptions = [
   { id: 'website', label: 'Website / Web App', icon: Code, basePrice: 15000, description: 'React, Next.js, full-stack solutions' },
-  { id: 'video', label: 'Video Production', icon: Video, basePrice: 10000, description: 'Reels, YouTube, cinematic content' },
-  { id: 'ai', label: 'AI Agent / Chatbot', icon: Bot, basePrice: 25000, description: 'Custom LLM bots and automation' },
-  { id: 'marketing', label: 'Digital Marketing', icon: TrendingUp, basePrice: 10000, description: 'SEO, ads, social media strategy' },
 ]
 
 const featureAddons = {
@@ -18,28 +15,7 @@ const featureAddons = {
     { id: 'dashboard', label: 'Custom Dashboard', price: 20000 },
     { id: 'seo', label: 'SEO Optimization', price: 5000 },
     { id: 'auth', label: 'User Authentication', price: 8000 },
-  ],
-  video: [
-    { id: 'motion-gfx', label: 'Motion Graphics', price: 5000 },
-    { id: 'scripting', label: 'Scripting & Strategy', price: 4000 },
-    { id: 'thumbnail', label: 'Thumbnail Design (5)', price: 2000 },
-    { id: 'subtitles', label: 'Subtitles & Captions', price: 1500 },
-    { id: 'channel-mgmt', label: 'Channel Management', price: 15000 },
-  ],
-  ai: [
-    { id: 'multi-channel', label: 'Multi-Channel (Web + WhatsApp)', price: 10000 },
-    { id: 'crm', label: 'CRM / ERP Integration', price: 12000 },
-    { id: 'training', label: 'Custom LLM Training', price: 20000 },
-    { id: 'analytics', label: 'Sentiment Analytics', price: 8000 },
-    { id: 'scheduling', label: 'Appointment Scheduling', price: 5000 },
-  ],
-  marketing: [
-    { id: 'meta-ads', label: 'Meta / Google Ads', price: 15000 },
-    { id: 'email-flow', label: 'Email Marketing Flow', price: 8000 },
-    { id: 'branding', label: 'Brand Identity Design', price: 20000 },
-    { id: 'content', label: 'Content Strategy', price: 10000 },
-    { id: 'analytics-dashboard', label: 'Analytics Dashboard', price: 12000 },
-  ],
+  ]
 }
 
 const urgencyOptions = [
@@ -115,15 +91,8 @@ export default function BudgetCalculator() {
 
   const getProjectedROI = () => {
     let roiText = 'High Impact Growth';
-    if (selectedServices.includes('ai')) {
-      // Just an illustrative dynamic calculation
-      roiText = `Saves ~40 hrs/mo + ${formatCurrency(total * 1.5)} revenue`;
-    } else if (selectedServices.includes('website')) {
+    if (selectedServices.includes('website')) {
       roiText = '2-3x Conversion Rate';
-    } else if (selectedServices.includes('marketing')) {
-      roiText = '300-500% Return on Ad Spend';
-    } else if (selectedServices.includes('video')) {
-      roiText = 'Up to 80% higher engagement';
     }
     return roiText;
   }

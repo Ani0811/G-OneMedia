@@ -10,14 +10,7 @@ const ensureAbsoluteUrl = (url) => {
   return `https://${url}`
 }
 
-const categories = ['All', 'Websites', 'AI Agents', 'Videos']
-const videoSubCategories = ['All Videos', 'Reels', 'YT Videos', 'Vlogs']
-
-const isVideoProject = (project) => {
-  if (!project) return false
-  return ['Reels', 'YT Videos', 'Vlogs'].includes(project.type) || 
-         (project.image && /\.(mp4|webm|ogg)$/i.test(project.image))
-}
+const categories = ['All', 'Websites']
 
 function LazyMedia({ image, title, isVideo, isReel }) {
   const [inView, setInView] = useState(false)
@@ -147,7 +140,6 @@ function PortfolioError({ onRetry }) {
 
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState('All')
-  const [activeSubTab, setActiveSubTab] = useState('All Videos')
   const [currentPage, setCurrentPage] = useState(1)
   const [projects, setProjects] = useState([])
   const [loadState, setLoadState] = useState('loading') // 'loading' | 'success' | 'error'
@@ -176,10 +168,6 @@ export default function Portfolio() {
 
   const filteredProjects = projects.filter(p => {
     if (activeTab === 'All') return true
-    if (activeTab === 'Videos') {
-      if (activeSubTab === 'All Videos') return ['Reels', 'YT Videos', 'Vlogs'].includes(p.type)
-      return p.type === activeSubTab
-    }
     return p.type === activeTab
   })
 
@@ -224,7 +212,6 @@ export default function Portfolio() {
                     key={cat}
                     onClick={() => {
                       setActiveTab(cat)
-                      if (cat !== 'Videos') setActiveSubTab('All Videos')
                       setCurrentPage(1)
                     }}
                     className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border shrink-0 cursor-pointer ${activeTab === cat
@@ -238,31 +225,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            {/* Sub-Filters for Videos */}
-            <AnimatePresence>
-              {activeTab === 'Videos' && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="relative w-full max-w-md flex justify-center"
-                >
-                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[var(--bg-primary)] to-transparent pointer-events-none z-10 md:hidden" />
-                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[var(--bg-primary)] to-transparent pointer-events-none z-10 md:hidden" />
-                  <div className="w-full overflow-x-auto scrollbar-none flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 p-2 rounded-2xl bg-[var(--text-primary)]/5 border border-[var(--border-subtle)] mx-4">
-                    {videoSubCategories.map((sub) => (
-                      <button
-                        key={sub}
-                        onClick={() => { setActiveSubTab(sub); setCurrentPage(1) }}
-                        className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 shrink-0 cursor-pointer ${activeSubTab === sub ? 'bg-[var(--text-primary)]/10 text-cyan-400' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'}`}
-                      >
-                        {sub}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
           </div>
         </div>
 
@@ -283,25 +246,25 @@ export default function Portfolio() {
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
                     href={
-                      (project.case_study_slug || isVideoProject(project))
-                        ? `/portfolio/${project.case_study_slug || project.id}`
+                      (project.case_study_slug)
+                        ? `/portfolio/${project.case_study_slug}`
                         : (ensureAbsoluteUrl(project.link) || '#')
                     }
                     target={
-                      !(project.case_study_slug || isVideoProject(project)) && project.link
+                      !(project.case_study_slug) && project.link
                         ? '_blank'
                         : undefined
                     }
                     rel={
-                      !(project.case_study_slug || isVideoProject(project)) && project.link
+                      !(project.case_study_slug) && project.link
                         ? 'noopener noreferrer'
                         : undefined
                     }
                     className="group cursor-pointer block"
                     onClick={(e) => {
-                      if (project.case_study_slug || isVideoProject(project)) {
+                      if (project.case_study_slug) {
                         e.preventDefault()
-                        navigate(`/portfolio/${project.case_study_slug || project.id}`)
+                        navigate(`/portfolio/${project.case_study_slug}`)
                       } else if (!project.link) {
                         e.preventDefault()
                       }
@@ -310,8 +273,8 @@ export default function Portfolio() {
                     <LazyMedia
                       image={project.image}
                       title={project.title}
-                      isVideo={['Reels', 'YT Videos', 'Vlogs'].includes(project.type)}
-                      isReel={project.type === 'Reels'}
+                      isVideo={false}
+                      isReel={false}
                     />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 mb-3 block opacity-80">
                       {project.category}

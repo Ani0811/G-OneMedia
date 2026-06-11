@@ -48,7 +48,7 @@ function HomePage({ onScheduleCall }) {
       <Helmet>
         <title>G-One Media | High-Performance Digital Agency</title>
         <meta name="description" content="G-One Media — A digital agency crafting high-converting websites and engaging video content that drives business growth." />
-        <meta name="keywords" content="G-One Media, digital marketing agency, web design agency, app development, AI agents, video production, video editing, social media growth, SEO optimization, high-converting websites" />
+        <meta name="keywords" content="G-One Media, digital marketing agency, web design agency, app development, SEO optimization, high-converting websites" />
         <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/" />
         
         {/* Open Graph / Facebook */}

@@ -5,7 +5,7 @@ import { ArrowLeft, User, Mail, Building2, Briefcase, DollarSign, MessageSquare,
 import { Helmet } from 'react-helmet-async'
 import { supabase } from '../../lib/supabaseClient'
 
-const SERVICE_OPTIONS = ['Web Engineering', 'AI Agents', 'Content Creation', 'Digital Consultation', 'Multiple Services']
+const SERVICE_OPTIONS = ['Web Engineering', 'Landing Page', 'E-commerce', 'Custom Web App', 'Multiple Services']
 const BUDGET_OPTIONS = ['Under ₹15,000', '₹15,000 – ₹50,000', '₹50,000 – ₹1,50,000', '₹1,50,000+', 'Not sure yet']
 
 export default function GetStarted() {
