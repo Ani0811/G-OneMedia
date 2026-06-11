@@ -184,7 +184,7 @@ export default function Pricing({ onScheduleCall }) {
             <div className="text-center mb-12">
               <h3 className="text-3xl font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>Individual Services</h3>
               <p className="text-base mt-3 mb-8" style={{ color: 'var(--text-muted)' }}>Need a specific service? Select individually.</p>
-              
+
               {/* Sub-section swap toggle */}
               <div className="inline-flex p-1 rounded-xl bg-black/10 border border-white/5 backdrop-blur-sm mx-auto">
                 {['Development'].map((sub) => {
@@ -213,30 +213,30 @@ export default function Pricing({ onScheduleCall }) {
                   className="group relative p-8 rounded-3xl glass-card transition-all duration-300 border border-white/10 hover:border-cyan-500/50 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_8px_30px_rgb(0,240,255,0.15)]"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-transparent to-cyan-500/0 group-hover:from-cyan-500/5 transition-all duration-500" />
-                  
+
                   <div className="relative z-10 flex flex-col h-full gap-8">
                     <div className="flex justify-between items-start gap-4">
                       <h4 className="font-bold text-xl leading-tight" style={{ color: 'var(--text-primary)' }}>
                         {service.name}
                       </h4>
-                      <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center transition-all shrink-0 overflow-hidden p-2">
+                      <div className="flex items-center justify-center shrink-0">
                         {service.icon ? (
                           <img 
                             src={`${import.meta.env.BASE_URL || '/'}Archive/${service.icon}`.replace(/\/+/g, '/')} 
                             alt={service.name} 
-                            className="w-7 h-7 object-contain opacity-85 transition-transform duration-300 group-hover:scale-120 group-hover:opacity-100" 
+                            className="w-14 h-14 object-contain opacity-85 transition-transform duration-300 group-hover:scale-120 group-hover:opacity-100" 
                           />
                         ) : (
-                          <Sparkles size={20} className="text-cyan-400 transition-transform duration-300 group-hover:scale-120" />
+                          <Sparkles size={32} className="text-cyan-400 transition-transform duration-300 group-hover:scale-120" />
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="mt-auto flex flex-col gap-5">
                       <div className="font-black text-2xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
                         {currency === 'INR' ? '₹' + service.price.INR : service.price.USD}
                       </div>
-                      
+
                       {service.link ? (
                         <a
                           href={service.link}
