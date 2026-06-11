@@ -1,76 +1,78 @@
 import { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useTheme } from '../../context/ThemeContext'
 
 export default function Loader({ onComplete }) {
+  const { theme } = useTheme()
+  const isLight = theme === 'light'
+
   useEffect(() => {
-    // Found the "sweet spot" at 1200ms - fast enough but lets the animation shine
+    // Sweet spot at 1200ms - fast enough but lets the loading bar fill
     const timer = setTimeout(onComplete, 1200)
     return () => clearTimeout(timer)
   }, [onComplete])
 
+  const skeletonColor = isLight ? 'bg-black/5' : 'bg-white/5'
+
   return (
-    <div className="fixed inset-0 z-9999 bg-[#050508] flex flex-col items-center justify-center overflow-hidden">
+    <div 
+      className="fixed inset-0 z-[9999] overflow-hidden transition-colors duration-300 pointer-events-none"
+      style={{ backgroundColor: 'var(--bg-deep)' }}
+    >
       {/* Background subtle glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse" />
+      <div 
+        className={`absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-[140px] transition-all duration-300 ${
+          isLight ? 'bg-cyan-500/15' : 'bg-cyan-500/10'
+        }`} 
+      />
 
-      <div className="relative flex flex-col items-center">
-        {/* Animated Rings */}
-        <div className="relative w-32 h-32 flex items-center justify-center mb-8">
-          {/* Outer Ring */}
-          <motion.div
-            className="absolute inset-0 rounded-full border border-t-cyan-400 border-r-transparent border-b-transparent border-l-transparent"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-          />
-          {/* Middle Ring */}
-          <motion.div
-            className="absolute inset-2 rounded-full border border-r-fuchsia-500 border-t-transparent border-b-transparent border-l-transparent opacity-70"
-            animate={{ rotate: -360 }}
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-          />
-          {/* Inner Core */}
-          <motion.div
-            className="w-12 h-12 bg-cyan-400 rounded-full shadow-[0_0_30px_#00f0ff] mix-blend-screen"
-            animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          />
+      {/* Navbar Skeleton */}
+      <div className="w-full py-6 px-4 md:px-8 lg:px-16 flex items-center justify-between border-b border-transparent">
+        <div className={`w-36 h-10 rounded-md animate-pulse ${skeletonColor}`} />
+        <div className="hidden md:flex gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className={`w-20 h-4 rounded animate-pulse ${skeletonColor}`} />
+          ))}
         </div>
+        <div className="flex gap-4">
+          <div className={`w-10 h-10 rounded-full animate-pulse ${skeletonColor}`} />
+          <div className={`hidden md:block w-32 h-10 rounded animate-pulse ${skeletonColor}`} />
+        </div>
+      </div>
 
-        {/* Text */}
-        <motion.div 
-          className="flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h2 className="text-white font-black text-2xl tracking-[0.3em] uppercase">
-            G-One Media
-          </h2>
-          <div className="flex items-center gap-2">
-            <motion.span 
-              className="w-1.5 h-1.5 bg-fuchsia-500 rounded-full"
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ repeat: Infinity, duration: 1, delay: 0 }}
-            />
-            <motion.span 
-              className="w-1.5 h-1.5 bg-cyan-400 rounded-full"
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ repeat: Infinity, duration: 1, delay: 0.2 }}
-            />
-            <motion.span 
-              className="w-1.5 h-1.5 bg-fuchsia-500 rounded-full"
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ repeat: Infinity, duration: 1, delay: 0.4 }}
-            />
-            <span className="text-[10px] text-cyan-400/70 font-bold uppercase tracking-[0.4em] ml-2">
-              Initializing
-            </span>
+      {/* Hero Skeleton */}
+      <div className="container-custom relative z-10 w-full pt-24 pb-4">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
+          
+          {/* Content Left */}
+          <div className="flex flex-col justify-center order-2 lg:order-1 gap-6">
+            <div className="space-y-4">
+              <div className={`w-3/4 h-12 md:h-16 rounded-xl animate-pulse ${skeletonColor}`} />
+              <div className={`w-full h-12 md:h-16 rounded-xl animate-pulse ${skeletonColor}`} />
+              <div className={`w-5/6 h-12 md:h-16 rounded-xl animate-pulse ${skeletonColor}`} />
+            </div>
+            
+            <div className="space-y-3 mt-4">
+              <div className={`w-full h-4 rounded animate-pulse ${skeletonColor}`} />
+              <div className={`w-full h-4 rounded animate-pulse ${skeletonColor}`} />
+              <div className={`w-2/3 h-4 rounded animate-pulse ${skeletonColor}`} />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              <div className={`w-40 h-12 rounded-xl animate-pulse ${skeletonColor}`} />
+              <div className={`w-40 h-12 rounded-xl animate-pulse ${skeletonColor}`} />
+            </div>
           </div>
-        </motion.div>
+
+          {/* Visual Right */}
+          <div className="relative lg:ml-auto max-w-xl w-full order-1 lg:order-2">
+            <div className={`w-full aspect-[4/3] rounded-[48px] animate-pulse ${skeletonColor}`} />
+          </div>
+
+        </div>
       </div>
       
       {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none opacity-10" />
+      <div className="absolute inset-0 bg-[linear-gradient(var(--border-subtle)_1px,transparent_1px),linear-gradient(90deg,var(--border-subtle)_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none opacity-20" />
     </div>
   )
 }
