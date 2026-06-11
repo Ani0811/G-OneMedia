@@ -219,15 +219,15 @@ export default function Pricing({ onScheduleCall }) {
                       <h4 className="font-bold text-xl leading-tight" style={{ color: 'var(--text-primary)' }}>
                         {service.name}
                       </h4>
-                      <div className="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center transition-all shrink-0 overflow-hidden p-2 group-hover:scale-110 group-hover:bg-cyan-400">
+                      <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center transition-all shrink-0 overflow-hidden p-2">
                         {service.icon ? (
                           <img 
                             src={`${import.meta.env.BASE_URL || '/'}Archive/${service.icon}`.replace(/\/+/g, '/')} 
                             alt={service.name} 
-                            className="w-5 h-5 object-contain opacity-80 group-hover:opacity-100 group-hover:brightness-0 transition-all" 
+                            className="w-7 h-7 object-contain opacity-85 transition-transform duration-300 group-hover:scale-120 group-hover:opacity-100" 
                           />
                         ) : (
-                          <Sparkles size={16} className="text-cyan-400 group-hover:text-black transition-colors" />
+                          <Sparkles size={20} className="text-cyan-400 transition-transform duration-300 group-hover:scale-120" />
                         )}
                       </div>
                     </div>
