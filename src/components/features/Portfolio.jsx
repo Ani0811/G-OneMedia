@@ -153,6 +153,7 @@ export default function Portfolio() {
         .from('portfolio_projects')
         .select('*')
         .eq('is_active', true)
+        .eq('type', 'Websites')
         .order('sort_order', { ascending: true })
 
       if (error) throw error
@@ -167,6 +168,7 @@ export default function Portfolio() {
   useEffect(() => { fetchProjects() }, [])
 
   const filteredProjects = projects.filter(p => {
+    if (p.type !== 'Websites') return false
     if (activeTab === 'All') return true
     return p.type === activeTab
   })

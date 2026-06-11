@@ -35,7 +35,7 @@ export default function Services() {
           <p className="max-w-lg mx-auto" style={{ color: 'var(--text-secondary)' }}>Specialized solutions engineered for measurable impact.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="flex justify-center max-w-xl md:max-w-2xl mx-auto w-full">
           {services.map((service, index) => (
             <motion.div
               key={index}
@@ -48,7 +48,7 @@ export default function Services() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               onClick={() => navigate(`/services/${service.slug}`)}
-              className="glass-card p-10 relative overflow-hidden group cursor-pointer hover:ring-1 hover:ring-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all duration-300"
+              className="glass-card p-10 relative overflow-hidden group cursor-pointer hover:ring-1 hover:ring-cyan-400/50 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all duration-300 w-full"
             >
               {/* Profound background image */}
               <div 

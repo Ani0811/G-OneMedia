@@ -482,14 +482,14 @@ export default function BudgetCalculator() {
                     What do you need?
                   </h3>
                   <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>Select all services that apply.</p>
-                  <div className="grid sm:grid-cols-2 gap-3">
+                  <div className="flex justify-center max-w-md mx-auto w-full">
                     {serviceOptions.map(service => {
                       const isSelected = selectedServices.includes(service.id)
                       return (
                         <button
                           key={service.id}
                           onClick={() => toggleService(service.id)}
-                          className={`group relative flex items-start gap-4 p-5 rounded-xl border transition-all duration-300 text-left cursor-pointer ${
+                          className={`group relative flex items-start gap-4 p-5 rounded-xl border transition-all duration-300 text-left cursor-pointer w-full ${
                             isSelected
                               ? 'border-cyan-500/50 bg-cyan-500/10 shadow-[0_0_20px_rgba(0,240,255,0.1)]'
                               : 'border-white/10 hover:border-white/20 hover:bg-white/5'
