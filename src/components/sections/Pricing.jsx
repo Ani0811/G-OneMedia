@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, Sparkles, Zap, Building2, Layout, Video, Cpu, Target } from 'lucide-react'
+import { Check, Sparkles, Zap, Building2, Layout, Video, Cpu, Target, Clock } from 'lucide-react'
 import PaymentModal from '../features/PaymentModal'
 
 const pricingData = {
@@ -9,22 +9,25 @@ const pricingData = {
     packages: [
       {
         name: 'Starter', icon: Sparkles,
-        price: { INR: '₹10,000', USD: '$150' },
+        price: { INR: '₹10,000', USD: '$150', EUR: '€140' },
         period: '/ project',
+        duration: '3 - 5 days',
         description: 'Perfect for local businesses',
         features: ['Up to 5 Pages', 'Responsive Design', 'Contact Form', 'Basic SEO']
       },
       {
         name: 'Growth', icon: Zap,
-        price: { INR: '₹20,000', USD: '$250' },
+        price: { INR: '₹20,000', USD: '$250', EUR: '€230' },
         period: '/ project',
+        duration: '1 - 2 weeks',
         description: 'For scaling companies',
         features: ['Custom UI Design', 'CMS Integration', 'Advanced Animations', 'Performance Optimization']
       },
       {
         name: 'Premium', icon: Building2,
-        price: { INR: '₹50,000', USD: '$600' },
+        price: { INR: '₹50,000', USD: '$600', EUR: '€550' },
         period: '/ project',
+        duration: '3 - 4 weeks',
         description: 'Enterprise level solutions',
         features: ['Advanced Integrations', 'Custom Dashboards', 'Workflow Automations', 'AI Features']
       }
@@ -34,15 +37,15 @@ const pricingData = {
 
 const individualServicesData = {
   'Development': [
-    { name: 'Landing Page', price: { INR: '15K - 30K', USD: '$200 - $400' }, icon: 'landing-page.png' },
-    { name: 'Business Website', price: { INR: '30K - 80K', USD: '$400 - $1,000' }, icon: 'software-application.png' },
-    { name: 'Custom Dashboard / Web App', price: { INR: '80K - 2L', USD: '$1,000 - $2,500' }, icon: 'business-intelligence.png' },
-    { name: 'MVP Development', price: { INR: '1L - 4L', USD: '$1,200 - $5,000' }, icon: 'innovation.png' },
-    { name: 'AI Chatbot Integration', price: { INR: '25K - 75K', USD: '$300 - $900' }, icon: 'chatbot.png' },
-    { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800' }, icon: 'robot.png' },
-    { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000' }, icon: 'whatsapp.png' },
-    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo' }, icon: 'mechanic.png' },
-    { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins' }, icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' }
+    { name: 'Landing Page', price: { INR: '15K - 30K', USD: '$200 - $400', EUR: '€180 - €360' }, duration: '2 - 4 days', icon: 'landing-page.png' },
+    { name: 'Business Website', price: { INR: '30K - 80K', USD: '$400 - $1,000', EUR: '€365 - €910' }, duration: '5 - 10 days', icon: 'software-application.png' },
+    { name: 'Custom Dashboard / Web App', price: { INR: '80K - 2L', USD: '$1,000 - $2,500', EUR: '€915 - €2,285' }, duration: '2 - 4 weeks', icon: 'business-intelligence.png' },
+    { name: 'MVP Development', price: { INR: '1L - 4L', USD: '$1,200 - $5,000', EUR: '€1,100 - €4,570' }, duration: '3 - 6 weeks', icon: 'innovation.png' },
+    { name: 'AI Chatbot Integration', price: { INR: '25K - 75K', USD: '$300 - $900', EUR: '€275 - €820' }, duration: '4 - 7 days', icon: 'chatbot.png' },
+    { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800', EUR: '€550 - €1,650' }, duration: '1 - 2 weeks', icon: 'robot.png' },
+    { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000', EUR: '€365 - €910' }, duration: '4 - 7 days', icon: 'whatsapp.png' },
+    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo', EUR: '€135 - €365 / mo' }, duration: 'Monthly', icon: 'mechanic.png' },
+    { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins', EUR: '€18 / 30 mins' }, duration: '30 mins', icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' }
   ]
 }
 
@@ -87,6 +90,22 @@ export default function Pricing({ onScheduleCall }) {
               })}
             </div>
 
+            {/* Currency Toggle */}
+            <div className="flex justify-center items-center gap-2 p-1.5 rounded-2xl bg-black/10 border border-white/5 backdrop-blur-sm">
+              {['INR', 'USD', 'EUR'].map(curr => (
+                <button
+                  key={curr}
+                  onClick={() => setCurrency(curr)}
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                    currency === curr
+                      ? 'bg-cyan-400 text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                  }`}
+                >
+                  {curr}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -127,9 +146,22 @@ export default function Pricing({ onScheduleCall }) {
                       {plan.price[currency]}
                     </span>
                   </div>
-                  <span className="text-xs font-semibold text-(--text-muted) group-hover:text-cyan-400/80 mb-6 tracking-wide">
-                    {plan.period}
-                  </span>
+                  
+                  {/* Period & Duration */}
+                  <div className="flex items-center gap-3 mb-6 text-xs font-semibold text-(--text-muted) tracking-wide">
+                    <span className="group-hover:text-cyan-400/80 transition-colors duration-300">
+                      {plan.period}
+                    </span>
+                    {plan.duration && (
+                      <>
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/15" />
+                        <span className="flex items-center gap-1.5 group-hover:text-cyan-400/80 transition-colors duration-300">
+                          <Clock size={12} className="shrink-0" />
+                          {plan.duration}
+                        </span>
+                      </>
+                    )}
+                  </div>
 
                   <p className="text-sm mb-8 font-medium text-(--text-secondary)">{plan.description}</p>
 
@@ -233,8 +265,20 @@ export default function Pricing({ onScheduleCall }) {
                     </div>
 
                     <div className="mt-auto flex flex-col gap-5">
-                      <div className="font-black text-2xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                        {currency === 'INR' ? '₹' + service.price.INR : service.price.USD}
+                      <div className="flex flex-col gap-1.5">
+                        <div className="font-black text-2xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                          {currency === 'INR' 
+                            ? '₹' + service.price.INR 
+                            : currency === 'EUR' 
+                              ? service.price.EUR 
+                              : service.price.USD}
+                        </div>
+                        {service.duration && (
+                          <div className="flex items-center gap-1.5 text-xs text-(--text-muted) group-hover:text-cyan-400/80 transition-colors duration-300">
+                            <Clock size={12} className="shrink-0" />
+                            <span>Duration: {service.duration}</span>
+                          </div>
+                        )}
                       </div>
 
                       {service.link ? (
