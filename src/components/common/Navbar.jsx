@@ -178,13 +178,13 @@ export default function Navbar({ onScheduleCall }) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 p-8 md:hidden shadow-2xl backdrop-blur-3xl max-h-[calc(100vh-80px)] overflow-y-auto"
+            className="absolute top-full left-0 right-0 p-6 md:hidden shadow-2xl backdrop-blur-3xl max-h-[calc(100vh-80px)] overflow-y-auto"
             style={{ 
               background: theme === 'dark' ? 'rgba(10, 10, 15, 0.98)' : 'rgba(255, 255, 255, 0.98)', 
               borderBottom: '1px solid var(--border-subtle)' 
             }}
           >
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
               {['Services', 'Portfolio', 'Pricing', 'Testimonials', 'About', 'Contact'].map((item) => {
                 const id = item.toLowerCase()
                 const isActive = activeSection === id
@@ -193,7 +193,7 @@ export default function Navbar({ onScheduleCall }) {
                     key={item} 
                     href={`#${id}`}
                     onClick={(e) => scrollToSection(e, id)}
-                    className={`text-2xl font-black py-4 border-b border-white/5 last:border-0 flex items-center justify-between transition-all`}
+                    className={`text-xl font-bold py-2.5 border-b border-white/5 last:border-0 flex items-center justify-between transition-all`}
                     style={{ color: isActive ? 'var(--accent-blue)' : 'var(--text-primary)' }}
                   >
                     {item}
@@ -204,7 +204,7 @@ export default function Navbar({ onScheduleCall }) {
               <Link
                 to="/discovery"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-2xl font-black py-4 border-b border-white/5 flex items-center justify-between transition-all"
+                className="text-xl font-bold py-2.5 border-b border-white/5 flex items-center justify-between transition-all"
                 style={{ color: location.pathname === '/discovery' ? 'var(--accent-blue)' : 'var(--text-primary)' }}
               >
                 Discovery Call
@@ -215,7 +215,7 @@ export default function Navbar({ onScheduleCall }) {
                   setMobileMenuOpen(false)
                   scrollToSection(e, 'contact')
                 }}
-                className="btn-primary w-full flex items-center justify-center"
+                className="btn-primary w-full py-2.5 text-sm flex items-center justify-center mt-2 mb-2"
               >
                 Get Started
               </a>
