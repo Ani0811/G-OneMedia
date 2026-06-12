@@ -194,8 +194,9 @@ export default function Navbar({ onScheduleCall }) {
                       key={item} 
                       href={`#${id}`}
                       onClick={(e) => scrollToSection(e, id)}
-                      className={`text-2xl font-black py-3 border-b border-white/5 last:border-0 flex items-center justify-between transition-all`}
-                      style={{ color: isActive ? 'var(--accent-blue)' : 'var(--text-primary)' }}
+                      className={`text-2xl font-black py-3 border-b border-white/5 last:border-0 flex items-center justify-between transition-all duration-300 hover:translate-x-2 ${
+                        isActive ? 'text-[var(--accent-blue)]' : 'text-[var(--text-primary)] hover:text-[var(--accent-blue)]'
+                      }`}
                     >
                       {item}
                       {isActive && <motion.div layoutId="activeDot" className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#00f0ff]" />}
@@ -205,8 +206,11 @@ export default function Navbar({ onScheduleCall }) {
                 <Link
                   to="/discovery"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-black py-3 border-b border-white/5 flex items-center justify-between transition-all"
-                  style={{ color: location.pathname === '/discovery' ? 'var(--accent-blue)' : 'var(--text-primary)' }}
+                  className={`text-2xl font-black py-3 border-b border-white/5 flex items-center justify-between transition-all duration-300 hover:translate-x-2 ${
+                    location.pathname === '/discovery' 
+                      ? 'text-[var(--accent-blue)]' 
+                      : 'text-[var(--text-primary)] hover:text-[var(--accent-blue)]'
+                  }`}
                 >
                   Discovery Call
                 </Link>
