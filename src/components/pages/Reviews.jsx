@@ -398,6 +398,7 @@ export default function Reviews() {
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [fetchError, setFetchError] = useState(null)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [showForm, setShowForm] = useState(false)
@@ -424,37 +425,44 @@ export default function Reviews() {
   const fetchReviews = useCallback(async (targetPage = 1, append = false) => {
     if (targetPage === 1) setLoading(true)
     else setLoadingMore(true)
+    setFetchError(null)
 
     const from = (targetPage - 1) * REVIEWS_PER_PAGE
     const to = from + REVIEWS_PER_PAGE - 1
 
-    const { data, error, count } = await supabase
-      .from('reviews')
-      .select('*', { count: 'exact' })
-      .eq('is_approved', true)
-      .order('rating', { ascending: false })
-      .order('created_at', { ascending: false })
-      .range(from, to)
+    try {
+      const { data, error, count } = await supabase
+        .from('reviews')
+        .select('*', { count: 'exact' })
+        .eq('is_approved', true)
+        .order('rating', { ascending: false })
+        .order('created_at', { ascending: false })
+        .range(from, to)
 
-    if (!error) {
+      if (error) throw error
+
       setReviews(prev => append ? [...prev, ...(data || [])] : (data || []))
       setTotal(count || 0)
 
       // Compute average rating on first load
       if (targetPage === 1 && data?.length > 0) {
-        const { data: allRatings } = await supabase
+        const { data: allRatings, error: ratingsError } = await supabase
           .from('reviews')
           .select('rating')
           .eq('is_approved', true)
+        if (ratingsError) throw ratingsError
         if (allRatings?.length > 0) {
           const avg = allRatings.reduce((s, r) => s + r.rating, 0) / allRatings.length
           setAvgRating(avg)
         }
       }
+    } catch (err) {
+      console.error('[Reviews] Failed to fetch reviews:', err)
+      setFetchError('Failed to load client reviews. Please check your network connection.')
+    } finally {
+      setLoading(false)
+      setLoadingMore(false)
     }
-
-    setLoading(false)
-    setLoadingMore(false)
   }, [])
 
   useEffect(() => {
@@ -641,6 +649,22 @@ export default function Reviews() {
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(REVIEWS_PER_PAGE)].map((_, i) => <ReviewSkeleton key={i} />)}
+            </div>
+          ) : fetchError ? (
+            <div className="text-center py-20">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                <AlertCircle size={28} className="text-red-500" />
+              </div>
+              <h3 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
+                Connection Error
+              </h3>
+              <p className="mb-8 max-w-md mx-auto" style={{ color: 'var(--text-muted)' }}>
+                {fetchError}
+              </p>
+              <button onClick={() => fetchReviews(page)} className="btn-primary">
+                Try Again
+              </button>
             </div>
           ) : reviews.length === 0 ? (
             <motion.div

@@ -24,18 +24,38 @@ import VisualProof from './components/sections/VisualProof'
 import CookieBanner from './components/common/CookieBanner'
 import ScrollToTop from './components/common/ScrollToTop'
 
+// Helper to retry dynamic imports when they fail (e.g. ChunkLoadError due to network glitches or new deployments)
+const lazyWithRetry = (importFunc) => {
+  return lazy(async () => {
+    try {
+      return await importFunc()
+    } catch (error) {
+      console.error('[LazyRetry] Chunk load failed, retrying import:', error)
+      try {
+        // Retry once after a brief delay
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return await importFunc()
+      } catch (retryError) {
+        console.error('[LazyRetry] Chunk load failed after retry. Reloading page...', retryError)
+        window.location.reload()
+        return new Promise(() => {}) // Keep promise pending to prevent app from crashing before reload
+      }
+    }
+  })
+}
+
 // Lazy loaded page components
-const GetStarted = lazy(() => import('./components/pages/GetStarted'))
-const ServiceDetail = lazy(() => import('./components/pages/ServiceDetail'))
-const CaseStudyDetail = lazy(() => import('./components/pages/CaseStudyDetail'))
-const ClientLogin = lazy(() => import('./components/features/ClientLogin'))
-const ClientDashboard = lazy(() => import('./components/features/ClientDashboard'))
-const RefundRequest = lazy(() => import('./components/pages/RefundRequest'))
-const Reviews = lazy(() => import('./components/pages/Reviews'))
-const DiscoveryCall = lazy(() => import('./components/pages/DiscoveryCall'))
-const FounderProfile = lazy(() => import('./components/pages/FounderProfile'))
-const ResourceVault = lazy(() => import('./components/pages/ResourceVault'))
-const AuditWizard = lazy(() => import('./components/pages/AuditWizard'))
+const GetStarted = lazyWithRetry(() => import('./components/pages/GetStarted'))
+const ServiceDetail = lazyWithRetry(() => import('./components/pages/ServiceDetail'))
+const CaseStudyDetail = lazyWithRetry(() => import('./components/pages/CaseStudyDetail'))
+const ClientLogin = lazyWithRetry(() => import('./components/features/ClientLogin'))
+const ClientDashboard = lazyWithRetry(() => import('./components/features/ClientDashboard'))
+const RefundRequest = lazyWithRetry(() => import('./components/pages/RefundRequest'))
+const Reviews = lazyWithRetry(() => import('./components/pages/Reviews'))
+const DiscoveryCall = lazyWithRetry(() => import('./components/pages/DiscoveryCall'))
+const FounderProfile = lazyWithRetry(() => import('./components/pages/FounderProfile'))
+const ResourceVault = lazyWithRetry(() => import('./components/pages/ResourceVault'))
+const AuditWizard = lazyWithRetry(() => import('./components/pages/AuditWizard'))
 const PageLoader = () => (
   <div className="min-h-screen bg-[#050508] flex items-center justify-center">
     <div className="w-12 h-12 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin" />
