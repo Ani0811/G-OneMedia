@@ -6,7 +6,6 @@ import { trackPageView } from './utils/analytics'
 import Navbar from './components/common/Navbar'
 import Hero from './components/sections/Hero'
 import About from './components/sections/About'
-import Services from './components/sections/Services'
 import Portfolio from './components/features/Portfolio'
 import Process from './components/sections/Process'
 import Pricing from './components/sections/Pricing'
@@ -88,7 +87,6 @@ function HomePage({ onScheduleCall }) {
       <Hero onScheduleCall={onScheduleCall} />
       <ClientWinsTicker />
       <VisualProof />
-      <Services />
       <Portfolio />
       <Process />
       <BudgetCalculator />

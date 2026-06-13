@@ -37,7 +37,6 @@ export default function Footer() {
 
   const exploreLinks = [
     { label: 'About Us', id: 'about' },
-    { label: 'Services', id: 'services' },
     { label: 'Our Portfolio', id: 'portfolio' },
     { label: 'Pricing Plans', id: 'pricing' }
   ]

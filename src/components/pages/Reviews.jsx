@@ -174,8 +174,8 @@ function ReviewCard({ review, index }) {
 }
 
 // ── Review Submission Form ────────────────────────────────────────────────────
-function ReviewForm({ onSuccess }) {
-  const [form, setForm] = useState({ name: '', role: '', rating: 0, review: '' })
+function ReviewForm({ onSuccess, initialRating = 0 }) {
+  const [form, setForm] = useState({ name: '', role: '', rating: initialRating, review: '' })
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const [submitting, setSubmitting] = useState(false)
@@ -404,6 +404,7 @@ export default function Reviews() {
   const [showForm, setShowForm] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [avgRating, setAvgRating] = useState(null)
+  const [initialRating, setInitialRating] = useState(0)
   const formRef = useRef(null)
 
   const totalPages = Math.ceil(total / REVIEWS_PER_PAGE)
@@ -418,6 +419,12 @@ export default function Reviews() {
   useEffect(() => {
     const params = new URLSearchParams(location.search)
     if (params.get('write') === 'true') {
+      const ratingParam = parseInt(params.get('rating') || '0', 10)
+      if (ratingParam >= 1 && ratingParam <= 5) {
+        setInitialRating(ratingParam)
+      } else {
+        setInitialRating(0)
+      }
       handleShareExperience()
     }
   }, [location.search, handleShareExperience])
@@ -640,7 +647,7 @@ export default function Reviews() {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden mb-12"
               >
-                <ReviewForm onSuccess={handleSuccess} />
+                <ReviewForm onSuccess={handleSuccess} initialRating={initialRating} />
               </motion.div>
             )}
           </AnimatePresence>

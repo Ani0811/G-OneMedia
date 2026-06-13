@@ -30,7 +30,7 @@ export default function Navbar({ onScheduleCall }) {
     window.addEventListener('scroll', handleScroll)
 
     // Intersection Observer for Active Section
-    const sections = ['services', 'portfolio', 'pricing', 'testimonials', 'about', 'contact']
+    const sections = ['portfolio', 'pricing', 'testimonials', 'about', 'contact']
     const observerOptions = {
       root: null,
       rootMargin: '-40% 0px -40% 0px',
@@ -120,7 +120,7 @@ export default function Navbar({ onScheduleCall }) {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center md:gap-6 lg:gap-10">
-          {['Services', 'Portfolio', 'Pricing', 'Testimonials', 'About', 'Contact'].map((item) => {
+          {['Portfolio', 'Pricing', 'Testimonials', 'About', 'Contact'].map((item) => {
             const id = item.toLowerCase()
             const isActive = activeSection === id
             
@@ -186,7 +186,7 @@ export default function Navbar({ onScheduleCall }) {
           >
             <div className="flex flex-col justify-between min-h-full gap-8">
               <div className="flex flex-col gap-2">
-                {['Services', 'Portfolio', 'Pricing', 'Testimonials', 'About', 'Contact'].map((item) => {
+                {['Portfolio', 'Pricing', 'Testimonials', 'About', 'Contact'].map((item) => {
                   const id = item.toLowerCase()
                   const isActive = activeSection === id
                   return (

@@ -57,7 +57,7 @@ export default function ServiceDetail({ onScheduleCall }) {
           <p className="mb-8" style={{ color: 'var(--text-secondary)' }}>
             This service page doesn't exist yet.
           </p>
-          <Link to="/#services" className="btn-primary inline-block">← Back to Services</Link>
+          <Link to="/" className="btn-primary inline-block">← Back to Home</Link>
         </div>
       </section>
     )

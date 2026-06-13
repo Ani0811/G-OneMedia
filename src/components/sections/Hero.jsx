@@ -69,7 +69,7 @@ export default function Hero({ onScheduleCall }) {
             <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
               <Link
                 to="/get-started"
-                className="btn-primary flex items-center justify-center gap-3 group shadow-2xl shadow-cyan-500/40 px-7! py-3.5!"
+                className="btn-primary hero-get-started flex items-center justify-center gap-3 group shadow-2xl shadow-cyan-500/40 px-7! py-3.5!"
               >
                 Get Started
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
