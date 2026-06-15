@@ -37,6 +37,7 @@ const pricingData = {
 
 const individualServicesData = {
   'Development': [
+    { name: 'Discovery Call 1:1 (Free)', price: { INR: 'Free', USD: 'Free', EUR: 'Free' }, duration: '30 mins', icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' },
     { name: 'Landing Page', price: { INR: '15K - 30K', USD: '$200 - $400', EUR: '€180 - €360' }, duration: '2 - 4 days', icon: 'landing-page.png' },
     { name: 'Business Website', price: { INR: '30K - 80K', USD: '$400 - $1,000', EUR: '€365 - €910' }, duration: '5 - 10 days', icon: 'software-application.png' },
     { name: 'Custom Dashboard / Web App', price: { INR: '80K - 2L', USD: '$1,000 - $2,500', EUR: '€915 - €2,285' }, duration: '2 - 4 weeks', icon: 'business-intelligence.png' },
@@ -44,8 +45,7 @@ const individualServicesData = {
     { name: 'AI Chatbot Integration', price: { INR: '25K - 75K', USD: '$300 - $900', EUR: '€275 - €820' }, duration: '4 - 7 days', icon: 'chatbot.png' },
     { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800', EUR: '€550 - €1,650' }, duration: '1 - 2 weeks', icon: 'robot.png' },
     { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000', EUR: '€365 - €910' }, duration: '4 - 7 days', icon: 'whatsapp.png' },
-    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo', EUR: '€135 - €365 / mo' }, duration: 'Monthly', icon: 'mechanic.png' },
-    { name: 'Discovery Call 1:1 (Paid)', price: { INR: '500 / 30 mins', USD: '$20 / 30 mins', EUR: '€18 / 30 mins' }, duration: '30 mins', icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' }
+    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo', EUR: '€135 - €365 / mo' }, duration: 'Monthly', icon: 'mechanic.png' }
   ]
 }
 
@@ -267,11 +267,13 @@ export default function Pricing({ onScheduleCall }) {
                     <div className="mt-auto flex flex-col gap-5">
                       <div className="flex flex-col gap-1.5">
                         <div className="font-black text-2xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                          {currency === 'INR' 
-                            ? '₹' + service.price.INR 
-                            : currency === 'EUR' 
-                              ? service.price.EUR 
-                              : service.price.USD}
+                          {service.price[currency] === 'Free'
+                            ? 'Free'
+                            : currency === 'INR' 
+                              ? '₹' + service.price.INR 
+                              : currency === 'EUR' 
+                                ? service.price.EUR 
+                                : service.price.USD}
                         </div>
                         {service.duration && (
                           <div className="flex items-center gap-1.5 text-xs text-(--text-muted) group-hover:text-cyan-400/80 transition-colors duration-300">

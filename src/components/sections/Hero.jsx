@@ -56,7 +56,7 @@ export default function Hero({ onScheduleCall }) {
             className="flex flex-col justify-center order-2 lg:order-1"
           >
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter">
-              <span className="w-gradient-animated"><span className="text-[1.3em] select-none">W</span>e Help Businesses</span>{' '}
+              <span className="text-white"><span className="text-[1.3em] select-none">W</span>e Help Businesses</span>{' '}
               <span className="w-gradient-animated-dark">Grow with</span>{' '}
               <span className="w-gradient-animated">High-Converting</span>{' '}
               <span className="w-gradient-animated-dark">Websites</span>
