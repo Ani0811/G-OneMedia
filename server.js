@@ -16,7 +16,7 @@ dotenv.config()
 // Supabase admin client (server-side — uses service key or anon key)
 const supabase = createClient(
   process.env.SUPABASE_PROJECT_URL || process.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co',
-  process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
 )
 
 const app = express()
@@ -68,10 +68,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS, // Gmail App Password
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
+  }
 })
 
 app.post('/api/contact', contactLimiter, async (req, res) => {
@@ -283,7 +280,7 @@ app.post('/api/verify-payment', async (req, res) => {
   }
 })
 
-app.post('/api/refund', async (req, res) => {
+app.post('/api/refund', contactLimiter, async (req, res) => {
   const { payment_id, email } = req.body
 
   if (!payment_id || !email) {
@@ -336,19 +333,25 @@ app.post('/api/refund', async (req, res) => {
 
 app.post('/api/razorpay-webhook', async (req, res) => {
   const signature = req.headers['x-razorpay-signature']
-  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || process.env.VITE_RAZORPAY_WEBHOOK_SECRET
 
-  // Verify webhook signature if a secret is configured in the environment
-  if (webhookSecret && signature) {
-    const expectedSignature = crypto
-      .createHmac('sha256', webhookSecret)
-      .update(JSON.stringify(req.body))
-      .digest('hex')
+  if (!webhookSecret) {
+    console.error('❌ Razorpay webhook secret is not configured on the server.')
+    return res.status(500).json({ error: 'Webhook configuration error' })
+  }
 
-    if (expectedSignature !== signature) {
-      console.warn('⚠️ Webhook signature verification failed')
-      return res.status(400).json({ error: 'Invalid webhook signature' })
-    }
+  if (!signature) {
+    return res.status(400).json({ error: 'Missing webhook signature' })
+  }
+
+  const expectedSignature = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(JSON.stringify(req.body))
+    .digest('hex')
+
+  if (expectedSignature !== signature) {
+    console.warn('⚠️ Webhook signature verification failed')
+    return res.status(400).json({ error: 'Invalid webhook signature' })
   }
 
   const { event, payload } = req.body
