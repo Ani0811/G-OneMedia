@@ -14,7 +14,7 @@ values
     'Food SaaS • Full Stack',
     'High-performance food delivery platform and SaaS dashboard with real-time tracking.',
     '/Agency_Websites/FoodieFrenzy.jpg',
-    'https://foodie-frenzy-frontend-hpkf.onrender.com',
+    'https://foodie-frenzy-5656323623.vercel.app',
     'foodiefrenzy-saas',
     10
   ),

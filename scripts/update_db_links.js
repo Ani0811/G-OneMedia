@@ -18,7 +18,7 @@ async function main() {
   console.log("Connected to Supabase.");
 
   console.log("Updating FoodieFrenzy SaaS link...");
-  await client.query("UPDATE portfolio_projects SET link = 'https://foodie-frenzy-frontend-hpkf.onrender.com' WHERE case_study_slug = 'foodiefrenzy-saas';");
+  await client.query("UPDATE portfolio_projects SET link = 'https://foodie-frenzy-5656323623.vercel.app' WHERE case_study_slug = 'foodiefrenzy-saas';");
 
   console.log("Updating ABT Developer Portfolio link...");
   await client.query("UPDATE portfolio_projects SET link = 'https://anirudha-basu-thakur-portfolio.vercel.app' WHERE case_study_slug = 'abt-developer-portfolio';");
