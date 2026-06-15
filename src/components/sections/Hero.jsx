@@ -55,11 +55,8 @@ export default function Hero({ onScheduleCall }) {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center order-2 lg:order-1"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter">
-              <span className="text-white"><span className="text-[1.3em] select-none">W</span>e Help Businesses</span>{' '}
-              <span className="w-gradient-animated-dark">Grow with</span>{' '}
-              <span className="w-gradient-animated">High-Converting</span>{' '}
-              <span className="w-gradient-animated-dark">Websites</span>
+            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter text-white">
+              <span className="text-[1.3em] select-none">W</span>e Help Businesses Grow with High-Converting Websites
             </h1>
 
             <p className="text-base md:text-lg mb-8 leading-relaxed max-w-130" style={{ color: 'var(--text-secondary)' }}>
