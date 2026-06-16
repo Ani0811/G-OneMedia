@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, Sparkles, Zap, Building2, Layout, Video, Cpu, Target, Clock } from 'lucide-react'
+import { Check, Sparkles, Zap, Building2, Layout, Clock } from 'lucide-react'
 import PaymentModal from '../features/PaymentModal'
 
 const pricingData = {
@@ -180,10 +180,9 @@ export default function Pricing({ onScheduleCall }) {
                     href="#checkout"
                     onClick={(e) => {
                       e.preventDefault()
-                      let initialAmt = ''
                       const inrStr = plan.price.INR
                       const firstPart = inrStr.split('-')[0]
-                      initialAmt = firstPart.replace(/[^\d]/g, '') || '5000'
+                      const initialAmt = firstPart.replace(/[^\d]/g, '') || '5000'
 
                       setSelectedPlanName(`${plan.name} (${activeCategory})`)
                       setDefaultAmount(initialAmt)
@@ -286,10 +285,9 @@ export default function Pricing({ onScheduleCall }) {
                         <button
                           onClick={(e) => {
                             e.preventDefault()
-                            let initialAmt = ''
                             const inrStr = service.price.INR
                             const firstPart = inrStr.split('-')[0]
-                            initialAmt = firstPart.replace(/[^\d]/g, '') || '5000'
+                            const initialAmt = firstPart.replace(/[^\d]/g, '') || '5000'
 
                             setSelectedPlanName(`${service.name} (${activeIndividualSub})`)
                             setDefaultAmount(initialAmt)
