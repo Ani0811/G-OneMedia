@@ -9,7 +9,7 @@ const pricingData = {
     packages: [
       {
         name: 'Starter', icon: Sparkles,
-        price: { INR: '₹10,000', USD: '$150', EUR: '€140' },
+        price: { INR: '₹9,999', USD: '$149', EUR: '€139' },
         period: '/ project',
         duration: '3 - 5 days',
         description: 'Perfect for local businesses',
@@ -17,7 +17,7 @@ const pricingData = {
       },
       {
         name: 'Growth', icon: Zap,
-        price: { INR: '₹20,000', USD: '$250', EUR: '€230' },
+        price: { INR: '₹19,999', USD: '$249', EUR: '€229' },
         period: '/ project',
         duration: '1 - 2 weeks',
         description: 'For scaling companies',
@@ -25,7 +25,7 @@ const pricingData = {
       },
       {
         name: 'Premium', icon: Building2,
-        price: { INR: '₹50,000', USD: '$600', EUR: '€550' },
+        price: { INR: '₹49,999', USD: '$599', EUR: '€549' },
         period: '/ project',
         duration: '3 - 4 weeks',
         description: 'Enterprise level solutions',
@@ -38,14 +38,14 @@ const pricingData = {
 const individualServicesData = {
   'Development': [
     { name: 'Discovery Call 1:1 (Free)', price: { INR: 'Free', USD: 'Free', EUR: 'Free' }, duration: '30 mins', icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' },
-    { name: 'Landing Page', price: { INR: '15K - 30K', USD: '$200 - $400', EUR: '€180 - €360' }, duration: '2 - 4 days', icon: 'landing-page.png' },
-    { name: 'Business Website', price: { INR: '30K - 80K', USD: '$400 - $1,000', EUR: '€365 - €910' }, duration: '5 - 10 days', icon: 'software-application.png' },
-    { name: 'Custom Dashboard / Web App', price: { INR: '80K - 2L', USD: '$1,000 - $2,500', EUR: '€915 - €2,285' }, duration: '2 - 4 weeks', icon: 'business-intelligence.png' },
-    { name: 'MVP Development', price: { INR: '1L - 4L', USD: '$1,200 - $5,000', EUR: '€1,100 - €4,570' }, duration: '3 - 6 weeks', icon: 'innovation.png' },
-    { name: 'AI Chatbot Integration', price: { INR: '25K - 75K', USD: '$300 - $900', EUR: '€275 - €820' }, duration: '4 - 7 days', icon: 'chatbot.png' },
-    { name: 'Custom LLM Training', price: { INR: '50K - 1.5L', USD: '$600 - $1,800', EUR: '€550 - €1,650' }, duration: '1 - 2 weeks', icon: 'robot.png' },
-    { name: 'WhatsApp Bot Integration', price: { INR: '30K - 80K', USD: '$400 - $1,000', EUR: '€365 - €910' }, duration: '4 - 7 days', icon: 'whatsapp.png' },
-    { name: 'Maintenance Retainer', price: { INR: '10K - 30K / mo', USD: '$150 - $400 / mo', EUR: '€135 - €365 / mo' }, duration: 'Monthly', icon: 'mechanic.png' }
+    { name: 'Landing Page', price: { INR: '₹14,999 - ₹29,999', USD: '$199 - $399', EUR: '€179 - €359' }, duration: '2 - 4 days', icon: 'landing-page.png' },
+    { name: 'Business Website', price: { INR: '₹29,999 - ₹79,999', USD: '$399 - $999', EUR: '€359 - €909' }, duration: '5 - 10 days', icon: 'software-application.png' },
+    { name: 'Custom Dashboard / Web App', price: { INR: '₹79,999 - ₹1,99,999', USD: '$999 - $2,499', EUR: '€909 - €2,279' }, duration: '2 - 4 weeks', icon: 'business-intelligence.png' },
+    { name: 'MVP Development', price: { INR: '₹99,999 - ₹3,99,999', USD: '$1,199 - $4,999', EUR: '€1,099 - €4,569' }, duration: '3 - 6 weeks', icon: 'innovation.png' },
+    { name: 'AI Chatbot Integration', price: { INR: '₹24,999 - ₹74,999', USD: '$299 - $899', EUR: '€269 - €819' }, duration: '4 - 7 days', icon: 'chatbot.png' },
+    { name: 'Custom LLM Training', price: { INR: '₹49,999 - ₹1,49,999', USD: '$599 - $1,799', EUR: '€549 - €1,649' }, duration: '1 - 2 weeks', icon: 'robot.png' },
+    { name: 'WhatsApp Bot Integration', price: { INR: '₹29,999 - ₹79,999', USD: '$399 - $999', EUR: '€359 - €909' }, duration: '4 - 7 days', icon: 'whatsapp.png' },
+    { name: 'Maintenance Retainer', price: { INR: '₹9,999 - ₹29,999 / mo', USD: '$149 - $399 / mo', EUR: '€129 - €359 / mo' }, duration: 'Monthly', icon: 'mechanic.png' }
   ]
 }
 
@@ -182,12 +182,8 @@ export default function Pricing({ onScheduleCall }) {
                       e.preventDefault()
                       let initialAmt = ''
                       const inrStr = plan.price.INR
-                      if (inrStr.includes('K')) {
-                        const match = inrStr.match(/\d+/)
-                        if (match) initialAmt = String(Number(match[0]) * 1000)
-                      } else {
-                        initialAmt = inrStr.replace(/[^\d]/g, '') || '5000'
-                      }
+                      const firstPart = inrStr.split('-')[0]
+                      initialAmt = firstPart.replace(/[^\d]/g, '') || '5000'
 
                       setSelectedPlanName(`${plan.name} (${activeCategory})`)
                       setDefaultAmount(initialAmt)
@@ -267,13 +263,7 @@ export default function Pricing({ onScheduleCall }) {
                     <div className="mt-auto flex flex-col gap-5">
                       <div className="flex flex-col gap-1.5">
                         <div className="font-black text-2xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                          {service.price[currency] === 'Free'
-                            ? 'Free'
-                            : currency === 'INR' 
-                              ? '₹' + service.price.INR 
-                              : currency === 'EUR' 
-                                ? service.price.EUR 
-                                : service.price.USD}
+                          {service.price[currency]}
                         </div>
                         {service.duration && (
                           <div className="flex items-center gap-1.5 text-xs text-(--text-muted) group-hover:text-cyan-400/80 transition-colors duration-300">
@@ -298,15 +288,8 @@ export default function Pricing({ onScheduleCall }) {
                             e.preventDefault()
                             let initialAmt = ''
                             const inrStr = service.price.INR
-                            if (inrStr.includes('L') && !inrStr.split('L')[0].includes('K')) {
-                              const match = inrStr.match(/\d+/)
-                              if (match) initialAmt = String(Number(match[0]) * 100000)
-                            } else if (inrStr.includes('K')) {
-                              const match = inrStr.match(/\d+/)
-                              if (match) initialAmt = String(Number(match[0]) * 1000)
-                            } else {
-                              initialAmt = inrStr.replace(/[^\d]/g, '') || '5000'
-                            }
+                            const firstPart = inrStr.split('-')[0]
+                            initialAmt = firstPart.replace(/[^\d]/g, '') || '5000'
 
                             setSelectedPlanName(`${service.name} (${activeIndividualSub})`)
                             setDefaultAmount(initialAmt)

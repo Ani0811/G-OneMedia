@@ -4,17 +4,17 @@ import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Se
 import { jsPDF } from 'jspdf'
 
 const serviceOptions = [
-  { id: 'website', label: 'Website / Web App', icon: Code, basePrice: 15000, description: 'React, Next.js, full-stack solutions' },
+  { id: 'website', label: 'Website / Web App', icon: Code, basePrice: 14999, description: 'React, Next.js, full-stack solutions' },
 ]
 
 const featureAddons = {
   website: [
-    { id: 'cms', label: 'CMS Integration', price: 8000 },
-    { id: 'ecommerce', label: 'E-Commerce / Payments', price: 15000 },
-    { id: 'animations', label: 'Advanced Animations', price: 5000 },
-    { id: 'dashboard', label: 'Custom Dashboard', price: 20000 },
-    { id: 'seo', label: 'SEO Optimization', price: 5000 },
-    { id: 'auth', label: 'User Authentication', price: 8000 },
+    { id: 'cms', label: 'CMS Integration', price: 7999 },
+    { id: 'ecommerce', label: 'E-Commerce / Payments', price: 14999 },
+    { id: 'animations', label: 'Advanced Animations', price: 4999 },
+    { id: 'dashboard', label: 'Custom Dashboard', price: 19999 },
+    { id: 'seo', label: 'SEO Optimization', price: 4999 },
+    { id: 'auth', label: 'User Authentication', price: 7999 },
   ]
 }
 
@@ -322,18 +322,14 @@ export default function BudgetCalculator() {
 
 
   const formatCurrency = (num, curr = currency) => {
-    const value = Math.round(num * exchangeRates[curr])
-    const symbol = currencySymbols[curr]
-    
-    if (curr === 'INR') {
-      if (value >= 100000) return `${symbol}${(value / 100000).toFixed(1)}L`
-      if (value >= 1000) return `${symbol}${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}K`
-      return `${symbol}${value}`
+    let value = Math.round(num * exchangeRates[curr])
+    if (value > 9) {
+      value = Math.round((value - 9) / 10) * 10 + 9
     } else {
-      if (value >= 1000000) return `${symbol}${(value / 1000000).toFixed(1)}M`
-      if (value >= 1000) return `${symbol}${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}K`
-      return `${symbol}${value}`
+      value = 9
     }
+    const symbol = currencySymbols[curr]
+    return `${symbol}${value.toLocaleString(curr === 'INR' ? 'en-IN' : 'en-US')}`
   }
 
   const goNext = () => { setDirection(1); setStep(s => Math.min(s + 1, totalSteps - 1)) }

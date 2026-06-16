@@ -32,7 +32,7 @@ const services = {
       { step: '02', title: 'Build & Iterate', desc: 'Agile sprints with weekly demos. You see real progress, not promises.' },
       { step: '03', title: 'Launch & Handoff', desc: 'Full deployment, documentation, and a knowledge-transfer session so your team owns it.' },
     ],
-    priceRange: '₹25,000 – ₹2,00,000+',
+    priceRange: '₹24,999 – ₹1,99,999+',
     timeline: '2 – 8 weeks',
   }
 }
