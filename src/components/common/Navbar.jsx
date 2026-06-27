@@ -148,6 +148,7 @@ export default function Navbar({ onScheduleCall }) {
             onClick={toggleTheme}
             className="p-2 rounded-full transition-colors hover:bg-white/5"
             style={{ color: 'var(--text-primary)' }}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -165,6 +166,8 @@ export default function Navbar({ onScheduleCall }) {
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{ color: 'var(--text-primary)' }}
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
@@ -206,6 +209,7 @@ export default function Navbar({ onScheduleCall }) {
                 <Link
                   to="/discovery"
                   onClick={() => setMobileMenuOpen(false)}
+                  onMouseEnter={() => import('../../components/pages/DiscoveryCall')}
                   className={`text-2xl font-black py-3 border-b border-white/5 flex items-center justify-between transition-all duration-300 hover:translate-x-2 ${
                     location.pathname === '/discovery' 
                       ? 'text-[var(--accent-blue)]' 

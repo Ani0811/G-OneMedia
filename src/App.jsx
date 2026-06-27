@@ -5,23 +5,14 @@ import { ThemeProvider } from './context/ThemeContext'
 import { trackPageView } from './utils/analytics'
 import Navbar from './components/common/Navbar'
 import Hero from './components/sections/Hero'
-import About from './components/sections/About'
-import Portfolio from './components/features/Portfolio'
-import Process from './components/sections/Process'
-import Pricing from './components/sections/Pricing'
-import Testimonials from './components/sections/Testimonials'
-import CTA from './components/sections/CTA'
-import RefundSection from './components/sections/RefundSection'
 import Footer from './components/common/Footer'
 import NotFound from './components/pages/NotFound'
-import BudgetCalculator from './components/sections/BudgetCalculator'
 import AIChatWidget from './components/features/AIChatWidget'
 import ScheduleModal from './components/features/ScheduleModal'
 import Loader from './components/common/Loader'
-import ClientWinsTicker from './components/features/ClientWinsTicker'
-import VisualProof from './components/sections/VisualProof'
 import CookieBanner from './components/common/CookieBanner'
 import ScrollToTop from './components/common/ScrollToTop'
+import LazySection from './components/common/LazySection'
 
 // Helper to retry dynamic imports when they fail (e.g. ChunkLoadError due to network glitches or new deployments)
 const lazyWithRetry = (importFunc) => {
@@ -55,6 +46,18 @@ const DiscoveryCall = lazyWithRetry(() => import('./components/pages/DiscoveryCa
 const FounderProfile = lazyWithRetry(() => import('./components/pages/FounderProfile'))
 const ResourceVault = lazyWithRetry(() => import('./components/pages/ResourceVault'))
 const AuditWizard = lazyWithRetry(() => import('./components/pages/AuditWizard'))
+
+// Lazy loaded home sections
+const ClientWinsTicker = lazyWithRetry(() => import('./components/features/ClientWinsTicker'))
+const VisualProof = lazyWithRetry(() => import('./components/sections/VisualProof'))
+const Portfolio = lazyWithRetry(() => import('./components/features/Portfolio'))
+const Process = lazyWithRetry(() => import('./components/sections/Process'))
+const BudgetCalculator = lazyWithRetry(() => import('./components/sections/BudgetCalculator'))
+const Pricing = lazyWithRetry(() => import('./components/sections/Pricing'))
+const Testimonials = lazyWithRetry(() => import('./components/sections/Testimonials'))
+const About = lazyWithRetry(() => import('./components/sections/About'))
+const RefundSection = lazyWithRetry(() => import('./components/sections/RefundSection'))
+const CTA = lazyWithRetry(() => import('./components/sections/CTA'))
 const PageLoader = () => (
   <div className="min-h-screen bg-[#050508] flex items-center justify-center">
     <div className="w-12 h-12 rounded-full border-2 border-cyan-400/20 border-t-cyan-400 animate-spin" />
@@ -85,16 +88,36 @@ function HomePage({ onScheduleCall }) {
         <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
       </Helmet>
       <Hero onScheduleCall={onScheduleCall} />
-      <ClientWinsTicker />
-      <VisualProof />
-      <Portfolio />
-      <Process />
-      <BudgetCalculator />
-      <Pricing onScheduleCall={onScheduleCall} />
-      <Testimonials />
-      <About />
-      <RefundSection />
-      <CTA />
+      <LazySection placeholderHeight="80px">
+        <ClientWinsTicker />
+      </LazySection>
+      <LazySection placeholderHeight="400px">
+        <VisualProof />
+      </LazySection>
+      <LazySection placeholderHeight="600px">
+        <Portfolio />
+      </LazySection>
+      <LazySection placeholderHeight="500px">
+        <Process />
+      </LazySection>
+      <LazySection placeholderHeight="600px">
+        <BudgetCalculator />
+      </LazySection>
+      <LazySection placeholderHeight="600px">
+        <Pricing onScheduleCall={onScheduleCall} />
+      </LazySection>
+      <LazySection placeholderHeight="400px">
+        <Testimonials />
+      </LazySection>
+      <LazySection placeholderHeight="500px">
+        <About />
+      </LazySection>
+      <LazySection placeholderHeight="300px">
+        <RefundSection />
+      </LazySection>
+      <LazySection placeholderHeight="400px">
+        <CTA />
+      </LazySection>
     </>
   )
 }
@@ -105,16 +128,7 @@ export default function App() {
   const location = useLocation()
   const handleComplete = useCallback(() => setLoading(false), [])
 
-  useEffect(() => {
-    // Wake up backend server to handle cold start delays
-    const API_BASE = import.meta.env.DEV
-      ? 'http://localhost:3001'
-      : (import.meta.env.VITE_API_BACKEND_URL || '')
-    if (API_BASE) {
-      console.log('[API Warmup] Pinged backend base URL to warm it up:', API_BASE);
-      fetch(API_BASE.replace(/\/$/, '')).catch(() => {})
-    }
-  }, [])
+
 
   useEffect(() => {
     if (!loading) {
@@ -136,6 +150,11 @@ export default function App() {
             top: elementPosition - offset,
             behavior: 'smooth'
           })
+          
+          // Manage accessibility focus
+          el.setAttribute('tabindex', '-1')
+          el.focus({ preventScroll: true })
+
           // Clear the hash from the URL bar so it doesn't linger on refresh
           window.history.replaceState(null, null, window.location.pathname + window.location.search)
         }, 150)
