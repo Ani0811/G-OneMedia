@@ -4,17 +4,17 @@ import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Se
 import { jsPDF } from 'jspdf'
 
 const serviceOptions = [
-  { id: 'website', label: 'Website / Web App', icon: Code, basePrice: 14999, description: 'React, Next.js, full-stack solutions' },
+  { id: 'website', label: 'Website / Web App', icon: Code, originalBasePrice: 14999, basePrice: 7499, description: 'React, Next.js, full-stack solutions' },
 ]
 
 const featureAddons = {
   website: [
-    { id: 'cms', label: 'CMS Integration', price: 7999 },
-    { id: 'ecommerce', label: 'E-Commerce / Payments', price: 14999 },
-    { id: 'animations', label: 'Advanced Animations', price: 4999 },
-    { id: 'dashboard', label: 'Custom Dashboard', price: 19999 },
-    { id: 'seo', label: 'SEO Optimization', price: 4999 },
-    { id: 'auth', label: 'User Authentication', price: 7999 },
+    { id: 'cms', label: 'CMS Integration', originalPrice: 7999, price: 3999 },
+    { id: 'ecommerce', label: 'E-Commerce / Payments', originalPrice: 14999, price: 7499 },
+    { id: 'animations', label: 'Advanced Animations', originalPrice: 4999, price: 2499 },
+    { id: 'dashboard', label: 'Custom Dashboard', originalPrice: 19999, price: 9999 },
+    { id: 'seo', label: 'SEO Optimization', originalPrice: 4999, price: 2499 },
+    { id: 'auth', label: 'User Authentication', originalPrice: 7999, price: 3999 },
   ]
 }
 
@@ -72,6 +72,21 @@ export default function BudgetCalculator() {
           : [...current, featureId]
       }
     })
+  }
+
+  const calculateOriginalTotal = () => {
+    let total = 0
+    selectedServices.forEach(serviceId => {
+      const service = serviceOptions.find(s => s.id === serviceId)
+      if (service) total += (service.originalBasePrice || service.basePrice)
+      const features = selectedFeatures[serviceId] || []
+      features.forEach(fId => {
+        const addon = (featureAddons[serviceId] || []).find(f => f.id === fId)
+        if (addon) total += (addon.originalPrice || addon.price)
+      })
+    })
+    const mult = urgencyOptions.find(u => u.id === urgency)?.multiplier || 1
+    return Math.round(total * mult)
   }
 
   const calculateTotal = () => {
@@ -377,6 +392,7 @@ export default function BudgetCalculator() {
   }
 
   const total = calculateTotal()
+  const originalTotal = calculateOriginalTotal()
   const canProceedStep0 = selectedServices.length > 0
   const canProceedStep2 = true // urgency always has a default
   const canSubmit = formData.name.trim() && formData.email.trim()
@@ -444,9 +460,17 @@ export default function BudgetCalculator() {
               >
                 <Calculator size={16} className="text-cyan-400" />
                 <span className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Estimated Total:</span>
-                <span className="text-2xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">
-                  {formatCurrency(total)}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold line-through text-[var(--text-muted)] opacity-70">
+                    {formatCurrency(originalTotal)}
+                  </span>
+                  <span className="text-2xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">
+                    {formatCurrency(total)}
+                  </span>
+                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(255,0,229,0.4)]">
+                    50% OFF
+                  </span>
+                </div>
               </motion.div>
 
               <motion.div
@@ -502,7 +526,15 @@ export default function BudgetCalculator() {
                           <div>
                             <div className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{service.label}</div>
                             <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{service.description}</div>
-                            <div className="text-xs font-bold text-cyan-400 mt-1.5">from {formatCurrency(service.basePrice)}</div>
+                            <div className="flex items-center gap-2 mt-1.5">
+                              <span className="text-xs font-bold text-cyan-400">from {formatCurrency(service.basePrice)}</span>
+                              {service.originalBasePrice && (
+                                <span className="text-[11px] font-bold line-through text-[var(--text-muted)] opacity-60">
+                                  {formatCurrency(service.originalBasePrice)}
+                                </span>
+                              )}
+                              <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white uppercase tracking-wider">50% OFF</span>
+                            </div>
                           </div>
                           {isSelected && (
                             <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-cyan-400 flex items-center justify-center">
@@ -554,9 +586,16 @@ export default function BudgetCalculator() {
                                   }`}
                                 >
                                   <span className="font-medium">{addon.label}</span>
-                                  <span className={`text-xs font-bold ${isSelected ? 'text-cyan-400' : 'text-[var(--text-muted)]'}`}>
-                                    +{formatCurrency(addon.price)}
-                                  </span>
+                                  <div className="flex items-center gap-1.5">
+                                    {addon.originalPrice && (
+                                      <span className="text-xs line-through text-[var(--text-muted)] opacity-60">
+                                        +{formatCurrency(addon.originalPrice)}
+                                      </span>
+                                    )}
+                                    <span className={`text-xs font-bold ${isSelected ? 'text-cyan-400' : 'text-[var(--text-muted)]'}`}>
+                                      +{formatCurrency(addon.price)}
+                                    </span>
+                                  </div>
                                 </button>
                               )
                             })}
