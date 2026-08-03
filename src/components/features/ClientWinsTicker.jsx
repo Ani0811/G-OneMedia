@@ -11,16 +11,16 @@ const WINS = [
 export default function ClientWinsTicker() {
   return (
     <div
-      className="w-full bg-linear-to-r from-accent-blue/20 via-accent-purple/20 to-accent-blue/20 backdrop-blur-md border-b border-white/5 text-white py-2"
-      style={{ overflow: 'hidden', position: 'relative', zIndex: 40 }}
+      className="w-full bg-linear-to-r from-accent-blue/20 via-accent-purple/20 to-accent-blue/20 backdrop-blur-md py-2"
+      style={{ overflow: 'hidden', position: 'relative', zIndex: 40, borderBottom: '1px solid var(--border-subtle)' }}
     >
       <div className="flex animate-marquee whitespace-nowrap items-center hover:[animation-play-state:paused]">
         {/* Double the array to ensure seamless looping */}
         {[...WINS, ...WINS, ...WINS, ...WINS].map((win, idx) => (
-          <div key={idx} className="flex items-center gap-3 px-8 text-xs font-bold uppercase tracking-widest text-[#b9cacb]">
-            <Bolt size={12} className="text-[#00f0ff]" />
+          <div key={idx} className="flex items-center gap-3 px-8 text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-secondary)' }}>
+            <Bolt size={12} style={{ color: 'var(--accent-blue)' }} />
             <span>{win}</span>
-            <span className="text-white/20 mx-4">•</span>
+            <span className="mx-4" style={{ color: 'var(--text-muted)', opacity: 0.4 }}>•</span>
           </div>
         ))}
       </div>

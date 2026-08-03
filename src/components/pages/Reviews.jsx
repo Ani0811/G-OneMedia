@@ -732,8 +732,8 @@ export default function Reviews() {
               <button
                 onClick={() => goToPage(page - 1)}
                 disabled={page === 1}
-                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-cyan-400/50 hover:bg-cyan-400/5"
-                style={{ border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}
+                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-[var(--bg-secondary)] hover:border-cyan-400/50 hover:bg-cyan-400/5"
+                style={{ border: '1px solid var(--border-subtle)', color: page === 1 ? 'var(--text-muted)' : 'var(--text-primary)' }}
               >
                 <ChevronLeft size={16} />
               </button>
@@ -772,8 +772,8 @@ export default function Reviews() {
               <button
                 onClick={() => goToPage(page + 1)}
                 disabled={page === totalPages}
-                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-cyan-400/50 hover:bg-cyan-400/5"
-                style={{ border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}
+                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-[var(--bg-secondary)] hover:border-cyan-400/50 hover:bg-cyan-400/5"
+                style={{ border: '1px solid var(--border-subtle)', color: page === totalPages ? 'var(--text-muted)' : 'var(--text-primary)' }}
               >
                 <ChevronRight size={16} />
               </button>

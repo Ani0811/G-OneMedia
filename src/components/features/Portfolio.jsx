@@ -297,8 +297,12 @@ export default function Portfolio() {
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-11 h-11 rounded-xl border border-[var(--border-subtle)] flex items-center justify-center transition-all duration-300 cursor-pointer ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 active:scale-95'}`}
-                  style={{ color: 'var(--text-muted)' }}
+                  className={`w-11 h-11 rounded-xl border border-[var(--border-subtle)] flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                    currentPage === 1
+                      ? 'opacity-40 cursor-not-allowed bg-[var(--bg-secondary)]'
+                      : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 active:scale-95'
+                  }`}
+                  style={{ color: currentPage === 1 ? 'var(--text-muted)' : 'var(--text-primary)' }}
                   aria-label="Previous Page"
                 >
                   <ChevronLeft size={18} />
@@ -308,7 +312,11 @@ export default function Portfolio() {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-11 h-11 rounded-xl text-xs font-black transition-all duration-300 border cursor-pointer ${currentPage === page ? 'bg-cyan-400 border-cyan-400 text-black shadow-[0_0_20px_rgba(0,240,255,0.4)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--text-muted)] hover:text-[var(--text-primary)] hover:scale-105 hover:bg-[var(--text-primary)]/5 active:scale-95'}`}
+                    className={`w-11 h-11 rounded-xl text-xs font-black transition-all duration-300 border cursor-pointer ${
+                      currentPage === page
+                        ? 'bg-cyan-400 border-cyan-400 text-black shadow-[0_0_20px_rgba(0,240,255,0.4)]'
+                        : 'border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--text-muted)] hover:text-[var(--text-primary)] hover:scale-105 hover:bg-[var(--text-primary)]/5 active:scale-95'
+                    }`}
                   >
                     {page}
                   </button>
@@ -317,8 +325,12 @@ export default function Portfolio() {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-11 h-11 rounded-xl border border-[var(--border-subtle)] flex items-center justify-center transition-all duration-300 cursor-pointer ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 active:scale-95'}`}
-                  style={{ color: 'var(--text-muted)' }}
+                  className={`w-11 h-11 rounded-xl border border-[var(--border-subtle)] flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                    currentPage === totalPages
+                      ? 'opacity-40 cursor-not-allowed bg-[var(--bg-secondary)]'
+                      : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 active:scale-95'
+                  }`}
+                  style={{ color: currentPage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)' }}
                   aria-label="Next Page"
                 >
                   <ChevronRight size={18} />

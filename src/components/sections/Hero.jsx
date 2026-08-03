@@ -55,7 +55,7 @@ export default function Hero({ onScheduleCall }) {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center order-2 lg:order-1"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter text-[var(--text-primary)]">
               <span className="text-[1.3em] select-none">W</span>e Help Businesses Grow with High-Converting Websites
             </h1>
 
@@ -88,7 +88,7 @@ export default function Hero({ onScheduleCall }) {
               className="mt-8 flex flex-wrap items-center gap-6 border-t border-white/5 pt-6"
             >
               <div className="flex flex-wrap items-center gap-4">
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] opacity-50 text-(--text-secondary)">
+                <span className="text-[10px] font-bold uppercase tracking-[0.25em] opacity-50" style={{ color: 'var(--text-secondary)' }}>
                   Follow My Journey
                 </span>
                 <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export default function Hero({ onScheduleCall }) {
                 </div>
               </div>
 
-              <div className="h-4 w-px bg-white/10 hidden sm:block" />
+              <div className="h-4 w-px hidden sm:block" style={{ backgroundColor: 'var(--border-subtle)' }} />
 
               <a
                 href={`${import.meta.env.BASE_URL}knowledge_base/G-ONE MEDIA.pdf`.replace(/\/+/g, '/')}

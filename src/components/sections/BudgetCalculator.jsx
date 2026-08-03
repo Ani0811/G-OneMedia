@@ -421,9 +421,12 @@ export default function BudgetCalculator() {
           <div className="flex items-center gap-2 mb-10">
             {['Services', 'Features', 'Timeline', 'Submit'].map((label, i) => (
               <div key={label} className="flex-1 flex flex-col items-center gap-2">
-                <div className={`w-full h-1.5 rounded-full transition-all duration-500 ${
-                  i <= step ? 'bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_0_10px_rgba(0,240,255,0.3)]' : 'bg-white/10'
-                }`} />
+                <div 
+                  className={`w-full h-1.5 rounded-full transition-all duration-500 ${
+                    i <= step ? 'bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_0_10px_rgba(0,240,255,0.3)]' : ''
+                  }`} 
+                  style={i <= step ? {} : { backgroundColor: 'var(--border-subtle)' }}
+                />
                 <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${
                   i <= step ? 'text-cyan-400' : 'text-[var(--text-muted)]'
                 }`}>{label}</span>
@@ -715,10 +718,10 @@ export default function BudgetCalculator() {
               <button
                 onClick={goBack}
                 disabled={step === 0}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer border ${
                   step === 0
-                    ? 'opacity-30 cursor-not-allowed text-[var(--text-muted)]'
-                    : 'text-[var(--text-primary)] hover:bg-white/5 border border-white/10 hover:border-white/20'
+                    ? 'opacity-40 cursor-not-allowed border-[var(--border-subtle)] text-[var(--text-muted)] bg-[var(--bg-secondary)]'
+                    : 'text-[var(--text-primary)] hover:bg-[var(--text-primary)]/5 border-[var(--border-subtle)] hover:border-[var(--text-muted)]'
                 }`}
               >
                 <ChevronLeft size={16} /> Back
@@ -730,7 +733,7 @@ export default function BudgetCalculator() {
                   disabled={step === 0 && !canProceedStep0}
                   className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                     step === 0 && !canProceedStep0
-                      ? 'opacity-30 cursor-not-allowed bg-white/5 text-[var(--text-muted)]'
+                      ? 'opacity-40 cursor-not-allowed border border-[var(--border-subtle)] bg-[var(--bg-secondary)] text-[var(--text-muted)]'
                       : 'bg-cyan-400 text-black hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:-translate-y-0.5'
                   }`}
                 >
@@ -742,7 +745,7 @@ export default function BudgetCalculator() {
                   disabled={!canSubmit || submitting}
                   className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                     !canSubmit || submitting
-                      ? 'opacity-30 cursor-not-allowed bg-white/5 text-[var(--text-muted)]'
+                      ? 'opacity-40 cursor-not-allowed border border-[var(--border-subtle)] bg-[var(--bg-secondary)] text-[var(--text-muted)]'
                       : 'bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] hover:-translate-y-0.5'
                   }`}
                 >

@@ -29,11 +29,11 @@ export default function LegalModal({ isOpen, onClose, type }) {
           content: (
             <div className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               <p>Welcome to G-One Media's Privacy Policy. This policy describes how we collect, use, and handle your information when you use our website, products, and services.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">1. Information We Collect</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>1. Information We Collect</h3>
               <p>We may collect information you provide directly to us, such as your name, email address, and project details when you request a quote or contact us.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">2. How We Use Information</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>2. How We Use Information</h3>
               <p>We use the information we collect to communicate with you, process transactions, and improve our services.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">3. Information Sharing</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>3. Information Sharing</h3>
               <p>We do not share your personal information with third parties except as necessary to provide our services or comply with the law.</p>
               <p className="mt-8 text-xs opacity-50">Last updated: May 2026</p>
             </div>
@@ -49,11 +49,11 @@ export default function LegalModal({ isOpen, onClose, type }) {
           content: (
             <div className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               <p>By accessing or using our services, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access our services.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">1. Services</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>1. Services</h3>
               <p>G-One Media provides digital agency services including web development, AI automation, and content creation.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">2. Intellectual Property</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>2. Intellectual Property</h3>
               <p>Upon full payment, the client owns the final deliverables. We retain the right to showcase the work in our portfolio unless agreed otherwise.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">3. Limitation of Liability</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>3. Limitation of Liability</h3>
               <p>In no event shall G-One Media be liable for any indirect, incidental, special, consequential or punitive damages.</p>
               <p className="mt-8 text-xs opacity-50">Last updated: May 2026</p>
             </div>
@@ -69,16 +69,16 @@ export default function LegalModal({ isOpen, onClose, type }) {
           content: (
             <div className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               <p>This Cookie Policy explains how G-One Media uses cookies and similar technologies to recognize you when you visit our website.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">1. What are cookies?</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>1. What are cookies?</h3>
               <p>Cookies are small data files that are placed on your computer or mobile device when you visit a website.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">2. Why do we use cookies?</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>2. Why do we use cookies?</h3>
               <p>We use first-party and third-party cookies for several reasons. Some cookies are required for technical reasons in order for our website to operate, and we refer to these as "essential" or "strictly necessary" cookies.</p>
-              <h3 className="text-white font-bold mt-6 mb-2">3. How can I control cookies?</h3>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>3. How can I control cookies?</h3>
               <p>You have the right to decide whether to accept or reject cookies. You can exercise your cookie rights by resetting your choices below to display the consent dialog again.</p>
               
               <div className="mt-6 p-4 rounded-xl border border-dashed border-orange-400/20 bg-orange-400/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h4 className="text-white font-bold text-sm">Manage Cookie Preferences</h4>
+                  <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>Manage Cookie Preferences</h4>
                   <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Clicking reset will remove your choices and show the consent dialog again.</p>
                 </div>
                 <button
