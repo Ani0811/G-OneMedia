@@ -4,17 +4,17 @@ import { Code, Video, Bot, TrendingUp, ChevronRight, ChevronLeft, Calculator, Se
 import { jsPDF } from 'jspdf'
 
 const serviceOptions = [
-  { id: 'website', label: 'Website / Web App', icon: Code, originalBasePrice: 14999, basePrice: 7499, description: 'React, Next.js, full-stack solutions' },
+  { id: 'website', label: 'Website / Web App', icon: Code, originalBasePrice: 11999, basePrice: 5999, description: 'React, Next.js, full-stack solutions' },
 ]
 
 const featureAddons = {
   website: [
-    { id: 'cms', label: 'CMS Integration', originalPrice: 7999, price: 3999 },
-    { id: 'ecommerce', label: 'E-Commerce / Payments', originalPrice: 14999, price: 7499 },
-    { id: 'animations', label: 'Advanced Animations', originalPrice: 4999, price: 2499 },
-    { id: 'dashboard', label: 'Custom Dashboard', originalPrice: 19999, price: 9999 },
-    { id: 'seo', label: 'SEO Optimization', originalPrice: 4999, price: 2499 },
-    { id: 'auth', label: 'User Authentication', originalPrice: 7999, price: 3999 },
+    { id: 'cms', label: 'CMS Integration', originalPrice: 5999, price: 2999 },
+    { id: 'ecommerce', label: 'E-Commerce / Payments', originalPrice: 11999, price: 5999 },
+    { id: 'animations', label: 'Advanced Animations', originalPrice: 3999, price: 1999 },
+    { id: 'dashboard', label: 'Custom Dashboard', originalPrice: 15999, price: 7999 },
+    { id: 'seo', label: 'SEO Optimization', originalPrice: 3999, price: 1999 },
+    { id: 'auth', label: 'User Authentication', originalPrice: 5999, price: 2999 },
   ]
 }
 
@@ -461,14 +461,20 @@ export default function BudgetCalculator() {
                 <Calculator size={16} className="text-cyan-400" />
                 <span className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>Estimated Total:</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold line-through text-[var(--text-muted)] opacity-70">
+                  <span className="text-base font-black text-rose-400/90 dark:text-rose-400/90 line-through decoration-rose-500 decoration-2 opacity-95 tracking-tight">
                     {formatCurrency(originalTotal)}
                   </span>
-                  <span className="text-2xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">
+                  <motion.span
+                    key={`${total}-${currency}`}
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                    className="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-200 to-cyan-300 drop-shadow-[0_0_12px_rgba(0,240,255,0.4)]"
+                  >
                     {formatCurrency(total)}
-                  </span>
-                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(255,0,229,0.4)]">
-                    50% OFF
+                  </motion.span>
+                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(244,63,94,0.4)]">
+                    NEW OFFER
                   </span>
                 </div>
               </motion.div>
@@ -529,11 +535,11 @@ export default function BudgetCalculator() {
                             <div className="flex items-center gap-2 mt-1.5">
                               <span className="text-xs font-bold text-cyan-400">from {formatCurrency(service.basePrice)}</span>
                               {service.originalBasePrice && (
-                                <span className="text-[11px] font-bold line-through text-[var(--text-muted)] opacity-60">
+                                <span className="text-xs font-extrabold text-slate-400 dark:text-zinc-400 line-through decoration-rose-500 decoration-2 opacity-90 tracking-tight">
                                   {formatCurrency(service.originalBasePrice)}
                                 </span>
                               )}
-                              <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white uppercase tracking-wider">50% OFF</span>
+                              <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(244,63,94,0.4)]">NEW OFFER</span>
                             </div>
                           </div>
                           {isSelected && (
@@ -588,7 +594,7 @@ export default function BudgetCalculator() {
                                   <span className="font-medium">{addon.label}</span>
                                   <div className="flex items-center gap-1.5">
                                     {addon.originalPrice && (
-                                      <span className="text-xs line-through text-[var(--text-muted)] opacity-60">
+                                      <span className="text-xs font-extrabold text-slate-400 dark:text-zinc-400 line-through decoration-rose-500 decoration-2 opacity-90">
                                         +{formatCurrency(addon.originalPrice)}
                                       </span>
                                     )}

@@ -9,8 +9,8 @@ const pricingData = {
     packages: [
       {
         name: 'Starter', icon: Sparkles,
-        originalPrice: { INR: '₹9,999', USD: '$149', EUR: '€139' },
-        price: { INR: '₹4,999', USD: '$74', EUR: '€69' },
+        originalPrice: { INR: '₹10,999', USD: '$139', EUR: '€129' },
+        price: { INR: '₹5,999', USD: '$79', EUR: '€75' },
         period: '/ project',
         duration: '3 - 5 days',
         description: 'Perfect for local businesses',
@@ -18,8 +18,8 @@ const pricingData = {
       },
       {
         name: 'Growth', icon: Zap,
-        originalPrice: { INR: '₹19,999', USD: '$249', EUR: '€229' },
-        price: { INR: '₹9,999', USD: '$124', EUR: '€114' },
+        originalPrice: { INR: '₹22,999', USD: '$279', EUR: '€259' },
+        price: { INR: '₹12,999', USD: '$169', EUR: '€159' },
         period: '/ project',
         duration: '1 - 2 weeks',
         description: 'For scaling companies',
@@ -27,8 +27,8 @@ const pricingData = {
       },
       {
         name: 'Premium', icon: Building2,
-        originalPrice: { INR: '₹49,999', USD: '$599', EUR: '€549' },
-        price: { INR: '₹24,999', USD: '$299', EUR: '€274' },
+        originalPrice: { INR: '₹42,999', USD: '$529', EUR: '€489' },
+        price: { INR: '₹23,999', USD: '$299', EUR: '€279' },
         period: '/ project',
         duration: '3 - 4 weeks',
         description: 'Enterprise level solutions',
@@ -41,14 +41,14 @@ const pricingData = {
 const individualServicesData = {
   'Development': [
     { name: 'Discovery Call 1:1 (Free)', price: { INR: 'Free', USD: 'Free', EUR: 'Free' }, duration: '30 mins', icon: 'customize.png', link: 'https://calendly.com/g-onemedia/discovery-call' },
-    { name: 'Landing Page', originalPrice: { INR: '₹14,999 - ₹29,999', USD: '$199 - $399', EUR: '€179 - €359' }, price: { INR: '₹7,499 - ₹14,999', USD: '$99 - $199', EUR: '€89 - €179' }, duration: '2 - 4 days', icon: 'landing-page.png' },
-    { name: 'Business Website', originalPrice: { INR: '₹29,999 - ₹79,999', USD: '$399 - $999', EUR: '€359 - €909' }, price: { INR: '₹14,999 - ₹39,999', USD: '$199 - $499', EUR: '€179 - €454' }, duration: '5 - 10 days', icon: 'software-application.png' },
-    { name: 'Custom Dashboard / Web App', originalPrice: { INR: '₹79,999 - ₹1,99,999', USD: '$999 - $2,499', EUR: '€909 - €2,279' }, price: { INR: '₹39,999 - ₹99,999', USD: '$499 - $1,249', EUR: '€454 - €1,139' }, duration: '2 - 4 weeks', icon: 'business-intelligence.png' },
-    { name: 'MVP Development', originalPrice: { INR: '₹99,999 - ₹3,99,999', USD: '$1,199 - $4,999', EUR: '€1,099 - €4,569' }, price: { INR: '₹49,999 - ₹1,99,999', USD: '$599 - $2,499', EUR: '€549 - €2,284' }, duration: '3 - 6 weeks', icon: 'innovation.png' },
-    { name: 'AI Chatbot Integration', originalPrice: { INR: '₹24,999 - ₹74,999', USD: '$299 - $899', EUR: '€269 - €819' }, price: { INR: '₹12,499 - ₹37,499', USD: '$149 - $449', EUR: '€134 - €409' }, duration: '4 - 7 days', icon: 'chatbot.png' },
-    { name: 'Custom LLM Training', originalPrice: { INR: '₹49,999 - ₹1,49,999', USD: '$599 - $1,799', EUR: '€549 - €1,649' }, price: { INR: '₹24,999 - ₹74,999', USD: '$299 - $899', EUR: '€274 - €824' }, duration: '1 - 2 weeks', icon: 'robot.png' },
-    { name: 'WhatsApp Bot Integration', originalPrice: { INR: '₹29,999 - ₹79,999', USD: '$399 - $999', EUR: '€359 - €909' }, price: { INR: '₹14,999 - ₹39,999', USD: '$199 - $499', EUR: '€179 - €454' }, duration: '4 - 7 days', icon: 'whatsapp.png' },
-    { name: 'Maintenance Retainer', originalPrice: { INR: '₹9,999 - ₹29,999 / mo', USD: '$149 - $399 / mo', EUR: '€129 - €359 / mo' }, price: { INR: '₹4,999 - ₹14,999 / mo', USD: '$74 - $199 / mo', EUR: '€64 - €179 / mo' }, duration: 'Monthly', icon: 'mechanic.png' }
+    { name: 'Landing Page', originalPrice: { INR: '₹16,999 - ₹32,999', USD: '$219 - $419', EUR: '€199 - €389' }, price: { INR: '₹8,499 - ₹16,999', USD: '$109 - $219', EUR: '€99 - €199' }, duration: '2 - 4 days', icon: 'landing-page.png' },
+    { name: 'Business Website', originalPrice: { INR: '₹32,999 - ₹84,999', USD: '$429 - $1,049', EUR: '€389 - €959' }, price: { INR: '₹16,999 - ₹42,999', USD: '$219 - $549', EUR: '€199 - €499' }, duration: '5 - 10 days', icon: 'software-application.png' },
+    { name: 'Custom Dashboard / Web App', originalPrice: { INR: '₹84,999 - ₹2,14,999', USD: '$1,099 - $2,699', EUR: '€989 - €2,449' }, price: { INR: '₹42,999 - ₹1,09,999', USD: '$549 - $1,399', EUR: '€499 - €1,269' }, duration: '2 - 4 weeks', icon: 'business-intelligence.png' },
+    { name: 'MVP Development', originalPrice: { INR: '₹1,09,999 - ₹4,29,999', USD: '$1,299 - $5,399', EUR: '€1,189 - €4,899' }, price: { INR: '₹54,999 - ₹2,19,999', USD: '$689 - $2,749', EUR: '€629 - €2,499' }, duration: '3 - 6 weeks', icon: 'innovation.png' },
+    { name: 'AI Chatbot Integration', originalPrice: { INR: '₹27,999 - ₹81,999', USD: '$329 - $979', EUR: '€299 - €889' }, price: { INR: '₹13,999 - ₹41,999', USD: '$169 - $499', EUR: '€149 - €449' }, duration: '4 - 7 days', icon: 'chatbot.png' },
+    { name: 'Custom LLM Training', originalPrice: { INR: '₹54,999 - ₹1,64,999', USD: '$659 - $1,979', EUR: '€599 - €1,799' }, price: { INR: '₹27,999 - ₹82,999', USD: '$339 - $999', EUR: '€299 - €899' }, duration: '1 - 2 weeks', icon: 'robot.png' },
+    { name: 'WhatsApp Bot Integration', originalPrice: { INR: '₹32,999 - ₹84,999', USD: '$429 - $1,049', EUR: '€389 - €959' }, price: { INR: '₹16,999 - ₹42,999', USD: '$219 - $549', EUR: '€199 - €499' }, duration: '4 - 7 days', icon: 'whatsapp.png' },
+    { name: 'Maintenance Retainer', originalPrice: { INR: '₹11,999 - ₹32,999 / mo', USD: '$159 - $429 / mo', EUR: '€139 - €389 / mo' }, price: { INR: '₹5,999 - ₹16,999 / mo', USD: '$79 - $219 / mo', EUR: '€69 - €199 / mo' }, duration: 'Monthly', icon: 'mechanic.png' }
   ]
 }
 
@@ -66,9 +66,9 @@ export default function Pricing({ onScheduleCall }) {
     <section id="pricing" className="py-24">
       <div className="container-custom">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-fuchsia-500/20 via-pink-500/20 to-cyan-500/20 border border-fuchsia-500/30 text-fuchsia-400 text-xs font-black uppercase tracking-widest mb-6 animate-pulse shadow-[0_0_15px_rgba(255,0,229,0.2)]">
-            <Sparkles size={14} className="text-fuchsia-400" />
-            🔥 Special Offer: 50% OFF Applied on All Plans
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-fuchsia-500/20 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-widest mb-6 animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+            <Sparkles size={14} className="text-amber-400" />
+            🔥 New Offer: Special Discounted Rates Applied Across All Packages
           </div>
 
           <h2 className="text-4xl lg:text-5xl font-black mb-6 tracking-tight" style={{ color: 'var(--text-primary)' }}>Transparent <span className="gradient-text">Pricing</span></h2>
@@ -149,20 +149,28 @@ export default function Pricing({ onScheduleCall }) {
                     <span className="inline-block px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-black text-cyan-400 uppercase tracking-widest">
                       {plan.name}
                     </span>
-                    <span className="inline-block px-2.5 py-1 rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white text-[9px] font-black uppercase tracking-wider shadow-[0_0_10px_rgba(255,0,229,0.4)]">
-                      50% OFF
+                    <span className="inline-block px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 text-white text-[9px] font-black uppercase tracking-wider shadow-[0_0_10px_rgba(244,63,94,0.4)]">
+                      NEW OFFER
                     </span>
                   </div>
 
-                  <div className="flex flex-col mb-2">
+                  <div className="flex flex-col mb-3">
                     {plan.originalPrice && (
-                      <span className="text-xs font-bold line-through text-[var(--text-muted)] opacity-70 mb-0.5">
+                      <span className="text-xl lg:text-2xl font-black text-rose-400/90 dark:text-rose-400/90 line-through decoration-rose-500 decoration-3 mb-1 tracking-tight opacity-95">
                         {plan.originalPrice[currency]}
                       </span>
                     )}
-                    <span className="text-4xl font-black tracking-tighter text-[var(--text-primary)] group-hover:text-cyan-400 transition-colors duration-300">
-                      {plan.price[currency]}
-                    </span>
+                    <motion.div
+                      key={`${plan.price[currency]}-${currency}`}
+                      initial={{ scale: 0.85, opacity: 0, y: 8 }}
+                      animate={{ scale: 1, opacity: 1, y: 0 }}
+                      transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                      className="inline-block"
+                    >
+                      <span className="text-4xl lg:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-200 to-cyan-300 drop-shadow-[0_0_18px_rgba(0,240,255,0.4)] group-hover:scale-105 transition-transform duration-300 inline-block">
+                        {plan.price[currency]}
+                      </span>
+                    </motion.div>
                   </div>
                   
                   {/* Period & Duration */}
@@ -280,18 +288,24 @@ export default function Pricing({ onScheduleCall }) {
                     <div className="mt-auto flex flex-col gap-5">
                       <div className="flex flex-col gap-1">
                         {service.originalPrice && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold line-through text-[var(--text-muted)] opacity-70">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-base lg:text-lg font-black text-rose-400/90 dark:text-rose-400/90 line-through decoration-rose-500 decoration-2 tracking-tight opacity-95">
                               {service.originalPrice[currency]}
                             </span>
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(255,0,229,0.4)]">
-                              50% OFF
+                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(244,63,94,0.4)]">
+                              NEW OFFER
                             </span>
                           </div>
                         )}
-                        <div className="font-black text-2xl tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                        <motion.div
+                          key={`${service.name}-${currency}-${service.price[currency]}`}
+                          initial={{ scale: 0.9, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ type: "spring", stiffness: 350, damping: 22 }}
+                          className="font-black text-2xl lg:text-3xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-200 to-cyan-300 drop-shadow-[0_0_12px_rgba(0,240,255,0.3)]"
+                        >
                           {service.price[currency]}
-                        </div>
+                        </motion.div>
                         {service.duration && (
                           <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] group-hover:text-cyan-400/80 transition-colors duration-300 mt-1">
                             <Clock size={12} className="shrink-0" />
