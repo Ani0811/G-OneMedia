@@ -156,7 +156,7 @@ export default function Pricing({ onScheduleCall }) {
 
                   <div className="flex flex-col mb-3">
                     {plan.originalPrice && (
-                      <span className="text-xl lg:text-2xl font-black text-rose-400/90 dark:text-rose-400/90 line-through decoration-rose-500 decoration-3 mb-1 tracking-tight opacity-95">
+                      <span className="text-xl lg:text-2xl font-black text-cyan-400/50 line-through decoration-cyan-400/70 decoration-3 mb-1 tracking-tight">
                         {plan.originalPrice[currency]}
                       </span>
                     )}
@@ -289,7 +289,7 @@ export default function Pricing({ onScheduleCall }) {
                       <div className="flex flex-col gap-1">
                         {service.originalPrice && (
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-base lg:text-lg font-black text-rose-400/90 dark:text-rose-400/90 line-through decoration-rose-500 decoration-2 tracking-tight opacity-95">
+                            <span className="text-base lg:text-lg font-black text-cyan-400/50 line-through decoration-cyan-400/70 decoration-3 tracking-tight">
                               {service.originalPrice[currency]}
                             </span>
                             <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 text-white uppercase tracking-wider shadow-[0_0_8px_rgba(244,63,94,0.4)]">
