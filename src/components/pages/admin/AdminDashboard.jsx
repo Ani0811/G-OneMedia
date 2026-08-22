@@ -42,7 +42,6 @@ const ALL_TABS = [
   { id: 'pricing', label: 'Pricing Packages', icon: DollarSign, permission: 'manage_pricing' },
   { id: 'services', label: 'Services', icon: Briefcase, permission: 'manage_services' },
   { id: 'portfolio', label: 'Portfolio', icon: ImageIcon, permission: 'manage_portfolio' },
-  { id: 'client_projects', label: 'Client Projects', icon: FolderGit2, permission: 'manage_client_projects' },
   { id: 'testimonials', label: 'Testimonials', icon: MessageSquareQuote, permission: 'manage_reviews' },
   { id: 'admins', label: 'Admins & Permissions', icon: Shield, permission: 'manage_admins' },
 ]
