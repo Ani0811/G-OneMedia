@@ -280,6 +280,7 @@ export default function PortfolioManager() {
                       className="w-full px-3 py-2.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
                     >
                       <option value="Websites" className="bg-slate-900">Websites</option>
+                      <option value="Client Projects" className="bg-slate-900">Client Projects</option>
                       <option value="AI Agents" className="bg-slate-900">AI Agents</option>
                       <option value="Reels" className="bg-slate-900">Reels</option>
                       <option value="YT Videos" className="bg-slate-900">YT Videos</option>

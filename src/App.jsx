@@ -53,10 +53,9 @@ const AdminDashboard = lazyWithRetry(() => import('./components/pages/admin/Admi
 
 // Lazy loaded home sections
 const ClientWinsTicker = lazyWithRetry(() => import('./components/features/ClientWinsTicker'))
-const VisualProof = lazyWithRetry(() => import('./components/sections/VisualProof'))
 const Portfolio = lazyWithRetry(() => import('./components/features/Portfolio'))
+const ClientProjects = lazyWithRetry(() => import('./components/sections/ClientProjects'))
 const Process = lazyWithRetry(() => import('./components/sections/Process'))
-const BudgetCalculator = lazyWithRetry(() => import('./components/sections/BudgetCalculator'))
 const Pricing = lazyWithRetry(() => import('./components/sections/Pricing'))
 const Testimonials = lazyWithRetry(() => import('./components/sections/Testimonials'))
 const About = lazyWithRetry(() => import('./components/sections/About'))
@@ -91,33 +90,26 @@ function HomePage({ onScheduleCall }) {
         <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
       </Helmet>
       <Hero onScheduleCall={onScheduleCall} />
+      
       <LazySection placeholderHeight="80px">
         <ClientWinsTicker />
       </LazySection>
-      <LazySection placeholderHeight="400px">
-        <VisualProof />
-      </LazySection>
-      <LazySection placeholderHeight="600px">
-        <Portfolio />
-      </LazySection>
+
+      <Portfolio />
+
+      <ClientProjects />
+
       <LazySection placeholderHeight="500px">
         <Process />
       </LazySection>
-      <LazySection placeholderHeight="600px">
-        <BudgetCalculator />
-      </LazySection>
-      <LazySection placeholderHeight="600px">
-        <Pricing onScheduleCall={onScheduleCall} />
-      </LazySection>
-      <LazySection placeholderHeight="400px">
-        <Testimonials />
-      </LazySection>
-      <LazySection placeholderHeight="500px">
-        <About />
-      </LazySection>
-      <LazySection placeholderHeight="400px">
-        <CTA />
-      </LazySection>
+
+      <Pricing onScheduleCall={onScheduleCall} />
+
+      <Testimonials />
+
+      <About />
+
+      <CTA />
     </>
   )
 }
