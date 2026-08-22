@@ -7,7 +7,6 @@ import helmet from 'helmet'
 import contactRoutes from './server/routes/contact.js'
 
 import chatRoutes from './server/routes/chat.js'
-import webhookRoutes from './server/routes/webhook.js'
 import ttsRoutes from './server/routes/tts.js'
 
 dotenv.config()
@@ -43,7 +42,6 @@ app.use(express.json())
 app.use('/api', contactRoutes)
 
 app.use('/api', chatRoutes)
-app.use('/api', webhookRoutes)
 app.use('/api', ttsRoutes)
 
 // Root endpoint
