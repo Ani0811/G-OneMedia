@@ -326,6 +326,58 @@ async function runMigration() {
       console.log('ℹ️ admin_users table already has records.')
     }
 
+    // 6. Seed Client Projects if empty
+    console.log('\n💼 Checking and seeding client_projects...')
+    const { rows: existingClientProjects } = await client.query('SELECT id FROM client_projects LIMIT 1;')
+    if (existingClientProjects.length === 0) {
+      const initialClientProjects = [
+        {
+          title: 'FitFlow Gym SaaS',
+          client_name: 'FitFlow Athletics',
+          category: 'SaaS Platform',
+          description: 'A modern fitness scheduling, member management, and automated recurring billing web platform.',
+          image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop',
+          live_url: 'https://example.com/fitflow',
+          technologies: JSON.stringify(['React', 'Node.js', 'PostgreSQL', 'Stripe']),
+          sort_order: 1,
+          is_active: true
+        },
+        {
+          title: 'NovaSphere Web3 Protocol',
+          client_name: 'Nova Labs Ltd',
+          category: 'Web3 & Fintech',
+          description: 'Decentralized liquidity aggregator interface featuring sub-second analytics and wallet connectivity.',
+          image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=800&auto=format&fit=crop',
+          live_url: 'https://example.com/novasphere',
+          technologies: JSON.stringify(['Next.js', 'TailwindCSS', 'Ethers.js', 'TheGraph']),
+          sort_order: 2,
+          is_active: true
+        },
+        {
+          title: 'Artisan Coffee Roasters',
+          client_name: 'Artisan Co.',
+          category: 'E-Commerce Storefront',
+          description: 'Direct-to-consumer artisanal coffee subscription portal with custom roast builder and high-converting checkout.',
+          image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop',
+          live_url: 'https://example.com/artisancoffee',
+          technologies: JSON.stringify(['Shopify Hydrogen', 'GraphQL', 'TailwindCSS']),
+          sort_order: 3,
+          is_active: true
+        }
+      ]
+
+      for (const cp of initialClientProjects) {
+        await client.query(
+          `INSERT INTO client_projects (title, client_name, category, description, image, live_url, technologies, sort_order, is_active)
+           VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8, $9);`,
+          [cp.title, cp.client_name, cp.category, cp.description, cp.image, cp.live_url, cp.technologies, cp.sort_order, cp.is_active]
+        )
+      }
+      console.log('✅ Seeded sample live client projects into client_projects table.')
+    } else {
+      console.log('ℹ️ client_projects table already has records.')
+    }
+
     console.log('\n🎉 ALL MIGRATIONS AND SEEDING COMPLETED SUCCESSFULLY!\n')
   } catch (err) {
     console.error('❌ Migration Error:', err)

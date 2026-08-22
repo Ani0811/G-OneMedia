@@ -82,6 +82,23 @@ CREATE TABLE IF NOT EXISTS portfolio_projects (
 );
 
 -- ─────────────────────────────────────────────────────────────
+-- 4.1 CLIENT PROJECTS (Dedicated Table)
+-- ─────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS client_projects (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  client_name TEXT,
+  category TEXT NOT NULL DEFAULT 'Web Application',
+  description TEXT NOT NULL,
+  image TEXT NOT NULL,
+  live_url TEXT,
+  technologies JSONB DEFAULT '[]'::jsonb,
+  sort_order INT DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ─────────────────────────────────────────────────────────────
 -- 5. CASE STUDIES
 -- ─────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS case_studies (
@@ -193,6 +210,7 @@ ALTER TABLE hero_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pricing_packages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE portfolio_projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE client_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE case_studies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
@@ -216,6 +234,10 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
   CREATE POLICY "Public Read portfolio_projects" ON portfolio_projects FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE POLICY "Public Read client_projects" ON client_projects FOR SELECT USING (is_active = true);
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
@@ -262,6 +284,10 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
   CREATE POLICY "Admin All portfolio_projects" ON portfolio_projects FOR ALL USING (auth.role() = 'authenticated');
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE POLICY "Admin All client_projects" ON client_projects FOR ALL USING (auth.role() = 'authenticated');
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN

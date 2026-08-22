@@ -18,7 +18,8 @@ import {
   Sparkles, 
   Shield,
   ShieldCheck,
-  Key
+  Key,
+  FolderGit2
 } from 'lucide-react'
 import { supabase } from '../../../lib/supabaseClient'
 import { useAdminAuth } from '../../../context/AdminAuthContext'
@@ -27,6 +28,7 @@ import HeroManager from './HeroManager'
 import PricingManager from './PricingManager'
 import ServicesManager from './ServicesManager'
 import PortfolioManager from './PortfolioManager'
+import ClientProjectsManager from './ClientProjectsManager'
 import ReviewsManager from './ReviewsManager'
 import LeadsManager from './LeadsManager'
 import TeamManager from './TeamManager'
@@ -40,6 +42,7 @@ const ALL_TABS = [
   { id: 'pricing', label: 'Pricing Packages', icon: DollarSign, permission: 'manage_pricing' },
   { id: 'services', label: 'Services', icon: Briefcase, permission: 'manage_services' },
   { id: 'portfolio', label: 'Portfolio', icon: ImageIcon, permission: 'manage_portfolio' },
+  { id: 'client_projects', label: 'Client Projects', icon: FolderGit2, permission: 'manage_client_projects' },
   { id: 'testimonials', label: 'Testimonials', icon: MessageSquareQuote, permission: 'manage_reviews' },
   { id: 'admins', label: 'Admins & Permissions', icon: Shield, permission: 'manage_admins' },
 ]
@@ -294,6 +297,7 @@ export default function AdminDashboard() {
             {activeTab === 'pricing' && <PricingManager />}
             {activeTab === 'services' && <ServicesManager />}
             {activeTab === 'portfolio' && <PortfolioManager />}
+            {activeTab === 'client_projects' && <ClientProjectsManager />}
             {activeTab === 'testimonials' && <ReviewsManager />}
             {activeTab === 'admins' && <AdminPermissionsManager />}
           </motion.div>

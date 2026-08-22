@@ -42,6 +42,11 @@ export default function OverviewManager({ onNavigateTab }) {
         .from('portfolio_projects')
         .select('*', { count: 'exact', head: true })
 
+      // 4.1 Client Projects
+      const { count: clientProjectsCount } = await supabase
+        .from('client_projects')
+        .select('*', { count: 'exact', head: true })
+
       // 5. Team Members
       const { count: teamCount } = await supabase
         .from('team_members')
@@ -59,6 +64,7 @@ export default function OverviewManager({ onNavigateTab }) {
         callsCount: callsCount || 0,
         reviewsCount: reviewsCount || 0,
         projectsCount: projectsCount || 0,
+        clientProjectsCount: clientProjectsCount || 0,
         teamCount: teamCount || 0,
         avgRating: avg,
       })
@@ -114,14 +120,14 @@ export default function OverviewManager({ onNavigateTab }) {
       tab: 'testimonials',
     },
     {
-      title: 'Portfolio Showcase',
-      value: stats.projectsCount,
-      label: 'Active Case Studies',
+      title: 'Client Projects',
+      value: stats.clientProjectsCount ?? 0,
+      label: 'Live Partner Sites',
       icon: FolderGit2,
       color: 'from-emerald-500/20 to-teal-500/20',
       border: 'border-emerald-500/30',
       iconColor: 'text-emerald-400',
-      tab: 'portfolio',
+      tab: 'client_projects',
     },
   ]
 
