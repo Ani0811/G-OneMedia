@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS hero_content (
   headline TEXT NOT NULL,
   subheadline TEXT NOT NULL,
   cta_text TEXT NOT NULL,
+  tagline TEXT,
+  image_url TEXT,
+  extra_fields JSONB DEFAULT '[]'::jsonb,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW())
 );
 
@@ -238,6 +241,10 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
   CREATE POLICY "Public Insert discovery_calls" ON discovery_calls FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE POLICY "Public Insert reviews" ON reviews FOR INSERT WITH CHECK (true);
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Authenticated Admin Full Access

@@ -25,6 +25,19 @@ async function runMigration() {
     console.log('\n📄 Applying database/schema.sql...')
     const schemaSql = fs.readFileSync(path.resolve('./database/schema.sql'), 'utf-8')
     await client.query(schemaSql)
+    
+    // Alter existing tables if they already exist to ensure new fields are added
+    await client.query(`
+      ALTER TABLE hero_content ADD COLUMN IF NOT EXISTS tagline TEXT;
+      ALTER TABLE hero_content ADD COLUMN IF NOT EXISTS image_url TEXT;
+      ALTER TABLE hero_content ADD COLUMN IF NOT EXISTS extra_fields JSONB DEFAULT '[]'::jsonb;
+    `)
+    // Apply public insert reviews policy in case table already exists but policy does not
+    await client.query(`
+      DO $$ BEGIN
+        CREATE POLICY "Public Insert reviews" ON reviews FOR INSERT WITH CHECK (true);
+      EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    `)
     console.log('✅ Schema tables and RLS policies created successfully.')
 
     // 2. Seed Pricing Packages if empty

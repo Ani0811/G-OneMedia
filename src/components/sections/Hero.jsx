@@ -45,7 +45,7 @@ export default function Hero({ onScheduleCall }) {
             <div className="relative z-10 rounded-[48px] overflow-hidden shadow-2xl shadow-cyan-500/30 p-2" style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-subtle)' }}>
               <div className="rounded-[40px] overflow-hidden aspect-4/3">
                 <img
-                  src={`${import.meta.env.BASE_URL}pexels-mintworkspace-18304033.jpg`.replace(/\/+/g, '/')}
+                  src={heroData.image_url || `${import.meta.env.BASE_URL}pexels-mintworkspace-18304033.jpg`.replace(/\/+/g, '/')}
                   alt="G-One Media Work"
                   className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-700"
                 />
@@ -79,13 +79,32 @@ export default function Hero({ onScheduleCall }) {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center order-2 lg:order-1"
           >
+            {heroData.tagline && (
+              <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400 mb-3 bg-cyan-400/10 px-3.5 py-1.5 rounded-full border border-cyan-400/20 w-fit">
+                {heroData.tagline}
+              </span>
+            )}
+
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter text-[var(--text-primary)]">
               {heroData.headline}
             </h1>
 
-            <p className="text-base md:text-lg mb-8 leading-relaxed max-w-130" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-base md:text-lg mb-6 leading-relaxed max-w-130" style={{ color: 'var(--text-secondary)' }}>
               {heroData.subheadline}
             </p>
+
+            {/* Dynamic Custom Extra Fields highlight list */}
+            {heroData.extra_fields && Array.isArray(heroData.extra_fields) && heroData.extra_fields.length > 0 && (
+              <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-3.5 border-t border-b border-white/5 py-5">
+                {heroData.extra_fields.map((field, idx) => (
+                  <div key={idx} className="flex items-center gap-2.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">{field.label}:</span>
+                    <span className="text-xs text-[var(--text-muted)] font-medium">{field.value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
               <Link
