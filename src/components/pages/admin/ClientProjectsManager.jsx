@@ -408,201 +408,205 @@ export default function ClientProjectsManager() {
       {/* Add / Edit Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl my-8 rounded-3xl glass-card border border-white/10 shadow-2xl p-6 sm:p-8 bg-[var(--bg-primary)] max-h-[90vh] overflow-y-auto space-y-5"
-            >
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
-                  <Sparkles size={18} className="text-cyan-400" />
-                  {editingId ? 'Edit Client Project' : 'Add New Client Project'}
-                </h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              {message && (
-                <div className={`p-3.5 rounded-xl text-xs font-semibold ${
-                  message.type === 'error' 
-                    ? 'bg-red-500/10 text-red-400 border border-red-500/20' 
-                    : 'bg-green-500/10 text-green-400 border border-green-500/20'
-                }`}>
-                  {message.text}
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm p-4 sm:p-6">
+            <div className="min-h-full flex items-center justify-center py-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className="relative w-full max-w-xl rounded-3xl glass-card border border-white/10 shadow-2xl bg-[#0a0b10] p-6 sm:p-8 flex flex-col max-h-[88vh] overflow-hidden"
+              >
+                {/* Fixed Modal Header */}
+                <div className="flex items-center justify-between pb-4 mb-2 border-b border-white/10 shrink-0">
+                  <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                    <Sparkles size={18} className="text-cyan-400" />
+                    {editingId ? 'Edit Client Project' : 'Add New Client Project'}
+                  </h3>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
-              )}
 
-              <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-                {/* Title & Client Name */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className="space-y-1">
-                    <label className="font-bold text-[var(--text-secondary)] block">Project Title *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="e.g. FitFlow Gym SaaS"
-                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
+                {message && (
+                  <div className={`p-3.5 my-2 rounded-xl text-xs font-semibold shrink-0 ${
+                    message.type === 'error' 
+                      ? 'bg-red-500/10 text-red-400 border border-red-500/20' 
+                      : 'bg-green-500/10 text-green-400 border border-green-500/20'
+                  }`}>
+                    {message.text}
                   </div>
+                )}
 
-                  <div className="space-y-1">
-                    <label className="font-bold text-[var(--text-secondary)] block">Client / Company Name</label>
-                    <input
-                      type="text"
-                      value={formData.client_name}
-                      onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                      placeholder="e.g. FitFlow Athletics Ltd"
-                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
-                  </div>
-                </div>
-
-                {/* Category & Live URL */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className="space-y-1">
-                    <label className="font-bold text-[var(--text-secondary)] block">Category *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      placeholder="e.g. SaaS Platform, E-Commerce"
-                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="font-bold text-[var(--text-secondary)] block">Live Website URL</label>
-                    <input
-                      type="url"
-                      value={formData.live_url}
-                      onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
-                      placeholder="https://client-site.com"
-                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div className="space-y-1">
-                  <label className="font-bold text-[var(--text-secondary)] block">Description *</label>
-                  <textarea
-                    rows="3"
-                    required
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Brief overview of the project, features delivered, and business impact..."
-                    className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 resize-none leading-relaxed"
-                  />
-                </div>
-
-                {/* Technologies */}
-                <div className="space-y-1">
-                  <label className="font-bold text-[var(--text-secondary)] block">Tech Stack (comma-separated)</label>
-                  <input
-                    type="text"
-                    value={formData.technologies}
-                    onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
-                    placeholder="e.g. React, Next.js, Supabase, TailwindCSS, Stripe"
-                    className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                  />
-                </div>
-
-                {/* Image Section */}
-                <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-3">
-                  <label className="font-bold text-[var(--text-secondary)] block">Cover Image *</label>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex-1">
-                      <LinkIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+                {/* Scrollable Form Body */}
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-1 space-y-4 text-xs">
+                  {/* Title & Client Name */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                    <div className="space-y-1">
+                      <label className="font-bold text-[var(--text-secondary)] block">Project Title *</label>
                       <input
                         type="text"
                         required
-                        value={formData.image}
-                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                        placeholder="Paste image URL (https://...)"
-                        className="w-full pl-9 pr-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 text-xs"
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        placeholder="e.g. FitFlow Gym SaaS"
+                        className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
                       />
                     </div>
 
-                    <label
-                      htmlFor="client-proj-uploader"
-                      className="px-3.5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
-                    >
-                      {uploadingImage ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
-                      Upload File
-                    </label>
-                    <input
-                      type="file"
-                      id="client-proj-uploader"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                  </div>
-
-                  {formData.image && (
-                    <div className="relative aspect-video max-h-36 rounded-lg overflow-hidden border border-white/10 bg-black/50">
-                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                    <div className="space-y-1">
+                      <label className="font-bold text-[var(--text-secondary)] block">Client / Company Name</label>
+                      <input
+                        type="text"
+                        value={formData.client_name}
+                        onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
+                        placeholder="e.g. FitFlow Athletics Ltd"
+                        className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
                     </div>
-                  )}
-                </div>
+                  </div>
 
-                {/* Sort Order & Active */}
-                <div className="grid grid-cols-2 gap-3.5 items-center">
+                  {/* Category & Live URL */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div className="space-y-1">
+                      <label className="font-bold text-[var(--text-secondary)] block">Category *</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.category}
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        placeholder="e.g. SaaS Platform, E-Commerce"
+                        className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-bold text-[var(--text-secondary)] block">Live Website URL</label>
+                      <input
+                        type="url"
+                        value={formData.live_url}
+                        onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
+                        placeholder="https://client-site.com"
+                        className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Description */}
                   <div className="space-y-1">
-                    <label className="font-bold text-[var(--text-secondary)] block">Sort Order</label>
-                    <input
-                      type="number"
-                      value={formData.sort_order}
-                      onChange={(e) => setFormData({ ...formData, sort_order: e.target.value })}
-                      className="w-full px-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                    <label className="font-bold text-[var(--text-secondary)] block">Description *</label>
+                    <textarea
+                      rows="3"
+                      required
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder="Brief overview of the project, features delivered, and business impact..."
+                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 resize-none leading-relaxed"
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 pt-5">
+                  {/* Technologies */}
+                  <div className="space-y-1">
+                    <label className="font-bold text-[var(--text-secondary)] block">Tech Stack (comma-separated)</label>
                     <input
-                      type="checkbox"
-                      id="is_active_check"
-                      checked={formData.is_active}
-                      onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                      className="w-4 h-4 rounded text-cyan-400 focus:ring-cyan-400 bg-black/30 border-white/10 cursor-pointer"
+                      type="text"
+                      value={formData.technologies}
+                      onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+                      placeholder="e.g. React, Next.js, Supabase, TailwindCSS, Stripe"
+                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
                     />
-                    <label htmlFor="is_active_check" className="font-bold text-white text-xs cursor-pointer select-none">
-                      Active (Visible to public)
-                    </label>
                   </div>
-                </div>
 
-                {/* Form Buttons */}
-                <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 font-bold text-white cursor-pointer transition-colors"
-                  >
-                    Cancel
-                  </button>
+                  {/* Image Section */}
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-3">
+                    <label className="font-bold text-[var(--text-secondary)] block">Cover Image *</label>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="relative flex-1">
+                        <LinkIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+                        <input
+                          type="text"
+                          required
+                          value={formData.image?.startsWith('data:') ? 'Local Image Attached (base64)' : formData.image}
+                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                          placeholder="Paste image URL (https://...)"
+                          className="w-full pl-9 pr-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 text-xs"
+                        />
+                      </div>
 
-                  <button
-                    type="submit"
-                    disabled={saving || uploadingImage}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-cyan-400 text-black font-bold rounded-xl hover:bg-cyan-300 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/20"
-                  >
-                    {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-                    {editingId ? 'Save Changes' : 'Create Project'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
+                      <label
+                        htmlFor="client-proj-uploader"
+                        className="px-3.5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
+                      >
+                        {uploadingImage ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+                        Upload File
+                      </label>
+                      <input
+                        type="file"
+                        id="client-proj-uploader"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </div>
+
+                    {formData.image && (
+                      <div className="relative aspect-video max-h-40 rounded-lg overflow-hidden border border-white/10 bg-black/50">
+                        <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Sort Order & Active */}
+                  <div className="grid grid-cols-2 gap-3.5 items-center">
+                    <div className="space-y-1">
+                      <label className="font-bold text-[var(--text-secondary)] block">Sort Order</label>
+                      <input
+                        type="number"
+                        value={formData.sort_order}
+                        onChange={(e) => setFormData({ ...formData, sort_order: e.target.value })}
+                        className="w-full px-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-5">
+                      <input
+                        type="checkbox"
+                        id="is_active_check"
+                        checked={formData.is_active}
+                        onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                        className="w-4 h-4 rounded text-cyan-400 focus:ring-cyan-400 bg-black/30 border-white/10 cursor-pointer"
+                      />
+                      <label htmlFor="is_active_check" className="font-bold text-white text-xs cursor-pointer select-none">
+                        Active (Visible to public)
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Sticky Footer Form Buttons */}
+                  <div className="sticky bottom-0 bg-[#0a0b10] pt-4 pb-1 border-t border-white/10 flex items-center justify-end gap-2.5 z-10">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="px-4 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 font-bold text-white cursor-pointer transition-colors"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={saving || uploadingImage}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-cyan-400 text-black font-bold rounded-xl hover:bg-cyan-300 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/20"
+                    >
+                      {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+                      {editingId ? 'Save Changes' : 'Create Project'}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
           </div>
         )}
       </AnimatePresence>

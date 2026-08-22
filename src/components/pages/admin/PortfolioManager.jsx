@@ -345,185 +345,188 @@ export default function PortfolioManager() {
       {/* Modal for Featured Projects */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg my-8 rounded-3xl glass-card border border-white/10 shadow-2xl p-6 sm:p-8 bg-[var(--bg-primary)] max-h-[90vh] overflow-y-auto space-y-5"
-            >
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <h3 className="text-lg font-black text-white flex items-center gap-2">
-                  <Sparkles size={18} className="text-cyan-400" />
-                  {editingId ? 'Edit Featured Project' : 'Add New Featured Project'}
-                </h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-                <div>
-                  <label className="font-bold text-[var(--text-secondary)] block mb-1">Project Title *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="e.g. FoodieFrenzy SaaS"
-                    className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                  />
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm p-4 sm:p-6">
+            <div className="min-h-full flex items-center justify-center py-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className="relative w-full max-w-xl rounded-3xl glass-card border border-white/10 shadow-2xl bg-[#0a0b10] p-6 sm:p-8 flex flex-col max-h-[88vh] overflow-hidden"
+              >
+                <div className="flex items-center justify-between pb-4 mb-2 border-b border-white/10 shrink-0">
+                  <h3 className="text-lg font-black text-white flex items-center gap-2">
+                    <Sparkles size={18} className="text-cyan-400" />
+                    {editingId ? 'Edit Featured Project' : 'Add New Featured Project'}
+                  </h3>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Type *</label>
-                    <select
-                      value={formData.type}
-                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                      className="w-full px-3 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    >
-                      <option value="Websites" className="bg-slate-900">Websites</option>
-                      <option value="AI Agents" className="bg-slate-900">AI Agents</option>
-                      <option value="Reels" className="bg-slate-900">Reels</option>
-                      <option value="YT Videos" className="bg-slate-900">YT Videos</option>
-                      <option value="Vlogs" className="bg-slate-900">Vlogs</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Category *</label>
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-1 space-y-4 text-xs">
+                  <div className="pt-1">
+                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Project Title *</label>
                     <input
                       type="text"
                       required
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      placeholder="e.g. Food SaaS • Full Stack"
-                      className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="e.g. FoodieFrenzy SaaS"
+                      className="w-full px-3.5 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
                     />
                   </div>
-                </div>
 
-                {/* Cover Image URL + Local File Uploader */}
-                <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-3">
-                  <label className="font-bold text-[var(--text-secondary)] block">Cover Image *</label>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex-1">
-                      <LinkIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-[var(--text-secondary)] block mb-1">Type *</label>
+                      <select
+                        value={formData.type}
+                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      >
+                        <option value="Websites" className="bg-slate-900">Websites</option>
+                        <option value="AI Agents" className="bg-slate-900">AI Agents</option>
+                        <option value="Reels" className="bg-slate-900">Reels</option>
+                        <option value="YT Videos" className="bg-slate-900">YT Videos</option>
+                        <option value="Vlogs" className="bg-slate-900">Vlogs</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="font-bold text-[var(--text-secondary)] block mb-1">Category *</label>
                       <input
                         type="text"
                         required
-                        value={formData.image}
-                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                        placeholder="Image URL or upload local file"
-                        className="w-full pl-9 pr-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 text-xs"
+                        value={formData.category}
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        placeholder="e.g. Food SaaS • Full Stack"
+                        className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Cover Image URL + Local File Uploader */}
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-3">
+                    <label className="font-bold text-[var(--text-secondary)] block">Cover Image *</label>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="relative flex-1">
+                        <LinkIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+                        <input
+                          type="text"
+                          required
+                          value={formData.image?.startsWith('data:') ? 'Local Image Attached (base64)' : formData.image}
+                          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                          placeholder="Image URL or upload local file"
+                          className="w-full pl-9 pr-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 text-xs"
+                        />
+                      </div>
+
+                      <label
+                        htmlFor="portfolio-img-upload"
+                        className="px-3.5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
+                      >
+                        {uploadingImage ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+                        Upload File
+                      </label>
+                      <input
+                        type="file"
+                        id="portfolio-img-upload"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
                       />
                     </div>
 
-                    <label
-                      htmlFor="portfolio-img-upload"
-                      className="px-3.5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
-                    >
-                      {uploadingImage ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
-                      Upload File
-                    </label>
-                    <input
-                      type="file"
-                      id="portfolio-img-upload"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
+                    {formData.image && (
+                      <div className="relative aspect-video max-h-40 rounded-lg overflow-hidden border border-white/10 bg-black/50">
+                        <img src={resolveImage(formData.image)} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Description *</label>
+                    <textarea
+                      rows="2"
+                      required
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder="Short summary of results and deliverables"
+                      className="w-full px-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 resize-none leading-relaxed"
                     />
                   </div>
 
-                  {formData.image && (
-                    <div className="relative aspect-video max-h-36 rounded-lg overflow-hidden border border-white/10 bg-black/50">
-                      <img src={resolveImage(formData.image)} alt="Preview" className="w-full h-full object-cover" />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-[var(--text-secondary)] block mb-1">Case Study Slug (Optional)</label>
+                      <input
+                        type="text"
+                        value={formData.case_study_slug}
+                        onChange={(e) => setFormData({ ...formData, case_study_slug: e.target.value })}
+                        placeholder="e.g. foodiefrenzy-saas"
+                        className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
                     </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="font-bold text-[var(--text-secondary)] block mb-1">Description *</label>
-                  <textarea
-                    rows="2"
-                    required
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Short summary of results and deliverables"
-                    className="w-full px-3.5 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400 resize-none leading-relaxed"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Case Study Slug (Optional)</label>
-                    <input
-                      type="text"
-                      value={formData.case_study_slug}
-                      onChange={(e) => setFormData({ ...formData, case_study_slug: e.target.value })}
-                      placeholder="e.g. foodiefrenzy-saas"
-                      className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
+                    <div>
+                      <label className="font-bold text-[var(--text-secondary)] block mb-1">External Link (Optional)</label>
+                      <input
+                        type="url"
+                        value={formData.link}
+                        onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                        placeholder="https://..."
+                        className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">External Link (Optional)</label>
-                    <input
-                      type="url"
-                      value={formData.link}
-                      onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                      placeholder="https://..."
-                      className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-3 items-center">
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Sort Order</label>
-                    <input
-                      type="number"
-                      value={formData.sort_order}
-                      onChange={(e) => setFormData({ ...formData, sort_order: e.target.value })}
-                      className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
-                    />
+                  <div className="grid grid-cols-2 gap-3 items-center">
+                    <div>
+                      <label className="font-bold text-[var(--text-secondary)] block mb-1">Sort Order</label>
+                      <input
+                        type="number"
+                        value={formData.sort_order}
+                        onChange={(e) => setFormData({ ...formData, sort_order: e.target.value })}
+                        className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-xl text-white outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 pt-4">
+                      <input
+                        type="checkbox"
+                        id="port_active_check"
+                        checked={formData.is_active}
+                        onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                        className="w-4 h-4 rounded text-cyan-400 focus:ring-cyan-400 bg-black/30 border-white/10 cursor-pointer"
+                      />
+                      <label htmlFor="port_active_check" className="font-bold text-white text-xs cursor-pointer select-none">
+                        Active (Visible)
+                      </label>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 pt-4">
-                    <input
-                      type="checkbox"
-                      id="port_active_check"
-                      checked={formData.is_active}
-                      onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                      className="w-4 h-4 rounded text-cyan-400 focus:ring-cyan-400 bg-black/30 border-white/10 cursor-pointer"
-                    />
-                    <label htmlFor="port_active_check" className="font-bold text-white text-xs cursor-pointer select-none">
-                      Active (Visible)
-                    </label>
-                  </div>
-                </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] font-semibold cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={saving || uploadingImage}
-                    className="flex items-center gap-2 px-5 py-2 rounded-xl bg-cyan-400 text-black font-bold hover:bg-cyan-300 disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/20"
-                  >
-                    {saving ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
-                    Save Project
-                  </button>
-                </div>
-              </form>
-            </motion.div>
+                  {/* Sticky Footer Form Buttons */}
+                  <div className="sticky bottom-0 bg-[#0a0b10] pt-4 pb-1 border-t border-white/10 flex items-center justify-end gap-3 z-10">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] font-semibold cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={saving || uploadingImage}
+                      className="flex items-center gap-2 px-5 py-2 rounded-xl bg-cyan-400 text-black font-bold hover:bg-cyan-300 disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/20"
+                    >
+                      {saving ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
+                      Save Project
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
           </div>
         )}
       </AnimatePresence>
