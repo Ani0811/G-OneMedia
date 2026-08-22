@@ -16,21 +16,37 @@ import ScrollToTop from './components/common/ScrollToTop'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import LazySection from './components/common/LazySection'
 
-// Helper to retry dynamic imports when they fail (e.g. ChunkLoadError due to network glitches or new deployments)
+// Helper to retry dynamic imports when they fail (e.g. ChunkLoadError due to new deployments)
 const lazyWithRetry = (importFunc) => {
   return lazy(async () => {
     try {
-      return await importFunc()
+      const module = await importFunc()
+      // Clear reload guard on successful load
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('chunk_retry_reloaded')
+      }
+      return module
     } catch (error) {
-      console.error('[LazyRetry] Chunk load failed, retrying import:', error)
+      console.warn('[LazyRetry] Chunk load failed, retrying once...', error)
       try {
-        // Retry once after a brief delay
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return await importFunc()
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        const module = await importFunc()
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('chunk_retry_reloaded')
+        }
+        return module
       } catch (retryError) {
-        console.error('[LazyRetry] Chunk load failed after retry. Reloading page...', retryError)
-        window.location.reload()
-        return new Promise(() => {}) // Keep promise pending to prevent app from crashing before reload
+        console.error('[LazyRetry] Chunk import failed after retry:', retryError)
+        // In production only, attempt at most ONE reload per session for stale chunks
+        if (typeof window !== 'undefined' && !import.meta.env.DEV) {
+          const hasReloaded = sessionStorage.getItem('chunk_retry_reloaded')
+          if (!hasReloaded) {
+            sessionStorage.setItem('chunk_retry_reloaded', 'true')
+            window.location.reload()
+            return new Promise(() => {})
+          }
+        }
+        throw retryError
       }
     }
   })

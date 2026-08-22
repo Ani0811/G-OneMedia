@@ -63,7 +63,7 @@ export default function ClientProjects() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, idx) => {
-            const resolvedImage = project.image?.startsWith('http')
+            const resolvedImage = project.image?.startsWith('http') || project.image?.startsWith('data:')
               ? project.image
               : `${import.meta.env.BASE_URL}${project.image?.replace(/^\//, '')}`.replace(/\/+/g, '/')
 
