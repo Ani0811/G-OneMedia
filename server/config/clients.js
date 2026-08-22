@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import nodemailer from 'nodemailer'
-import Razorpay from 'razorpay'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -20,17 +19,3 @@ export const transporter = nodemailer.createTransport({
   }
 })
 
-// Initialize Razorpay
-const VITE_RAZORPAY_KEY_ID = process.env.VITE_RAZORPAY_KEY_ID
-const VITE_RAZORPAY_KEY_SECRET = process.env.VITE_RAZORPAY_KEY_SECRET
-
-export let razorpay = null
-if (VITE_RAZORPAY_KEY_ID && VITE_RAZORPAY_KEY_SECRET) {
-  console.log('Razorpay Key ID loaded:', `${VITE_RAZORPAY_KEY_ID.substring(0, 9)}...`)
-  razorpay = new Razorpay({
-    key_id: VITE_RAZORPAY_KEY_ID.trim(),
-    key_secret: VITE_RAZORPAY_KEY_SECRET.trim(),
-  })
-} else {
-  console.warn("⚠️ RAZORPAY KEYS MISSING: Please add VITE_RAZORPAY_KEY_ID and VITE_RAZORPAY_KEY_SECRET to your environment variables.")
-}

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { ThemeProvider } from './context/ThemeContext'
+import { AdminAuthProvider } from './context/AdminAuthContext'
 import { trackPageView } from './utils/analytics'
 import Navbar from './components/common/Navbar'
 import Hero from './components/sections/Hero'
@@ -12,6 +13,7 @@ import ScheduleModal from './components/features/ScheduleModal'
 import Loader from './components/common/Loader'
 import CookieBanner from './components/common/CookieBanner'
 import ScrollToTop from './components/common/ScrollToTop'
+import ProtectedRoute from './components/common/ProtectedRoute'
 import LazySection from './components/common/LazySection'
 
 // Helper to retry dynamic imports when they fail (e.g. ChunkLoadError due to network glitches or new deployments)
@@ -46,6 +48,8 @@ const DiscoveryCall = lazyWithRetry(() => import('./components/pages/DiscoveryCa
 const FounderProfile = lazyWithRetry(() => import('./components/pages/FounderProfile'))
 const ResourceVault = lazyWithRetry(() => import('./components/pages/ResourceVault'))
 const AuditWizard = lazyWithRetry(() => import('./components/pages/AuditWizard'))
+const AdminLogin = lazyWithRetry(() => import('./components/pages/admin/AdminLogin'))
+const AdminDashboard = lazyWithRetry(() => import('./components/pages/admin/AdminDashboard'))
 
 // Lazy loaded home sections
 const ClientWinsTicker = lazyWithRetry(() => import('./components/features/ClientWinsTicker'))
@@ -56,7 +60,6 @@ const BudgetCalculator = lazyWithRetry(() => import('./components/sections/Budge
 const Pricing = lazyWithRetry(() => import('./components/sections/Pricing'))
 const Testimonials = lazyWithRetry(() => import('./components/sections/Testimonials'))
 const About = lazyWithRetry(() => import('./components/sections/About'))
-const RefundSection = lazyWithRetry(() => import('./components/sections/RefundSection'))
 const CTA = lazyWithRetry(() => import('./components/sections/CTA'))
 const PageLoader = () => (
   <div className="min-h-screen bg-[#050508] flex items-center justify-center">
@@ -111,9 +114,6 @@ function HomePage({ onScheduleCall }) {
       </LazySection>
       <LazySection placeholderHeight="500px">
         <About />
-      </LazySection>
-      <LazySection placeholderHeight="300px">
-        <RefundSection />
       </LazySection>
       <LazySection placeholderHeight="400px">
         <CTA />
@@ -177,38 +177,49 @@ export default function App() {
     )
   }
 
+  const isAdminRoute = location.pathname.startsWith('/admin')
+
   return (
     <HelmetProvider>
       <ThemeProvider>
-        <div className="min-h-screen relative">
-          <ScrollToTop />
-          <Navbar onScheduleCall={handleScheduleCall} />
-          <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
+        <AdminAuthProvider>
+          <div className="min-h-screen relative">
+            <ScrollToTop />
+            {!isAdminRoute && <Navbar onScheduleCall={handleScheduleCall} />}
+            {!isAdminRoute && <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />}
 
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<HomePage onScheduleCall={handleScheduleCall} />} />
-              <Route path="/get-started" element={<GetStarted />} />
-              <Route path="/services/:slug" element={<ServiceDetail onScheduleCall={handleScheduleCall} />} />
-              <Route path="/portfolio/:id" element={<CaseStudyDetail />} />
-              <Route path="/about/:slug" element={<FounderProfile />} />
-              <Route path="/portal" element={<ClientLogin />} />
-              <Route path="/portal/dashboard" element={<ClientDashboard />} />
-              <Route path="/refund" element={<RefundRequest />} />
-              <Route path="/reviews" element={<Reviews />} />
-              <Route path="/discovery" element={<DiscoveryCall />} />
-              <Route path="/vault" element={<ResourceVault />} />
-              <Route path="/audit" element={<AuditWizard />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-          <Footer />
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<HomePage onScheduleCall={handleScheduleCall} />} />
+                <Route path="/get-started" element={<GetStarted />} />
+                <Route path="/services/:slug" element={<ServiceDetail onScheduleCall={handleScheduleCall} />} />
+                <Route path="/portfolio/:id" element={<CaseStudyDetail />} />
+                <Route path="/about/:slug" element={<FounderProfile />} />
+                <Route path="/portal" element={<ClientLogin />} />
+                <Route path="/portal/dashboard" element={<ClientDashboard />} />
+                <Route path="/refund" element={<RefundRequest />} />
+                <Route path="/reviews" element={<Reviews />} />
+                <Route path="/discovery" element={<DiscoveryCall />} />
+                <Route path="/vault" element={<ResourceVault />} />
+                <Route path="/audit" element={<AuditWizard />} />
+                
+                {/* Admin Routes */}
+                <Route path="/admin" element={<AdminLogin />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                </Route>
 
-          {/* Global AI Chat Widget */}
-          <AIChatWidget />
-          
-          <CookieBanner />
-        </div>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+            {!isAdminRoute && <Footer />}
+
+            {/* Global AI Chat Widget */}
+            {!isAdminRoute && <AIChatWidget />}
+            
+            {!isAdminRoute && <CookieBanner />}
+          </div>
+        </AdminAuthProvider>
       </ThemeProvider>
     </HelmetProvider>
   )

@@ -23,8 +23,6 @@ select 'case_studies', count(*) from case_studies
 union all
 select 'bookings', count(*) from bookings
 union all
-select 'payments', count(*) from payments
-union all
 select 'leads', count(*) from leads
 union all
 select 'reviews', count(*) from reviews
@@ -98,11 +96,6 @@ from leads
 order by created_at desc
 limit 10;
 
--- Recent payments (last 10)
-select razorpay_payment_id, amount, email, status, created_at
-from payments
-order by created_at desc
-limit 10;
 
 -- Recent AI chat agent leads (last 10)
 select name, email, service, type, created_at

@@ -1,11 +1,37 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Code, Video, Mail, ExternalLink, Github, Linkedin, Instagram, Youtube, Zap, Star } from 'lucide-react'
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  Code, 
+  Mail, 
+  Github, 
+  Linkedin, 
+  Instagram, 
+  Youtube, 
+  Globe, 
+  Users, 
+  ChevronLeft, 
+  ChevronRight,
+  Sparkles
+} from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
+import { supabase } from '../../lib/supabaseClient'
 
-const founders = {
+const getSocialIcon = (name) => {
+  const n = (name || '').toLowerCase()
+  if (n.includes('github')) return Github
+  if (n.includes('linkedin')) return Linkedin
+  if (n.includes('insta')) return Instagram
+  if (n.includes('youtube')) return Youtube
+  if (n.includes('mail')) return Mail
+  return Globe
+}
+
+const defaultFounders = {
   anirudha: {
+    slug: 'anirudha',
     name: 'Anirudha Basu Thakur',
     role: 'Co-Founder & Lead Engineer',
     tagline: 'Co-Founder at G-One Media | Full-Stack Developer & Digital Systems Architect',
@@ -13,7 +39,6 @@ const founders = {
     image: 'Anirudha.jpeg',
     bgImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop',
     accentColor: 'cyan',
-    icon: Code,
     email: 'anirudha.basuthakur@gmail.com',
     skills: [
       { label: 'Full-Stack Development', desc: 'Building high-performance, secure frontends and backends with modern frameworks and architectures.' },
@@ -22,9 +47,9 @@ const founders = {
       { label: 'UI/UX Optimization', desc: 'Implementing smooth animations, micro-interactions, and accessibility to deliver premium user experiences.' },
     ],
     socials: [
-      { name: 'GitHub', url: 'https://github.com/Ani0811', icon: Github },
-      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/anirudha-basu-thakur-686aa8253', icon: Linkedin },
-      { name: 'Instagram', url: 'https://www.instagram.com/this_is_ringo_here/', icon: Instagram },
+      { name: 'GitHub', url: 'https://github.com/Ani0811' },
+      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/anirudha-basu-thakur-686aa8253' },
+      { name: 'Instagram', url: 'https://www.instagram.com/this_is_ringo_here/' },
     ],
     stats: [
       { value: '20+', label: 'Projects Shipped' },
@@ -33,6 +58,7 @@ const founders = {
     ],
   },
   vasudev: {
+    slug: 'vasudev',
     name: 'Vasudev Sharma',
     role: 'Founder & Agency Owner',
     tagline: 'Agency Owner | Content & Brand Strategist',
@@ -40,7 +66,6 @@ const founders = {
     image: 'Vasudev.jpeg',
     bgImage: 'https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?q=80&w=2071&auto=format&fit=crop',
     accentColor: 'fuchsia',
-    icon: Code,
     email: 'vasudevsharma997@gmail.com',
     skills: [
       { label: 'Digital Strategy', desc: 'Building platform-optimized strategies and planning.' },
@@ -49,9 +74,9 @@ const founders = {
       { label: 'Project Management', desc: 'Ensuring seamless delivery of web projects from concept to launch.' },
     ],
     socials: [
-      { name: 'YouTube', url: 'https://www.youtube.com/@vasudevsharma1', icon: Youtube },
-      { name: 'LinkedIn', url: 'https://linkedin.com/in/vasudev-sharma-a8b4ab22a', icon: Linkedin },
-      { name: 'Instagram', url: 'https://www.instagram.com/vasudev.sharma5/', icon: Instagram },
+      { name: 'YouTube', url: 'https://www.youtube.com/@vasudevsharma1' },
+      { name: 'LinkedIn', url: 'https://linkedin.com/in/vasudev-sharma-a8b4ab22a' },
+      { name: 'Instagram', url: 'https://www.instagram.com/vasudev.sharma5/' },
     ],
     stats: [
       { value: '50+', label: 'Projects Managed' },
@@ -61,16 +86,82 @@ const founders = {
   },
 }
 
+const defaultTeamList = [
+  {
+    slug: 'anirudha',
+    name: 'Anirudha Basu Thakur',
+    role: 'Co-Founder & Lead Engineer',
+    image: 'Anirudha.jpeg',
+    accent_color: 'cyan'
+  },
+  {
+    slug: 'vasudev',
+    name: 'Vasudev Sharma',
+    role: 'Founder & Agency Owner',
+    image: 'Vasudev.jpeg',
+    accent_color: 'fuchsia'
+  }
+]
+
 export default function FounderProfile() {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const founder = founders[slug]
+  const [founder, setFounder] = useState(defaultFounders[slug] || null)
+  const [allMembers, setAllMembers] = useState(defaultTeamList)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    async function loadData() {
+      try {
+        // Fetch all active team members for navigation
+        const { data: roster } = await supabase
+          .from('team_members')
+          .select('id, slug, name, role, tagline, image, accent_color, sort_order')
+          .eq('is_active', true)
+          .order('sort_order', { ascending: true })
+
+        if (roster && roster.length > 0) {
+          setAllMembers(roster)
+        }
+
+        // Fetch current member details
+        const { data, error } = await supabase
+          .from('team_members')
+          .select('*')
+          .eq('slug', slug)
+          .eq('is_active', true)
+          .single()
+
+        if (!error && data) {
+          setFounder({
+            slug: data.slug,
+            name: data.name,
+            role: data.role,
+            tagline: data.tagline || '',
+            description: data.description || '',
+            image: data.image,
+            bgImage: data.bg_image || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop',
+            accentColor: data.accent_color || 'cyan',
+            email: data.email || '',
+            skills: Array.isArray(data.skills) ? data.skills : [],
+            socials: Array.isArray(data.socials) ? data.socials : [],
+            stats: Array.isArray(data.stats) ? data.stats : [],
+          })
+        } else if (defaultFounders[slug]) {
+          setFounder(defaultFounders[slug])
+        }
+      } catch (err) {
+        if (defaultFounders[slug]) setFounder(defaultFounders[slug])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
   }, [slug])
 
-  if (!founder) {
+  if (!founder && !loading) {
     return (
       <section className="py-32 text-center">
         <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Profile Not Found</h2>
@@ -79,60 +170,70 @@ export default function FounderProfile() {
     )
   }
 
-  const Icon = founder.icon
+  if (!founder) return null
+
+  // Calculate Next and Previous Members
+  const currentIndex = allMembers.findIndex((m) => m.slug === slug)
+  const hasMultiple = allMembers.length > 1
+  const prevMember = hasMultiple 
+    ? allMembers[(currentIndex - 1 + allMembers.length) % allMembers.length] 
+    : null
+  const nextMember = hasMultiple 
+    ? allMembers[(currentIndex + 1) % allMembers.length] 
+    : null
+
+  const otherMembers = allMembers.filter((m) => m.slug !== slug)
+
   const isAccentCyan = founder.accentColor === 'cyan'
-  const accentClass = isAccentCyan ? 'text-cyan-400' : 'text-fuchsia-400'
-  const accentBg = isAccentCyan ? 'bg-cyan-400/10' : 'bg-fuchsia-400/10'
-  const accentBorder = isAccentCyan ? 'border-cyan-400/20' : 'border-fuchsia-400/20'
+  const isAccentPurple = founder.accentColor === 'violet' || founder.accentColor === 'purple'
+  const accentClass = isAccentCyan ? 'text-cyan-400' : isAccentPurple ? 'text-purple-400' : 'text-fuchsia-400'
+  const accentBg = isAccentCyan ? 'bg-cyan-400/10' : isAccentPurple ? 'bg-purple-400/10' : 'bg-fuchsia-400/10'
+  const accentBorder = isAccentCyan ? 'border-cyan-400/20' : isAccentPurple ? 'border-purple-400/20' : 'border-fuchsia-400/20'
   const accentGlow = isAccentCyan
     ? 'shadow-[0_0_40px_rgba(0,240,255,0.15)]'
     : 'shadow-[0_0_40px_rgba(217,70,239,0.15)]'
-  const gradientFrom = isAccentCyan ? 'from-cyan-900/40 via-blue-900/20' : 'from-fuchsia-900/40 via-purple-900/20'
-  const ringClass = isAccentCyan ? 'ring-cyan-400/30' : 'ring-fuchsia-400/30'
+  const gradientFrom = isAccentCyan ? 'from-cyan-900/40 via-blue-900/20' : isAccentPurple ? 'from-purple-900/40 via-indigo-900/20' : 'from-fuchsia-900/40 via-purple-900/20'
+  const ringClass = isAccentCyan ? 'ring-cyan-400/30' : isAccentPurple ? 'ring-purple-400/30' : 'ring-fuchsia-400/30'
+
+  const imgSrc = founder.image?.startsWith('http')
+    ? founder.image
+    : `${import.meta.env.BASE_URL || '/'}${founder.image}`.replace(/\/+/g, '/')
 
   return (
     <section className="pt-28 pb-24 relative min-h-screen overflow-hidden">
-      {founder && (
-        <Helmet>
-          <title>{`${founder.name} | G-One Media`}</title>
-          <meta name="description" content={founder.tagline} />
-          <meta name="keywords" content={`G-One Media, ${founder.name}, ${founder.role}, ${founder.tagline}, team, founder, ${founder.skills.map(s => s.label).join(', ')}`} />
-          <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
-          
-          {/* Open Graph / Facebook */}
-          <meta property="og:type" content="profile" />
-          <meta property="og:url" content={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
-          <meta property="og:title" content={`${founder.name} | G-One Media`} />
-          <meta property="og:description" content={founder.tagline} />
-          <meta property="og:image" content={`https://ani0811.github.io/G-OneMedia/${founder.image}`} />
+      <Helmet>
+        <title>{`${founder.name} | G-One Media`}</title>
+        <meta name="description" content={founder.tagline || founder.description} />
+        <meta name="keywords" content={`G-One Media, ${founder.name}, ${founder.role}, team, founder`} />
+        <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
+      </Helmet>
 
-          {/* Twitter */}
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
-          <meta property="twitter:title" content={`${founder.name} | G-One Media`} />
-          <meta property="twitter:description" content={founder.tagline} />
-          <meta property="twitter:image" content={`https://ani0811.github.io/G-OneMedia/${founder.image}`} />
-        </Helmet>
-      )}
       {/* Ambient BG */}
       <div className={`absolute top-0 left-0 right-0 h-[60vh] bg-gradient-to-b ${gradientFrom} to-[var(--bg-deep)] opacity-40 -z-20 pointer-events-none`} />
       
       {/* Background Image & Overlay Container */}
-      <div className="absolute top-0 left-0 right-0 h-[60vh] overflow-hidden -z-30 pointer-events-none">
-        <img
-          src={founder.bgImage}
-          alt="Background"
-          className="w-full h-full object-cover opacity-10 blur-sm scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-deep)]" />
-      </div>
+      {founder.bgImage && (
+        <div className="absolute top-0 left-0 right-0 h-[60vh] overflow-hidden -z-30 pointer-events-none">
+          <img
+            src={founder.bgImage}
+            alt="Background"
+            className="w-full h-full object-cover opacity-10 blur-sm scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-deep)]" />
+        </div>
+      )}
 
       <div className="container-custom">
-        {/* Back Button */}
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-12 mt-4">
+        {/* Top Navigation Row: Back Button & Next/Prev Controls */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          className="flex flex-wrap items-center justify-between gap-4 mb-12 mt-4"
+        >
+          {/* Back Button */}
           <button
             onClick={() => navigate('/#about')}
-            className={`group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:-translate-y-0.5 cursor-pointer hover:${accentClass} ${accentBorder} hover:border-opacity-50`}
+            className={`group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:-translate-y-0.5 cursor-pointer ${accentClass} ${accentBorder} hover:border-opacity-50`}
             style={{
               color: 'var(--text-secondary)',
               borderColor: 'var(--border-subtle)',
@@ -143,10 +244,42 @@ export default function FounderProfile() {
             <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform duration-300" />
             <span>Meet the Team</span>
           </button>
+
+          {/* Quick Team Member Navigator Pill */}
+          {hasMultiple && (
+            <div className="flex items-center gap-2 p-1 rounded-2xl glass-card border border-white/10 bg-black/40">
+              {prevMember && (
+                <button
+                  onClick={() => navigate(`/about/${prevMember.slug}`)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[var(--text-muted)] hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                  title={`Previous: ${prevMember.name}`}
+                >
+                  <ChevronLeft size={14} />
+                  <span className="hidden sm:inline">{prevMember.name.split(' ')[0]}</span>
+                </button>
+              )}
+
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-white/5 text-[var(--text-secondary)]">
+                {currentIndex + 1} / {allMembers.length}
+              </span>
+
+              {nextMember && (
+                <button
+                  onClick={() => navigate(`/about/${nextMember.slug}`)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold ${accentClass} hover:bg-white/10 transition-all cursor-pointer`}
+                  title={`Next: ${nextMember.name}`}
+                >
+                  <span className="hidden sm:inline">Next: {nextMember.name.split(' ')[0]}</span>
+                  <span className="sm:hidden">Next</span>
+                  <ChevronRight size={14} />
+                </button>
+              )}
+            </div>
+          )}
         </motion.div>
 
         {/* Hero Grid — Photo LEFT, Text RIGHT */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
           {/* Left: Photo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -155,11 +288,12 @@ export default function FounderProfile() {
             className="relative w-full max-w-md mx-auto lg:mx-0"
           >
             <div className={`relative z-10 rounded-[40px] overflow-hidden shadow-2xl ring-1 ${ringClass} ${accentGlow}`}>
-              <div className="aspect-[3/4] overflow-hidden">
+              <div className="aspect-[3/4] overflow-hidden bg-black/50">
                 <img
-                  src={`${import.meta.env.BASE_URL}${founder.image}`.replace(/\/+/g, '/')}
+                  src={imgSrc}
                   alt={founder.name}
                   className="w-full h-full object-cover profile-crop hover:scale-105 transition-transform duration-700"
+                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300' }}
                 />
               </div>
             </div>
@@ -174,7 +308,7 @@ export default function FounderProfile() {
             className="flex flex-col justify-center"
           >
             <div className={`inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] px-3 py-1 rounded-full mb-6 w-fit ${accentBg} ${accentClass} border ${accentBorder}`}>
-              <Icon size={12} />
+              <Code size={12} />
               {founder.role}
             </div>
 
@@ -182,87 +316,198 @@ export default function FounderProfile() {
               {founder.name}
             </h1>
 
-            <p className={`text-lg font-semibold mb-6 ${accentClass}`}>{founder.tagline}</p>
+            {founder.tagline && (
+              <p className={`text-lg font-semibold mb-6 ${accentClass}`}>{founder.tagline}</p>
+            )}
 
-            <p className="text-base leading-relaxed max-w-xl mb-8" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-base leading-relaxed max-w-xl mb-8 whitespace-pre-line" style={{ color: 'var(--text-secondary)' }}>
               {founder.description}
             </p>
 
             {/* Stats */}
-            <div className="flex flex-wrap gap-x-8 gap-y-4 mb-8">
-              {founder.stats.map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                >
-                  <div className={`text-2xl font-black ${accentClass}`}>{stat.value}</div>
-                  <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
+            {Array.isArray(founder.stats) && founder.stats.length > 0 && (
+              <div className="flex flex-wrap gap-x-8 gap-y-4 mb-8">
+                {founder.stats.map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + i * 0.1 }}
+                  >
+                    <div className={`text-2xl font-black ${accentClass}`}>{stat.value}</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
 
             {/* Social + Email */}
             <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={`mailto:${founder.email}`}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-bold tracking-wide transition-all hover:-translate-y-0.5 ${accentBg} ${accentBorder} ${accentClass}`}
-              >
-                <Mail size={14} />
-                {founder.email}
-              </a>
-              <div className="flex items-center gap-3">
-                {founder.socials.map((s, i) => {
-                  const SIcon = s.icon
-                  return (
-                    <a
-                      key={i}
-                      href={s.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      title={s.name}
-                      className={`w-9 h-9 rounded-lg flex items-center justify-center border transition-all hover:-translate-y-0.5 ${accentBg} ${accentBorder} ${accentClass}`}
-                    >
-                      <SIcon size={16} />
-                    </a>
-                  )
-                })}
-              </div>
+              {founder.email && (
+                <a
+                  href={`mailto:${founder.email}`}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-bold tracking-wide transition-all hover:-translate-y-0.5 ${accentBg} ${accentBorder} ${accentClass}`}
+                >
+                  <Mail size={14} />
+                  {founder.email}
+                </a>
+              )}
+              {Array.isArray(founder.socials) && founder.socials.length > 0 && (
+                <div className="flex items-center gap-3">
+                  {founder.socials.map((s, i) => {
+                    const SIcon = getSocialIcon(s.name)
+                    return (
+                      <a
+                        key={i}
+                        href={s.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={s.name}
+                        className={`w-9 h-9 rounded-lg flex items-center justify-center border transition-all hover:-translate-y-0.5 ${accentBg} ${accentBorder} ${accentClass}`}
+                      >
+                        <SIcon size={16} />
+                      </a>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
 
         {/* Skills Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <h2 className="text-2xl md:text-3xl font-black mb-8 tracking-tight" style={{ color: 'var(--text-primary)' }}>
-            Areas of <span className="gradient-text">Expertise</span>
-          </h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {founder.skills.map((skill, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className={`glass-card p-6 border ${accentBorder} hover:${accentGlow} transition-all`}
+        {Array.isArray(founder.skills) && founder.skills.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-16"
+          >
+            <h2 className="text-2xl md:text-3xl font-black mb-8 tracking-tight" style={{ color: 'var(--text-primary)' }}>
+              Areas of <span className="gradient-text">Expertise</span>
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {founder.skills.map((skill, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className={`glass-card p-6 border ${accentBorder} hover:${accentGlow} transition-all`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`w-2 h-2 rounded-full ${isAccentCyan ? 'bg-cyan-400' : isAccentPurple ? 'bg-purple-400' : 'bg-fuchsia-400'} animate-pulse`} />
+                    <h3 className={`text-sm font-black uppercase tracking-wider ${accentClass}`}>{skill.label}</h3>
+                  </div>
+                  {skill.desc && (
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{skill.desc}</p>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Next Team Member Showcase Card (When other members exist) */}
+        {nextMember && (
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">
+                <Sparkles size={14} className="text-cyan-400" />
+                <span>Next Leadership Profile</span>
+              </div>
+              <Link
+                to="/#about"
+                className="text-xs text-[var(--text-muted)] hover:text-white transition-colors flex items-center gap-1 font-semibold"
               >
-                <div className="flex items-center gap-3 mb-2">
-                  <div className={`w-2 h-2 rounded-full ${isAccentCyan ? 'bg-cyan-400' : 'bg-fuchsia-400'} animate-pulse`} />
-                  <h3 className={`text-sm font-black uppercase tracking-wider ${accentClass}`}>{skill.label}</h3>
+                <Users size={12} /> View Full Roster
+              </Link>
+            </div>
+
+            <div 
+              onClick={() => navigate(`/about/${nextMember.slug}`)}
+              className="glass-card p-6 sm:p-8 border border-white/10 rounded-3xl hover:border-cyan-400/50 transition-all duration-300 cursor-pointer group relative overflow-hidden bg-gradient-to-r from-black/60 via-[var(--bg-card)] to-black/60"
+            >
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
+                <div className="flex items-center gap-5">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/20 group-hover:border-cyan-400 transition-colors shrink-0 bg-black/60 shadow-xl">
+                    <img
+                      src={nextMember.image?.startsWith('http') ? nextMember.image : `${import.meta.env.BASE_URL || '/'}${nextMember.image}`.replace(/\/+/g, '/')}
+                      alt={nextMember.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' }}
+                    />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-cyan-400 block mb-1">
+                      {nextMember.role}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-cyan-300 transition-colors">
+                      {nextMember.name}
+                    </h3>
+                    {nextMember.tagline && (
+                      <p className="text-xs text-[var(--text-muted)] line-clamp-1 mt-0.5 max-w-lg">
+                        {nextMember.tagline}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{skill.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+
+                <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 group-hover:bg-cyan-400 group-hover:text-black text-white font-bold text-xs transition-all shrink-0 self-end sm:self-center shadow-lg">
+                  <span>Explore Bio</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Other Team Members Strip (if 3+ members) */}
+        {otherMembers.length > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">
+              More Team Members
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {otherMembers.map((m) => (
+                <div
+                  key={m.slug}
+                  onClick={() => navigate(`/about/${m.slug}`)}
+                  className="p-4 rounded-2xl glass-card border border-white/5 hover:border-cyan-400/40 transition-all cursor-pointer group flex items-center gap-3.5"
+                >
+                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-black/40 border border-white/10 shrink-0">
+                    <img
+                      src={m.image?.startsWith('http') ? m.image : `${import.meta.env.BASE_URL || '/'}${m.image}`.replace(/\/+/g, '/')}
+                      alt={m.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors truncate">
+                      {m.name}
+                    </h4>
+                    <p className="text-[11px] text-[var(--text-muted)] truncate">
+                      {m.role}
+                    </p>
+                  </div>
+                  <ChevronRight size={16} className="text-[var(--text-muted)] group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all" />
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* CTA Banner */}
         <motion.div
@@ -281,12 +526,14 @@ export default function FounderProfile() {
               Book a free discovery call and let's talk about your project.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href={`mailto:${founder.email}`}
-                className={`btn-secondary inline-flex items-center justify-center gap-2 px-7! py-3.5!`}
-              >
-                <Mail size={16} /> Send an Email
-              </a>
+              {founder.email && (
+                <a
+                  href={`mailto:${founder.email}`}
+                  className="btn-secondary inline-flex items-center justify-center gap-2 px-7! py-3.5!"
+                >
+                  <Mail size={16} /> Send an Email
+                </a>
+              )}
               <Link
                 to="/get-started"
                 className="btn-primary inline-flex items-center justify-center gap-2 group px-7! py-3.5!"

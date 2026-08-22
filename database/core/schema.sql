@@ -58,23 +58,6 @@ create table if not exists bookings (
 );
 
 -- ─────────────────────────────────────────────────────────────
--- TABLE: payments
--- Stores Razorpay payment records after verification
--- ─────────────────────────────────────────────────────────────
-create table if not exists payments (
-  id                    uuid primary key default uuid_generate_v4(),
-  razorpay_order_id     text not null,
-  razorpay_payment_id   text unique not null,
-  amount                numeric not null,        -- in INR (not paise)
-  currency              text default 'INR',
-  email                 text,
-  status                text default 'captured', -- 'captured' | 'refunded'
-  refund_id             text,
-  refunded_at           timestamptz,
-  created_at            timestamptz default now()
-);
-
--- ─────────────────────────────────────────────────────────────
 -- TABLE: leads
 -- Stores Get Started form submissions
 -- ─────────────────────────────────────────────────────────────
@@ -96,7 +79,6 @@ create table if not exists leads (
 alter table portfolio_projects enable row level security;
 alter table case_studies enable row level security;
 alter table bookings enable row level security;
-alter table payments enable row level security;
 alter table leads enable row level security;
 
 -- Allow public READ on portfolio and case studies (they are public content)
@@ -113,6 +95,3 @@ create policy "Anyone can insert bookings"
 create policy "Anyone can insert leads"
   on leads for insert with check (true);
 
--- Payments are insert-only from backend (anon key can insert, no read)
-create policy "Anyone can insert payments"
-  on payments for insert with check (true);

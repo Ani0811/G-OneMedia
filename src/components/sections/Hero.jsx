@@ -1,8 +1,32 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Instagram, Linkedin, Youtube, Download, Calendar } from 'lucide-react'
+import { supabase } from '../../lib/supabaseClient'
 
 export default function Hero({ onScheduleCall }) {
+  const [heroData, setHeroData] = useState({
+    headline: 'We Help Businesses Grow with High-Converting Websites',
+    subheadline: 'G-One Media bridges the gap between Sophisticated Engineering and Compelling Visual Narratives. We design and build elite Digital Ecosystems engineered to capture attention, command authority, and accelerate business growth.',
+    cta_text: 'Get Started'
+  })
+
+  useEffect(() => {
+    async function fetchHero() {
+      const { data } = await supabase
+        .from('hero_content')
+        .select('*')
+        .order('id', { ascending: true })
+        .limit(1)
+        .single()
+      
+      if (data) {
+        setHeroData(data)
+      }
+    }
+    fetchHero()
+  }, [])
+
   return (
     <section className="relative overflow-hidden min-h-[82vh] lg:min-h-[85vh] flex items-center pt-24 pb-4">
       {/* Background Ambient Glow */}
@@ -56,11 +80,11 @@ export default function Hero({ onScheduleCall }) {
             className="flex flex-col justify-center order-2 lg:order-1"
           >
             <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-black leading-[1.1] mb-4 tracking-tighter text-[var(--text-primary)]">
-              <span className="text-[1.3em] select-none">W</span>e Help Businesses Grow with High-Converting Websites
+              {heroData.headline}
             </h1>
 
             <p className="text-base md:text-lg mb-8 leading-relaxed max-w-130" style={{ color: 'var(--text-secondary)' }}>
-              G-One Media bridges the gap between Sophisticated Engineering and Compelling Visual Narratives. We design and build elite Digital Ecosystems engineered to capture attention, command authority, and accelerate business growth.
+              {heroData.subheadline}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
@@ -68,7 +92,7 @@ export default function Hero({ onScheduleCall }) {
                 to="/get-started"
                 className="btn-primary hero-get-started flex items-center justify-center gap-3 group shadow-2xl shadow-cyan-500/40 px-7! py-3.5!"
               >
-                Get Started
+                {heroData.cta_text}
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <button

@@ -1,5 +1,5 @@
 import express from 'express'
-import { supabase, transporter, razorpay } from '../config/clients.js'
+import { supabase, transporter } from '../config/clients.js'
 import { chatLimiter } from '../middleware/limiters.js'
 import { CHAT_SYSTEM_PROMPT, PRICING_MATRIX, CHAT_TOOLS } from '../../config/chatConfig.js'
 import { getChatBookingTemplate, getChatRefundRequestTemplate } from '../../templates/emailTemplates.js'
@@ -54,19 +54,8 @@ async function executeChatFunction(name, args, sessionId) {
       result = { success: true, estimate, service_category, specific_service: specific_service || 'General' }
 
     } else if (name === 'create_payment') {
-      const { name: clientName, email, amount_inr, service_description } = args
-      if (!razorpay) {
-        result = { success: false, message: 'Payment system not configured. Please contact us directly.' }
-      } else {
-        const order = await razorpay.orders.create({
-          amount: Math.round(amount_inr) * 100,
-          currency: 'INR',
-          receipt: `chat_${Date.now()}`,
-          notes: { client_name: clientName, client_email: email, service: service_description },
-        })
-        frontendAction = { type: 'OPEN_CHECKOUT', order, amount_inr, service_description, client_name: clientName, client_email: email }
-        result = { success: true, message: `Payment order created for Rs.${amount_inr} for "${service_description}".`, order_id: order.id }
-      }
+      result = { success: true, message: 'Online direct checkout is currently disabled. Please book a discovery call or contact our founders directly.' }
+
 
     } else if (name === 'request_refund') {
       const { name: clientName, email, payment_id, reason } = args

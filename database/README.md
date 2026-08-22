@@ -14,9 +14,6 @@ database/
 ├── bookings/
 │   └── bookings_setup.sql      # Management queries and filters for standard callback bookings
 │
-├── payments/
-│   └── payments_setup.sql      # Administrative reporting queries for checking Razorpay transactions
-│
 ├── reviews/
 │   └── reviews_setup.sql       # Reviews table setup, index, RLS policies, and storage bucket setup instructions
 │

@@ -1,40 +1,70 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Terminal, Camera, Linkedin, Github, Mail, Instagram, Youtube } from 'lucide-react'
+import { Terminal, Camera, Linkedin, Github, Mail, Instagram, Youtube, ExternalLink, Globe } from 'lucide-react'
+import { supabase } from '../../lib/supabaseClient'
 
-const founders = [
+const getSocialIcon = (name) => {
+  const n = (name || '').toLowerCase()
+  if (n.includes('github')) return Github
+  if (n.includes('linkedin')) return Linkedin
+  if (n.includes('insta')) return Instagram
+  if (n.includes('youtube')) return Youtube
+  if (n.includes('mail')) return Mail
+  return Globe
+}
+
+const defaultFounders = [
   {
     slug: 'anirudha',
     name: 'Anirudha Basu Thakur',
     role: 'Co-Founder & Lead Engineer',
-    icon: Terminal,
     image: 'Anirudha.jpeg',
-    color: 'cyan',
+    accent_color: 'cyan',
     email: 'anirudha.basuthakur@gmail.com',
     socials: [
-      { name: 'GitHub', url: 'https://github.com/Ani0811', icon: Github },
-      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/anirudha-basu-thakur-686aa8253', icon: Linkedin },
-      { name: 'Instagram', url: 'https://www.instagram.com/this_is_ringo_here/', icon: Instagram }
+      { name: 'GitHub', url: 'https://github.com/Ani0811' },
+      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/anirudha-basu-thakur-686aa8253' },
+      { name: 'Instagram', url: 'https://www.instagram.com/this_is_ringo_here/' }
     ]
   },
   {
     slug: 'vasudev',
     name: 'Vasudev Sharma',
     role: 'Founder & Agency Owner',
-    icon: Camera,
     image: 'Vasudev.jpeg',
-    color: 'fuchsia',
+    accent_color: 'fuchsia',
     email: 'vasudevsharma997@gmail.com',
     socials: [
-      { name: 'YouTube', url: 'https://www.youtube.com/@vasudevsharma1', icon: Youtube },
-      { name: 'LinkedIn', url: 'https://linkedin.com/in/vasudev-sharma-a8b4ab22a', icon: Linkedin },
-      { name: 'Instagram', url: 'https://www.instagram.com/vasudev.sharma5/', icon: Instagram }
+      { name: 'YouTube', url: 'https://www.youtube.com/@vasudevsharma1' },
+      { name: 'LinkedIn', url: 'https://linkedin.com/in/vasudev-sharma-a8b4ab22a' },
+      { name: 'Instagram', url: 'https://www.instagram.com/vasudev.sharma5/' }
     ]
   }
 ]
 
 export default function About() {
   const navigate = useNavigate()
+  const [team, setTeam] = useState(defaultFounders)
+
+  useEffect(() => {
+    async function fetchTeam() {
+      try {
+        const { data, error } = await supabase
+          .from('team_members')
+          .select('*')
+          .eq('is_active', true)
+          .order('sort_order', { ascending: true })
+
+        if (!error && data && data.length > 0) {
+          setTeam(data)
+        }
+      } catch (err) {
+        console.warn('Using default founders info:', err)
+      }
+    }
+    fetchTeam()
+  }, [])
 
   return (
     <section id="about" className="relative py-32 overflow-hidden">
@@ -48,7 +78,7 @@ export default function About() {
             viewport={{ once: true }}
             className="inline-block px-4 py-1.5 mb-6 rounded-full border border-white/10 bg-white/5 text-xs font-bold uppercase tracking-[0.3em] text-cyan-400"
           >
-            The Duo Behind G-One Media
+            The Team Behind G-One Media
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -56,97 +86,116 @@ export default function About() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 tracking-tightest"
           >
-            Meet the <span className="gradient-text">Founders</span>
+            Meet the <span className="gradient-text">Founders & Leadership</span>
           </motion.h2>
           <p className="text-sm opacity-50 uppercase tracking-widest text-center mb-8">Click a photo to read the full bio</p>
         </div>
 
-        <div className="max-w-4xl mx-auto relative">
-          {/* Connecting Line (Nokia Style) */}
-          <div className="hidden md:block absolute top-35 left-1/2 -translate-x-1/2 w-50 z-0 pointer-events-none">
-            <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
-              <motion.path
-                d="M0 20 Q 50 0, 100 20 T 200 20"
-                stroke="url(#nokiaGradient)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeDasharray="10 10"
-                initial={{ strokeDashoffset: 100, opacity: 0 }}
-                whileInView={{ strokeDashoffset: 0, opacity: 1 }}
-                transition={{
-                  strokeDashoffset: { duration: 10, repeat: Infinity, ease: "linear" },
-                  opacity: { duration: 1 }
-                }}
-              />
-              <defs>
-                <linearGradient id="nokiaGradient" x1="0" y1="20" x2="200" y2="20" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="var(--accent-blue)" />
-                  <stop offset="1" stopColor="var(--accent-purple)" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
+        <div className="max-w-5xl mx-auto relative">
+          {/* Team Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-24 relative z-10 justify-center">
+            {team.map((member, index) => {
+              const color = member.accent_color || (index % 2 === 0 ? 'cyan' : 'fuchsia')
+              const isCyan = color === 'cyan'
+              const isPurple = color === 'violet' || color === 'purple'
+              const isFuchsia = color === 'fuchsia'
 
-          {/* Founders Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-40 mb-24 relative z-10">
-            {founders.map((founder, index) => {
+              const imgSrc = member.image?.startsWith('http')
+                ? member.image
+                : `${import.meta.env.BASE_URL}${member.image}`.replace(/\/+/g, '/')
+
               return (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index === 0 ? -30 : 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  key={member.slug || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="flex flex-col items-center"
                 >
                   <div 
-                    className={`relative w-full aspect-square max-w-70 mb-6 group cursor-pointer transition-all duration-500 rounded-[40px] ${founder.color === 'cyan' ? 'hover:ring-2 hover:ring-cyan-400 hover:ring-offset-2 hover:ring-offset-[var(--bg-deep)]' : 'hover:ring-2 hover:ring-fuchsia-400 hover:ring-offset-2 hover:ring-offset-[var(--bg-deep)]'}`}
-                    onClick={() => navigate(`/about/${founder.slug}`)}
+                    className={`relative w-full aspect-square max-w-64 mb-6 group cursor-pointer transition-all duration-500 rounded-[36px] ${
+                      isCyan 
+                        ? 'hover:ring-2 hover:ring-cyan-400 hover:ring-offset-2 hover:ring-offset-[var(--bg-deep)]' 
+                        : isPurple
+                        ? 'hover:ring-2 hover:ring-purple-400 hover:ring-offset-2 hover:ring-offset-[var(--bg-deep)]'
+                        : 'hover:ring-2 hover:ring-fuchsia-400 hover:ring-offset-2 hover:ring-offset-[var(--bg-deep)]'
+                    }`}
+                    onClick={() => navigate(`/about/${member.slug}`)}
                   >
-                    <div className="relative h-full w-full rounded-[40px] overflow-hidden border border-white/10">
+                    <div className="relative h-full w-full rounded-[36px] overflow-hidden border border-white/10 bg-black/40">
                       <img
-                        src={`${import.meta.env.BASE_URL}${founder.image}`.replace(/\/+/g, '/')}
-                        alt={founder.name}
+                        src={imgSrc}
+                        alt={member.name}
                         className="w-full h-full object-cover profile-crop transition-all duration-700 group-hover:scale-105"
+                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300' }}
                       />
                     </div>
                   </div>
-                  <h3 className={`text-xl md:text-2xl font-bold mb-1 tracking-tight text-center transition-colors group-hover:${founder.color === 'cyan' ? 'text-cyan-400' : 'text-fuchsia-400'}`}>{founder.name}</h3>
-                  <p className={`text-[10px] font-black uppercase tracking-[0.3em] text-center opacity-70 mb-2 ${founder.color === 'cyan' ? 'text-cyan-400' : 'text-fuchsia-400'}`}>{founder.role}</p>
                   
-                  {/* Email Address Link */}
-                  <a 
-                    href={`mailto:${founder.email}`} 
-                    className={`text-xs text-(--text-muted) transition-colors mb-4 flex items-center gap-1.5 font-medium tracking-wide ${founder.color === 'cyan' ? 'hover:text-cyan-400' : 'hover:text-fuchsia-400'}`}
+                  <h3 
+                    onClick={() => navigate(`/about/${member.slug}`)}
+                    className={`text-xl md:text-2xl font-bold mb-1 tracking-tight text-center cursor-pointer transition-colors ${
+                      isCyan ? 'hover:text-cyan-400' : isPurple ? 'hover:text-purple-400' : 'hover:text-fuchsia-400'
+                    }`}
                   >
-                    <Mail size={13} className="opacity-80" />
-                    {founder.email}
-                  </a>
+                    {member.name}
+                  </h3>
+                  
+                  <p className={`text-[10px] font-black uppercase tracking-[0.25em] text-center opacity-80 mb-2 ${
+                    isCyan ? 'text-cyan-400' : isPurple ? 'text-purple-400' : 'text-fuchsia-400'
+                  }`}>
+                    {member.role}
+                  </p>
+                  
+                  {/* Email Link */}
+                  {member.email && (
+                    <a 
+                      href={`mailto:${member.email}`} 
+                      className={`text-xs text-[var(--text-muted)] transition-colors mb-4 flex items-center gap-1.5 font-medium tracking-wide ${
+                        isCyan ? 'hover:text-cyan-400' : isPurple ? 'hover:text-purple-400' : 'hover:text-fuchsia-400'
+                      }`}
+                    >
+                      <Mail size={13} className="opacity-80" />
+                      {member.email}
+                    </a>
+                  )}
 
                   {/* Social Media Links */}
-                  <div className="flex gap-4 justify-center items-center opacity-80">
-                    {founder.socials.map((social, i) => {
-                      const Icon = social.icon
-                      return (
-                        <a key={i} href={social.url} target="_blank" rel="noreferrer" className={`${founder.color === 'cyan' ? 'hover:text-cyan-400' : 'hover:text-fuchsia-400'} transition-colors`}>
-                          <Icon size={18} />
-                        </a>
-                      )
-                    })}
-                  </div>
+                  {Array.isArray(member.socials) && member.socials.length > 0 && (
+                    <div className="flex gap-4 justify-center items-center opacity-80">
+                      {member.socials.map((social, i) => {
+                        const Icon = getSocialIcon(social.name)
+                        return (
+                          <a 
+                            key={i} 
+                            href={social.url} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className={`transition-colors ${
+                              isCyan ? 'hover:text-cyan-400' : isPurple ? 'hover:text-purple-400' : 'hover:text-fuchsia-400'
+                            }`}
+                            title={social.name}
+                          >
+                            <Icon size={18} />
+                          </a>
+                        )
+                      })}
+                    </div>
+                  )}
                 </motion.div>
               )
             })}
           </div>
 
-          {/* Collaborative Bullet Points */}
+          {/* Collaborative Values Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="glass-card p-10 md:p-14 border-white/5 relative overflow-hidden shadow-lg shadow-black/25"
           >
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-cyan-400 to-fuchsia-500" />
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 via-blue-500 to-fuchsia-500" />
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div className="flex gap-4">

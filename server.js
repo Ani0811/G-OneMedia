@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import helmet from 'helmet'
 
 import contactRoutes from './server/routes/contact.js'
-import paymentRoutes from './server/routes/payment.js'
+
 import chatRoutes from './server/routes/chat.js'
 import webhookRoutes from './server/routes/webhook.js'
 import ttsRoutes from './server/routes/tts.js'
@@ -41,7 +41,7 @@ app.use(express.json())
 
 // API Routes
 app.use('/api', contactRoutes)
-app.use('/api', paymentRoutes)
+
 app.use('/api', chatRoutes)
 app.use('/api', webhookRoutes)
 app.use('/api', ttsRoutes)
