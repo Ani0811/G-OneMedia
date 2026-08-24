@@ -91,9 +91,9 @@ export default function AdminDashboard() {
     : 'Custom Staff'
 
   return (
-    <div className="min-h-screen bg-[var(--bg-deep)] text-[var(--text-primary)] flex flex-col lg:flex-row">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-[var(--bg-deep)] text-[var(--text-primary)] flex flex-col lg:flex-row">
       {/* Mobile Top Navigation Bar */}
-      <header className="lg:hidden flex items-center justify-between p-4 border-b border-[var(--border-subtle)] bg-[var(--bg-primary)] sticky top-0 z-40 backdrop-blur-md">
+      <header className="lg:hidden flex items-center justify-between p-4 border-b border-[var(--border-subtle)] bg-[var(--bg-primary)]/95 sticky top-0 z-40 backdrop-blur-md shrink-0">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-72 bg-[var(--bg-primary)] border-r border-[var(--border-subtle)] z-50 flex flex-col lg:hidden"
+              className="fixed top-0 left-0 bottom-0 w-72 bg-[var(--bg-primary)] border-r border-[var(--border-subtle)] z-50 flex flex-col lg:hidden shadow-2xl"
             >
               <div className="p-5 border-b border-[var(--border-subtle)] flex items-center justify-between">
                 <div>
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
       </AnimatePresence>
 
       {/* Desktop Persistent Sidebar */}
-      <aside className="hidden lg:flex w-64 xl:w-72 border-r border-[var(--border-subtle)] bg-[var(--bg-primary)] flex-col shrink-0 sticky top-0 h-screen">
+      <aside className="hidden lg:flex w-64 xl:w-72 border-r border-[var(--border-subtle)] bg-[var(--bg-primary)] flex-col shrink-0 h-full">
         <div className="p-6 border-b border-[var(--border-subtle)]">
           <div className="mb-3">
             <Link to="/" title="Back to main website">
@@ -278,8 +278,8 @@ export default function AdminDashboard() {
         </div>
       </aside>
 
-      {/* Main Content Viewport */}
-      <main className="flex-1 overflow-y-auto relative min-h-[calc(100vh-60px)] lg:min-h-screen">
+      {/* Main Content Viewport: Fluid native scroll on mobile, contained scroll on desktop */}
+      <main className="flex-1 min-w-0 lg:h-full lg:overflow-y-auto relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--accent-blue)]/5 blur-[140px] rounded-full pointer-events-none" />
 
         <div className="p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto relative z-10">

@@ -209,25 +209,25 @@ export default function ReviewsManager() {
       {/* Add Review Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg my-8 rounded-3xl glass-card border border-white/10 shadow-2xl p-6 sm:p-8 bg-[var(--bg-primary)] max-h-[90vh] overflow-y-auto"
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="w-full max-w-lg my-auto rounded-2xl sm:rounded-3xl glass-card border border-white/10 shadow-2xl p-5 sm:p-7 bg-[var(--bg-primary)] max-h-[90vh] flex flex-col overflow-hidden"
             >
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
-                <h3 className="text-lg font-black text-[var(--text-primary)]">Add Verified Testimonial</h3>
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 shrink-0">
+                <h3 className="text-base sm:text-lg font-black text-[var(--text-primary)]">Add Verified Testimonial</h3>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white"
+                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white transition-colors"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              <form onSubmit={handleAddSubmit} className="space-y-4 text-xs">
-                <div className="grid grid-cols-2 gap-3">
+              <form onSubmit={handleAddSubmit} className="flex-1 overflow-y-auto pr-1 space-y-4 text-xs overscroll-contain">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="font-bold text-[var(--text-secondary)] block mb-1">Client Name *</label>
                     <input
@@ -251,7 +251,7 @@ export default function ReviewsManager() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="font-bold text-[var(--text-secondary)] block mb-1">Star Rating (1-5)</label>
                     <select
@@ -290,18 +290,18 @@ export default function ReviewsManager() {
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10 shrink-0">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] font-semibold"
+                    className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] font-semibold cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[var(--accent-blue)] text-black font-bold hover:bg-cyan-400 disabled:opacity-50 cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-2 rounded-xl bg-[var(--accent-blue)] text-black font-bold hover:bg-cyan-400 disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/20"
                   >
                     {saving ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
                     Save Testimonial

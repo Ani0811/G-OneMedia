@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, Sparkles, Zap, Building2, Layout, Clock } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
+import { convertInrToUsd, convertInrToEur } from '../../utils/currencyConverter'
 
 const defaultPricingData = {
   'Websites & Apps': {
@@ -91,13 +92,13 @@ export default function Pricing({ onScheduleCall }) {
               icon: getIconForName(pkg.name),
               originalPrice: {
                 INR: pkg.original_price_inr || '',
-                USD: pkg.original_price_usd || '',
-                EUR: pkg.original_price_eur || '',
+                USD: pkg.original_price_usd || (pkg.original_price_inr ? convertInrToUsd(pkg.original_price_inr) : ''),
+                EUR: pkg.original_price_eur || (pkg.original_price_inr ? convertInrToEur(pkg.original_price_inr) : ''),
               },
               price: {
                 INR: pkg.price_inr,
-                USD: pkg.price_usd,
-                EUR: pkg.price_eur,
+                USD: pkg.price_usd || convertInrToUsd(pkg.price_inr),
+                EUR: pkg.price_eur || convertInrToEur(pkg.price_inr),
               },
               period: pkg.period || '/ project',
               duration: pkg.duration || '',
@@ -127,13 +128,13 @@ export default function Pricing({ onScheduleCall }) {
               name: srv.name,
               originalPrice: srv.original_price_inr ? {
                 INR: srv.original_price_inr,
-                USD: srv.original_price_usd,
-                EUR: srv.original_price_eur,
+                USD: srv.original_price_usd || convertInrToUsd(srv.original_price_inr),
+                EUR: srv.original_price_eur || convertInrToEur(srv.original_price_inr),
               } : null,
               price: {
                 INR: srv.price_inr,
-                USD: srv.price_usd,
-                EUR: srv.price_eur,
+                USD: srv.price_usd || convertInrToUsd(srv.price_inr),
+                EUR: srv.price_eur || convertInrToEur(srv.price_inr),
               },
               duration: srv.duration,
               icon: srv.icon,

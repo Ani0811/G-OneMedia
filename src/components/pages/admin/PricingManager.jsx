@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../../lib/supabaseClient'
-import { Loader2, Plus, Trash2, Edit, X, Save, Check, Sparkles } from 'lucide-react'
+import { Loader2, Plus, Trash2, Edit, X, Save, Check, Sparkles, RefreshCw } from 'lucide-react'
+import { convertInrToUsd, convertInrToEur, formatInr } from '../../../utils/currencyConverter'
 
 export default function PricingManager() {
   const [loading, setLoading] = useState(true)
@@ -46,18 +47,20 @@ export default function PricingManager() {
 
   const handleOpenAdd = () => {
     setEditingId(null)
+    const defaultInr = '₹12,999'
+    const defaultOrigInr = '₹22,999'
     setFormData({
       name: '',
       category: 'Websites & Apps',
       description: '',
       duration: '1 - 2 weeks',
       period: '/ project',
-      price_inr: '₹12,999',
-      price_usd: '$169',
-      price_eur: '€159',
-      original_price_inr: '₹22,999',
-      original_price_usd: '$279',
-      original_price_eur: '€259',
+      price_inr: defaultInr,
+      price_usd: convertInrToUsd(defaultInr) || '$169',
+      price_eur: convertInrToEur(defaultInr) || '€159',
+      original_price_inr: defaultOrigInr,
+      original_price_usd: convertInrToUsd(defaultOrigInr) || '$279',
+      original_price_eur: convertInrToEur(defaultOrigInr) || '€259',
       features: ['Responsive Design', 'Custom UI/UX', 'SEO Optimization'],
     })
     setIsModalOpen(true)
@@ -72,14 +75,48 @@ export default function PricingManager() {
       duration: pkg.duration || '',
       period: pkg.period || '/ project',
       price_inr: pkg.price_inr || '',
-      price_usd: pkg.price_usd || '',
-      price_eur: pkg.price_eur || '',
+      price_usd: pkg.price_usd || convertInrToUsd(pkg.price_inr) || '',
+      price_eur: pkg.price_eur || convertInrToEur(pkg.price_inr) || '',
       original_price_inr: pkg.original_price_inr || '',
-      original_price_usd: pkg.original_price_usd || '',
-      original_price_eur: pkg.original_price_eur || '',
+      original_price_usd: pkg.original_price_usd || (pkg.original_price_inr ? convertInrToUsd(pkg.original_price_inr) : ''),
+      original_price_eur: pkg.original_price_eur || (pkg.original_price_inr ? convertInrToEur(pkg.original_price_inr) : ''),
       features: Array.isArray(pkg.features) && pkg.features.length > 0 ? pkg.features : [''],
     })
     setIsModalOpen(true)
+  }
+
+  const handleInrChange = (val) => {
+    const autoUsd = convertInrToUsd(val)
+    const autoEur = convertInrToEur(val)
+    setFormData((prev) => ({
+      ...prev,
+      price_inr: val,
+      price_usd: autoUsd || prev.price_usd,
+      price_eur: autoEur || prev.price_eur,
+    }))
+  }
+
+  const handleOriginalInrChange = (val) => {
+    const autoUsd = convertInrToUsd(val)
+    const autoEur = convertInrToEur(val)
+    setFormData((prev) => ({
+      ...prev,
+      original_price_inr: val,
+      original_price_usd: autoUsd || prev.original_price_usd,
+      original_price_eur: autoEur || prev.original_price_eur,
+    }))
+  }
+
+  const handleRecomputeCurrencies = () => {
+    if (formData.price_inr) {
+      setFormData((prev) => ({
+        ...prev,
+        price_usd: convertInrToUsd(prev.price_inr),
+        price_eur: convertInrToEur(prev.price_inr),
+        original_price_usd: prev.original_price_inr ? convertInrToUsd(prev.original_price_inr) : prev.original_price_usd,
+        original_price_eur: prev.original_price_inr ? convertInrToEur(prev.original_price_inr) : prev.original_price_eur,
+      }))
+    }
   }
 
   const handleDelete = async (id) => {
@@ -120,11 +157,11 @@ export default function PricingManager() {
       duration: formData.duration,
       period: formData.period,
       price_inr: formData.price_inr,
-      price_usd: formData.price_usd,
-      price_eur: formData.price_eur,
+      price_usd: formData.price_usd || convertInrToUsd(formData.price_inr),
+      price_eur: formData.price_eur || convertInrToEur(formData.price_inr),
       original_price_inr: formData.original_price_inr || null,
-      original_price_usd: formData.original_price_usd || null,
-      original_price_eur: formData.original_price_eur || null,
+      original_price_usd: formData.original_price_usd || (formData.original_price_inr ? convertInrToUsd(formData.original_price_inr) : null),
+      original_price_eur: formData.original_price_eur || (formData.original_price_inr ? convertInrToEur(formData.original_price_inr) : null),
       features: formData.features.filter((f) => f.trim() !== ''),
     }
 
@@ -166,12 +203,12 @@ export default function PricingManager() {
         <div>
           <h2 className="text-xl sm:text-2xl font-black">Pricing Packages</h2>
           <p className="text-xs sm:text-sm text-[var(--text-muted)]">
-            Manage pricing tiers displayed on the website
+            Manage tiered pricing packages with automatic INR → USD/EUR multi-currency conversion
           </p>
         </div>
         <button
           onClick={handleOpenAdd}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--accent-blue)] text-black font-bold text-xs rounded-xl hover:bg-cyan-400 transition-all cursor-pointer shadow-lg shadow-cyan-500/20"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--accent-blue)] text-black font-bold text-xs rounded-xl hover:bg-cyan-400 transition-all cursor-pointer shadow-lg shadow-cyan-500/20 shrink-0"
         >
           <Plus size={16} /> Add New Tier
         </button>
@@ -201,7 +238,10 @@ export default function PricingManager() {
 
                 <div className="mb-3">
                   <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
-                    {pkg.price_inr} <span className="text-xs font-normal text-[var(--text-muted)]">/ {pkg.price_usd}</span>
+                    {pkg.price_inr}{' '}
+                    <span className="text-xs font-normal text-[var(--text-muted)]">
+                      / {pkg.price_usd || convertInrToUsd(pkg.price_inr)} / {pkg.price_eur || convertInrToEur(pkg.price_inr)}
+                    </span>
                   </div>
                   {pkg.duration && (
                     <div className="text-xs text-[var(--text-muted)] mt-0.5">
@@ -245,27 +285,39 @@ export default function PricingManager() {
       {/* Edit/Add Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl my-8 rounded-3xl glass-card border border-white/10 shadow-2xl p-6 sm:p-8 bg-[var(--bg-primary)] max-h-[90vh] overflow-y-auto"
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="w-full max-w-xl my-auto rounded-2xl sm:rounded-3xl glass-card border border-white/10 shadow-2xl p-5 sm:p-7 bg-[var(--bg-primary)] max-h-[90vh] flex flex-col overflow-hidden"
             >
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
-                <h3 className="text-lg font-black text-[var(--text-primary)]">
-                  {editingId ? 'Edit Pricing Package' : 'Create Pricing Package'}
-                </h3>
+              {/* Modal Header */}
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">
+                    <Sparkles size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black text-[var(--text-primary)]">
+                      {editingId ? 'Edit Pricing Package' : 'Create Pricing Package'}
+                    </h3>
+                    <p className="text-[10px] text-[var(--text-muted)]">
+                      Enter price in INR to auto-convert USD ($) & EUR (€)
+                    </p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white"
+                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-muted)] hover:text-white transition-colors"
                 >
                   <X size={18} />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Scrollable Form Body */}
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-1 space-y-4 text-xs overscroll-contain">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <div>
                     <label className="font-bold text-[var(--text-secondary)] block mb-1">Plan Name *</label>
                     <input
@@ -274,7 +326,7 @@ export default function PricingManager() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="e.g. Growth"
-                      className="w-full px-3.5 py-2.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
+                      className="w-full px-3.5 py-2.5 bg-black/25 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
                     />
                   </div>
                   <div>
@@ -285,48 +337,120 @@ export default function PricingManager() {
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                       placeholder="e.g. Websites & Apps"
-                      className="w-full px-3.5 py-2.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
+                      className="w-full px-3.5 py-2.5 bg-black/25 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Price (INR) *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.price_inr}
-                      onChange={(e) => setFormData({ ...formData, price_inr: e.target.value })}
-                      placeholder="₹12,999"
-                      className="w-full px-3 py-2 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
-                    />
+                {/* Selling Price with Auto-Conversion */}
+                <div className="p-3.5 rounded-2xl bg-cyan-500/5 border border-cyan-500/20 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                      <Sparkles size={13} className="text-cyan-400" />
+                      Active Package Price (Auto-Converted)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleRecomputeCurrencies}
+                      className="text-[10px] text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-semibold hover:underline"
+                      title="Sync USD and EUR from INR"
+                    >
+                      <RefreshCw size={10} /> Auto-Sync
+                    </button>
                   </div>
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Price (USD) *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.price_usd}
-                      onChange={(e) => setFormData({ ...formData, price_usd: e.target.value })}
-                      placeholder="$169"
-                      className="w-full px-3 py-2 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold text-[var(--text-secondary)] block mb-1">Price (EUR) *</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.price_eur}
-                      onChange={(e) => setFormData({ ...formData, price_eur: e.target.value })}
-                      placeholder="€159"
-                      className="w-full px-3 py-2 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
-                    />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div>
+                      <label className="font-semibold text-[var(--text-secondary)] block mb-1 text-[11px]">
+                        Price (INR ₹) *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.price_inr}
+                        onChange={(e) => handleInrChange(e.target.value)}
+                        placeholder="₹12,999"
+                        className="w-full px-3 py-2 bg-black/40 border border-cyan-500/30 rounded-xl text-[var(--text-primary)] font-semibold outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-[var(--text-secondary)] block mb-1 text-[11px]">
+                        Price (USD $)
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.price_usd}
+                        onChange={(e) => setFormData({ ...formData, price_usd: e.target.value })}
+                        placeholder="$169"
+                        className="w-full px-3 py-2 bg-black/30 border border-[var(--border-subtle)] rounded-xl text-purple-300 font-semibold outline-none focus:border-purple-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-semibold text-[var(--text-secondary)] block mb-1 text-[11px]">
+                        Price (EUR €)
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.price_eur}
+                        onChange={(e) => setFormData({ ...formData, price_eur: e.target.value })}
+                        placeholder="€159"
+                        className="w-full px-3 py-2 bg-black/30 border border-[var(--border-subtle)] rounded-xl text-blue-300 font-semibold outline-none focus:border-blue-400"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* Original / Strikethrough Price with Auto-Conversion */}
+                <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[var(--text-muted)] text-[11px]">
+                      Original / Strike-through Price (Optional)
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div>
+                      <label className="font-medium text-[var(--text-muted)] block mb-1 text-[10px]">
+                        Original (INR ₹)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.original_price_inr}
+                        onChange={(e) => handleOriginalInrChange(e.target.value)}
+                        placeholder="₹22,999"
+                        className="w-full px-3 py-2 bg-black/30 border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)] outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-medium text-[var(--text-muted)] block mb-1 text-[10px]">
+                        Original (USD $)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.original_price_usd}
+                        onChange={(e) => setFormData({ ...formData, original_price_usd: e.target.value })}
+                        placeholder="$279"
+                        className="w-full px-3 py-2 bg-black/30 border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)] outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="font-medium text-[var(--text-muted)] block mb-1 text-[10px]">
+                        Original (EUR €)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.original_price_eur}
+                        onChange={(e) => setFormData({ ...formData, original_price_eur: e.target.value })}
+                        placeholder="€259"
+                        className="w-full px-3 py-2 bg-black/30 border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)] outline-none focus:border-cyan-400"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <div>
                     <label className="font-bold text-[var(--text-secondary)] block mb-1">Timeline / Duration</label>
                     <input
@@ -334,7 +458,7 @@ export default function PricingManager() {
                       value={formData.duration}
                       onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                       placeholder="e.g. 1 - 2 weeks"
-                      className="w-full px-3.5 py-2.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
+                      className="w-full px-3.5 py-2.5 bg-black/25 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
                     />
                   </div>
                   <div>
@@ -344,7 +468,7 @@ export default function PricingManager() {
                       value={formData.period}
                       onChange={(e) => setFormData({ ...formData, period: e.target.value })}
                       placeholder="e.g. / project"
-                      className="w-full px-3.5 py-2.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
+                      className="w-full px-3.5 py-2.5 bg-black/25 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
                     />
                   </div>
                 </div>
@@ -356,7 +480,7 @@ export default function PricingManager() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Short description of this package target audience"
-                    className="w-full px-3.5 py-2 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400 resize-none"
+                    className="w-full px-3.5 py-2 bg-black/25 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400 resize-none"
                   />
                 </div>
 
@@ -367,9 +491,9 @@ export default function PricingManager() {
                     <button
                       type="button"
                       onClick={addFeatureInput}
-                      className="text-cyan-400 hover:underline font-semibold flex items-center gap-1"
+                      className="text-cyan-400 hover:underline font-semibold flex items-center gap-1 text-xs cursor-pointer"
                     >
-                      <Plus size={12} /> Add Feature
+                      <Plus size={13} /> Add Feature
                     </button>
                   </div>
                   <div className="space-y-2">
@@ -380,12 +504,12 @@ export default function PricingManager() {
                           value={feat}
                           onChange={(e) => handleFeatureChange(idx, e.target.value)}
                           placeholder={`Feature #${idx + 1}`}
-                          className="flex-1 px-3 py-2 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
+                          className="flex-1 px-3 py-2 bg-black/25 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400"
                         />
                         <button
                           type="button"
                           onClick={() => removeFeatureInput(idx)}
-                          className="p-2 text-[var(--text-muted)] hover:text-red-400"
+                          className="p-2 text-[var(--text-muted)] hover:text-red-400 transition-colors"
                         >
                           <X size={14} />
                         </button>
@@ -394,18 +518,19 @@ export default function PricingManager() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+                {/* Sticky / Dedicated Modal Action Footer */}
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10 shrink-0">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] font-semibold"
+                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] font-semibold cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--accent-blue)] text-black font-bold hover:bg-cyan-400 disabled:opacity-50 cursor-pointer"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--accent-blue)] text-black font-bold hover:bg-cyan-400 disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/20"
                   >
                     {saving ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
                     Save Package
