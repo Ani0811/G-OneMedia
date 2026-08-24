@@ -76,6 +76,14 @@
 }
 
 /* ===== Base ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 90px;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--bg-deep);

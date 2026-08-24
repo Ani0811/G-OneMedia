@@ -14,7 +14,6 @@ import Loader from './components/common/Loader'
 import CookieBanner from './components/common/CookieBanner'
 import ScrollToTop from './components/common/ScrollToTop'
 import ProtectedRoute from './components/common/ProtectedRoute'
-import LazySection from './components/common/LazySection'
 
 // Helper to retry dynamic imports when they fail (e.g. ChunkLoadError due to new deployments)
 const lazyWithRetry = (importFunc) => {
@@ -107,17 +106,13 @@ function HomePage({ onScheduleCall }) {
       </Helmet>
       <Hero onScheduleCall={onScheduleCall} />
       
-      <LazySection placeholderHeight="80px">
-        <ClientWinsTicker />
-      </LazySection>
+      <ClientWinsTicker />
 
       <Portfolio />
 
       <ClientProjects />
 
-      <LazySection placeholderHeight="500px">
-        <Process />
-      </LazySection>
+      <Process />
 
       <Pricing onScheduleCall={onScheduleCall} />
 
@@ -136,8 +131,6 @@ export default function App() {
   const location = useLocation()
   const handleComplete = useCallback(() => setLoading(false), [])
 
-
-
   useEffect(() => {
     if (!loading) {
       trackPageView(location.pathname + location.search + location.hash)
@@ -147,16 +140,12 @@ export default function App() {
   useEffect(() => {
     if (!loading && location.pathname === '/' && location.hash) {
       const id = location.hash.replace('#', '')
-      const el = document.getElementById(id)
-      if (el) {
-        const timer = setTimeout(() => {
-          const offset = 85
-          const bodyRect = document.body.getBoundingClientRect().top
-          const elementRect = el.getBoundingClientRect().top
-          const elementPosition = elementRect - bodyRect
-          window.scrollTo({
-            top: elementPosition - offset,
-            behavior: 'smooth'
+      const scrollToTarget = () => {
+        const el = document.getElementById(id)
+        if (el) {
+          el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           })
           
           // Manage accessibility focus
@@ -165,7 +154,13 @@ export default function App() {
 
           // Clear the hash from the URL bar so it doesn't linger on refresh
           window.history.replaceState(null, null, window.location.pathname + window.location.search)
-        }, 150)
+          return true
+        }
+        return false
+      }
+
+      if (!scrollToTarget()) {
+        const timer = setTimeout(scrollToTarget, 150)
         return () => clearTimeout(timer)
       }
     }
