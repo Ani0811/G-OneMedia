@@ -93,7 +93,7 @@ export default function About() {
 
         <div className="max-w-5xl mx-auto relative">
           {/* Team Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-24 relative z-10 justify-center">
+          <div className="flex flex-wrap justify-center gap-10 md:gap-14 lg:gap-20 mb-24 relative z-10">
             {team.map((member, index) => {
               const color = member.accent_color || (index % 2 === 0 ? 'cyan' : 'fuchsia')
               const isCyan = color === 'cyan'
@@ -111,7 +111,7 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="flex flex-col items-center"
+                  className="flex flex-col items-center w-full max-w-xs"
                 >
                   <div 
                     className={`relative w-full aspect-square max-w-64 mb-6 group cursor-pointer transition-all duration-500 rounded-[36px] ${
