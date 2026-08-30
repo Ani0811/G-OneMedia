@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ExternalLink, Loader2, Sparkles, Layers } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ExternalLink, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 
 const ensureAbsoluteUrl = (url) => {
@@ -9,13 +9,12 @@ const ensureAbsoluteUrl = (url) => {
   return `https://${url}`
 }
 
+const ITEMS_PER_PAGE = 3
+
 export default function ClientProjects() {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetchClientProjects()
-  }, [])
+  const [currentPage, setCurrentPage] = useState(1)
 
   const fetchClientProjects = async () => {
     try {
@@ -34,6 +33,10 @@ export default function ClientProjects() {
     }
   }
 
+  useEffect(() => {
+    fetchClientProjects()
+  }, [])
+
   if (loading) {
     return (
       <div className="flex justify-center py-20">
@@ -44,6 +47,28 @@ export default function ClientProjects() {
 
   if (projects.length === 0) {
     return null // Hide section if no client projects are live
+  }
+
+  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE)
+  const safeCurrentPage = Math.min(currentPage, totalPages || 1)
+  const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE
+  const displayedProjects = projects.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+    const element = document.getElementById('client-projects')
+    if (element) {
+      const yOffset = -80
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
+
+  // Determine dynamic container class: 1 card -> centered max-w-lg, 2 cards -> 2-col max-w-4xl, 3+ cards -> 3-col max-w-6xl
+  const getContainerLayoutClass = (count) => {
+    if (count === 1) return 'flex justify-center max-w-lg mx-auto w-full'
+    if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto w-full'
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full'
   }
 
   return (
@@ -61,91 +86,149 @@ export default function ClientProjects() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, idx) => {
-            const resolvedImage = project.image?.startsWith('http') || project.image?.startsWith('data:')
-              ? project.image
-              : `${import.meta.env.BASE_URL}${project.image?.replace(/^\//, '')}`.replace(/\/+/g, '/')
+        {/* Projects Cards Container */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`client-projects-page-${safeCurrentPage}`}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35 }}
+            className={getContainerLayoutClass(displayedProjects.length)}
+          >
+            {displayedProjects.map((project, idx) => {
+              const resolvedImage = project.image?.startsWith('http') || project.image?.startsWith('data:')
+                ? project.image
+                : `${import.meta.env.BASE_URL}${project.image?.replace(/^\//, '')}`.replace(/\/+/g, '/')
 
-            const techList = Array.isArray(project.technologies)
-              ? project.technologies
-              : []
+              const techList = Array.isArray(project.technologies)
+                ? project.technologies
+                : []
 
-            return (
-              <motion.a
-                key={project.id}
-                href={ensureAbsoluteUrl(project.live_url) || '#'}
-                target={project.live_url ? '_blank' : undefined}
-                rel={project.live_url ? 'noopener noreferrer' : undefined}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="group block rounded-3xl p-5 bg-white/[0.02] border border-white/5 hover:border-cyan-500/30 hover:bg-white/[0.04] transition-all duration-300 relative flex flex-col justify-between"
-              >
-                <div>
-                  {/* Visual Image container */}
-                  <div className="relative aspect-video rounded-2xl overflow-hidden mb-5 border border-white/5 bg-black/40">
-                    <img
-                      src={resolvedImage}
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                      loading="lazy"
-                    />
-                    {project.live_url && (
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                        <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                          <ExternalLink size={16} />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Meta details */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-block text-[9px] font-black uppercase tracking-wider text-cyan-400">
-                        {project.category || 'Web Application'}
-                      </span>
-                      {project.client_name && (
-                        <span className="text-[10px] text-[var(--text-muted)] font-medium">
-                          {project.client_name}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
-                        {project.title}
-                      </h3>
+              return (
+                <motion.a
+                  key={project.id}
+                  href={ensureAbsoluteUrl(project.live_url) || '#'}
+                  target={project.live_url ? '_blank' : undefined}
+                  rel={project.live_url ? 'noopener noreferrer' : undefined}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: idx * 0.05 }}
+                  className={`group block rounded-3xl p-6 bg-white/[0.02] border border-white/5 hover:border-cyan-500/30 hover:bg-white/[0.04] transition-all duration-300 relative flex flex-col justify-between h-full ${
+                    displayedProjects.length === 1 ? 'w-full max-w-lg' : 'w-full'
+                  }`}
+                >
+                  <div className="flex flex-col grow">
+                    {/* Visual Image container */}
+                    <div className="relative aspect-video rounded-2xl overflow-hidden mb-5 border border-white/5 bg-black/40">
+                      <img
+                        src={resolvedImage}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+                        loading="lazy"
+                      />
                       {project.live_url && (
-                        <ExternalLink size={14} className="text-[var(--text-muted)] group-hover:text-cyan-400 transition-colors shrink-0" />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                          <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                            <ExternalLink size={16} />
+                          </div>
+                        </div>
                       )}
                     </div>
 
-                    <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-3">
-                      {project.description}
-                    </p>
-                  </div>
-                </div>
+                    {/* Meta details */}
+                    <div className="space-y-2 grow flex flex-col">
+                      <div className="flex items-center justify-between">
+                        <span className="inline-block text-[9px] font-black uppercase tracking-wider text-cyan-400">
+                          {project.category || 'Web Application'}
+                        </span>
+                        {project.client_name && (
+                          <span className="text-[10px] text-[var(--text-muted)] font-medium">
+                            {project.client_name}
+                          </span>
+                        )}
+                      </div>
 
-                {/* Tech Stack tags */}
-                {techList.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-white/5">
-                    {techList.map((t, i) => (
-                      <span
-                        key={i}
-                        className="text-[9px] px-2 py-0.5 rounded-md bg-white/5 text-[var(--text-secondary)] border border-white/5"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
+                          {project.title}
+                        </h3>
+                        {project.live_url && (
+                          <ExternalLink size={14} className="text-[var(--text-muted)] group-hover:text-cyan-400 transition-colors shrink-0" />
+                        )}
+                      </div>
+
+                      <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-3 grow">
+                        {project.description}
+                      </p>
+                    </div>
                   </div>
-                )}
-              </motion.a>
-            )
-          })}
-        </div>
+
+                  {/* Tech Stack tags */}
+                  {techList.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-white/5">
+                      {techList.map((t, i) => (
+                        <span
+                          key={i}
+                          className="text-[9px] px-2 py-0.5 rounded-md bg-white/5 text-[var(--text-secondary)] border border-white/5"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </motion.a>
+              )
+            })}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 mt-14">
+            <button
+              onClick={() => handlePageChange(safeCurrentPage - 1)}
+              disabled={safeCurrentPage === 1}
+              className={`w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center transition-all duration-300 ${
+                safeCurrentPage === 1
+                  ? 'opacity-30 cursor-not-allowed bg-white/[0.02]'
+                  : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 cursor-pointer text-white'
+              }`}
+              style={{ color: safeCurrentPage === 1 ? 'var(--text-muted)' : 'var(--text-primary)' }}
+              aria-label="Previous Page"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`w-11 h-11 rounded-xl text-xs font-black transition-all duration-300 border cursor-pointer ${
+                  safeCurrentPage === page
+                    ? 'bg-cyan-400 border-cyan-400 text-black shadow-[0_0_20px_rgba(0,240,255,0.4)]'
+                    : 'border-white/10 text-[var(--text-muted)] hover:border-white/20 hover:text-white hover:scale-105 hover:bg-white/5'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(safeCurrentPage + 1)}
+              disabled={safeCurrentPage === totalPages}
+              className={`w-11 h-11 rounded-xl border border-white/10 flex items-center justify-center transition-all duration-300 ${
+                safeCurrentPage === totalPages
+                  ? 'opacity-30 cursor-not-allowed bg-white/[0.02]'
+                  : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 cursor-pointer text-white'
+              }`}
+              style={{ color: safeCurrentPage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)' }}
+              aria-label="Next Page"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   )
