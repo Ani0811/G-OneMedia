@@ -183,20 +183,20 @@ export default function Pricing({ onScheduleCall }) {
 
   // Dynamic grid layouts for centering when 1 or 2 items exist
   const getPackageContainerClass = (count) => {
-    if (count === 1) return 'flex justify-center max-w-2xl mx-auto w-full mb-14'
-    if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto w-full mb-14'
-    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full mb-14'
+    if (count === 1) return 'flex justify-center max-w-md mx-auto w-full mb-14'
+    if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto w-full mb-14'
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full mb-14'
   }
 
   const getServiceContainerClass = (count) => {
-    if (count === 1) return 'flex justify-center max-w-2xl mx-auto w-full'
-    if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto w-full'
-    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto w-full'
+    if (count === 1) return 'flex justify-center max-w-md mx-auto w-full'
+    if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto w-full'
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto w-full'
   }
 
   return (
     <section id="pricing" className="py-24">
-      <div className="container-custom max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-custom">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-fuchsia-500/20 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-widest mb-6 animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.2)]">
             <Sparkles size={14} className="text-amber-400" />
@@ -272,7 +272,7 @@ export default function Pricing({ onScheduleCall }) {
                   transition: { duration: 0.3, ease: "easeOut" }
                 }}
                 className={`glass-card p-8 lg:p-10 relative overflow-hidden flex flex-col justify-between group cursor-pointer transition-all duration-300 h-full ${
-                  paginatedPackages.length === 1 ? 'w-full max-w-2xl' : 'w-full'
+                  paginatedPackages.length === 1 ? 'w-full max-w-md' : 'w-full'
                 }`}
               >
                 {/* Hover background glow */}
@@ -448,7 +448,7 @@ export default function Pricing({ onScheduleCall }) {
                   key={service.id || index}
                   whileHover={{ y: -5 }}
                   className={`group relative p-8 rounded-3xl glass-card transition-all duration-300 border border-white/10 hover:border-cyan-500/50 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_8px_30px_rgb(0,240,255,0.15)] h-full ${
-                    paginatedServices.length === 1 ? 'w-full max-w-2xl' : 'w-full'
+                    paginatedServices.length === 1 ? 'w-full max-w-md' : 'w-full'
                   }`}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-transparent to-cyan-500/0 group-hover:from-cyan-500/5 transition-all duration-500 pointer-events-none" />
