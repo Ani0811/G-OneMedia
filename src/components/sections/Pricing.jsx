@@ -348,7 +348,7 @@ export default function Pricing({ onScheduleCall }) {
                       e.preventDefault()
                       if (onScheduleCall) onScheduleCall()
                     }}
-                    className="w-full py-4 text-sm font-bold rounded-xl transition-all duration-300 bg-transparent border border-[var(--border-subtle)] hover:border-cyan-500/50 hover:bg-cyan-500/10 text-[var(--text-primary)] flex items-center justify-center cursor-pointer mt-auto"
+                    className="w-full py-4 text-sm font-bold rounded-xl transition-all duration-300 border border-[var(--border-subtle)] hover:border-cyan-400/50 bg-white/5 hover:bg-cyan-400 text-[var(--text-primary)] hover:text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] flex items-center justify-center cursor-pointer mt-auto"
                   >
                     Schedule a Call
                   </button>
