@@ -1,9 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Shield, FileText, Cookie } from 'lucide-react'
+import { X, Shield, FileText, Cookie, RefreshCcw, ArrowRight } from 'lucide-react'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { deleteCookie } from '../../utils/cookies'
 
 export default function LegalModal({ isOpen, onClose, type }) {
+  const navigate = useNavigate()
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -98,6 +100,44 @@ export default function LegalModal({ isOpen, onClose, type }) {
                   className="btn-secondary py-2! px-4! text-xs! whitespace-nowrap cursor-pointer hover:bg-orange-400/10 hover:border-orange-400/50 hover:text-orange-400!"
                 >
                   Reset Preferences
+                </button>
+              </div>
+              
+              <p className="mt-8 text-xs opacity-50">Last updated: May 2026</p>
+            </div>
+          )
+        }
+      case 'refund':
+        return {
+          title: 'Refund & Cancellation Policy',
+          icon: RefreshCcw,
+          color: 'text-emerald-400',
+          bg: 'bg-emerald-400/10',
+          border: 'border-emerald-400/20',
+          content: (
+            <div className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              <p>At G-One Media, we are committed to client satisfaction. Our refund and cancellation terms are designed to be transparent, straightforward, and fair.</p>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>1. Milestone-Based Assurance</h3>
+              <p>Work is delivered in transparent project sprints. If you are not satisfied with initial design prototypes or milestone directions before final deployment, you may request a project review or partial refund.</p>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>2. Eligibility Criteria</h3>
+              <p>Refund requests must be initiated within 14 calendar days of payment milestone receipt and prior to production asset handoff or server deployment.</p>
+              <h3 className="font-bold mt-6 mb-2" style={{ color: 'var(--text-primary)' }}>3. Dedicated Refund Portal</h3>
+              <p>We provide a streamlined automated refund request portal for active client engagements and invoices.</p>
+              
+              <div className="mt-6 p-4 rounded-xl border border-dashed border-emerald-400/20 bg-emerald-400/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <h4 className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>Submit a Refund Request</h4>
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Lookup your payment ID and initiate an automated review.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    onClose()
+                    navigate('/refund')
+                  }}
+                  className="btn-secondary py-2! px-4! text-xs! whitespace-nowrap cursor-pointer hover:bg-emerald-400/10 hover:border-emerald-400/50 hover:text-emerald-400! flex items-center gap-1.5"
+                >
+                  <span>Open Portal</span>
+                  <ArrowRight size={14} />
                 </button>
               </div>
               
