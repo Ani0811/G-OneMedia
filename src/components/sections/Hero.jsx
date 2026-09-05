@@ -42,31 +42,19 @@ export default function Hero({ onScheduleCall }) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative lg:ml-auto max-w-xl w-full order-1 lg:order-2 mt-8 sm:mt-12 lg:mt-0"
           >
-            <div className="relative z-10 rounded-[48px] overflow-hidden shadow-2xl shadow-cyan-500/30 p-2" style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-subtle)' }}>
-              <div className="rounded-[40px] overflow-hidden aspect-4/3">
+            <div 
+              className="relative z-10 rounded-[48px] overflow-hidden shadow-2xl shadow-cyan-500/20 p-2.5 transition-all duration-700 hover:shadow-cyan-500/30 group" 
+              style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-subtle)' }}
+            >
+              <div className="rounded-[40px] overflow-hidden aspect-4/3 relative bg-slate-950/40">
                 <img
-                  src={heroData.image_url || `${import.meta.env.BASE_URL}pexels-mintworkspace-18304033.jpg`.replace(/\/+/g, '/')}
-                  alt="G-One Media Work"
-                  className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-700"
+                  src={heroData.image_url || `${import.meta.env.BASE_URL}hero-agency-workspace.jpg`.replace(/\/+/g, '/')}
+                  alt="G-One Media Workspace"
+                  className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
+                <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>
-            {/* Floating UI element */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-6 -left-6 z-20 glass-card p-4 rounded-2xl border-white/10 hidden md:block"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-cyan-400/20 flex items-center justify-center">
-                  <div className="w-5 h-5 bg-cyan-400 rounded-full animate-pulse" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest opacity-50">Consultation</p>
-                  <p className="text-xs font-bold">Systems Online</p>
-                </div>
-              </div>
-            </motion.div>
 
             {/* Decorative elements */}
             <div className="absolute -inset-8 bg-fuchsia-500/20 blur-[100px] -z-10 opacity-50 animate-pulse" />
