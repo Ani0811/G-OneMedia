@@ -3,4 +3,4 @@ Allow: /
 Disallow: /portal
 Disallow: /api/
 
-Sitemap: https://ani0811.github.io/G-OneMedia/sitemap.xml
+Sitemap: https://g-one-media.vercel.app/sitemap.xml

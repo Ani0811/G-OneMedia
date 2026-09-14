@@ -205,7 +205,7 @@ export default function FounderProfile() {
         <title>{`${founder.name} | G-One Media`}</title>
         <meta name="description" content={founder.tagline || founder.description} />
         <meta name="keywords" content={`G-One Media, ${founder.name}, ${founder.role}, team, founder`} />
-        <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/about/${slug}`} />
+        <link rel="canonical" href={`https://g-one-media.vercel.app/about/${slug}`} />
       </Helmet>
 
       {/* Ambient BG */}

@@ -44,21 +44,21 @@ export default function ResourceVault() {
         <title>G-One Media Vault | Free Growth Resources</title>
         <meta name="description" content="Get instant access to G-One Media's internal templates, strategy playbooks, and video teardowns to scale your business." />
         <meta name="keywords" content="G-One Media, growth vault, marketing resources, Shopify playbook, landing page teardown, free Figma templates, ad creatives swipe file" />
-        <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/vault" />
+        <link rel="canonical" href="https://g-one-media.vercel.app/vault" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/vault" />
+        <meta property="og:url" content="https://g-one-media.vercel.app/vault" />
         <meta property="og:title" content="G-One Media Vault | Free Growth Resources" />
         <meta property="og:description" content="Get instant access to G-One Media's internal templates, strategy playbooks, and video teardowns to scale your business." />
-        <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+        <meta property="og:image" content="https://g-one-media.vercel.app/G-One.png" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/vault" />
+        <meta property="twitter:url" content="https://g-one-media.vercel.app/vault" />
         <meta property="twitter:title" content="G-One Media Vault | Free Growth Resources" />
         <meta property="twitter:description" content="Get instant access to G-One Media's internal templates, strategy playbooks, and video teardowns to scale your business." />
-        <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+        <meta property="twitter:image" content="https://g-one-media.vercel.app/G-One.png" />
       </Helmet>
 
       <div className="container-custom max-w-4xl">

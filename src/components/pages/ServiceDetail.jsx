@@ -81,18 +81,18 @@ export default function ServiceDetail({ onScheduleCall }) {
           <title>{`${service.title} | G-One Media`}</title>
           <meta name="description" content={service.description} />
           <meta name="keywords" content={`G-One Media, ${service.title}, ${service.tagline}, ${service.features.map(f => f.text).join(', ')}`} />
-          <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/services/${slug}`} />
+          <link rel="canonical" href={`https://g-one-media.vercel.app/services/${slug}`} />
           
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="website" />
-          <meta property="og:url" content={`https://ani0811.github.io/G-OneMedia/services/${slug}`} />
+          <meta property="og:url" content={`https://g-one-media.vercel.app/services/${slug}`} />
           <meta property="og:title" content={`${service.title} | G-One Media`} />
           <meta property="og:description" content={service.description} />
           <meta property="og:image" content={service.image} />
 
           {/* Twitter */}
           <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content={`https://ani0811.github.io/G-OneMedia/services/${slug}`} />
+          <meta property="twitter:url" content={`https://g-one-media.vercel.app/services/${slug}`} />
           <meta property="twitter:title" content={`${service.title} | G-One Media`} />
           <meta property="twitter:description" content={service.description} />
           <meta property="twitter:image" content={service.image} />

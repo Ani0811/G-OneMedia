@@ -101,21 +101,21 @@ export default function AuditWizard() {
         <title>Get a Free Growth Audit | G-One Media</title>
         <meta name="description" content="Request a free website and conversion rate optimization audit. Our experts will analyze your site and record a personalized Loom teardown." />
         <meta name="keywords" content="G-One Media, free audit, website analysis, conversion rate optimization, CRO audit, digital marketing audit" />
-        <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/audit" />
+        <link rel="canonical" href="https://g-one-media.vercel.app/audit" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/audit" />
+        <meta property="og:url" content="https://g-one-media.vercel.app/audit" />
         <meta property="og:title" content="Get a Free Growth Audit | G-One Media" />
         <meta property="og:description" content="Request a free website and conversion rate optimization audit. Our experts will analyze your site and record a personalized Loom teardown." />
-        <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+        <meta property="og:image" content="https://g-one-media.vercel.app/G-One.png" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/audit" />
+        <meta property="twitter:url" content="https://g-one-media.vercel.app/audit" />
         <meta property="twitter:title" content="Get a Free Growth Audit | G-One Media" />
         <meta property="twitter:description" content="Request a free website and conversion rate optimization audit. Our experts will analyze your site and record a personalized Loom teardown." />
-        <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+        <meta property="twitter:image" content="https://g-one-media.vercel.app/G-One.png" />
       </Helmet>
 
       <div className="container-custom max-w-2xl">

@@ -498,21 +498,21 @@ export default function Reviews() {
           <title>Client Reviews | G-One Media</title>
           <meta name="description" content="Read real reviews from our clients. See how G-One Media has helped businesses grow with high-converting websites and video production." />
           <meta name="keywords" content="G-One Media reviews, customer feedback, client reviews, client success, testimonials, agency ratings" />
-          <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/reviews" />
+          <link rel="canonical" href="https://g-one-media.vercel.app/reviews" />
           
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/reviews" />
+          <meta property="og:url" content="https://g-one-media.vercel.app/reviews" />
           <meta property="og:title" content="Client Reviews | G-One Media" />
           <meta property="og:description" content="Read real reviews from our clients. See how G-One Media has helped businesses grow with high-converting websites and video production." />
-          <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+          <meta property="og:image" content="https://g-one-media.vercel.app/G-One.png" />
 
           {/* Twitter */}
           <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/reviews" />
+          <meta property="twitter:url" content="https://g-one-media.vercel.app/reviews" />
           <meta property="twitter:title" content="Client Reviews | G-One Media" />
           <meta property="twitter:description" content="Read real reviews from our clients. See how G-One Media has helped businesses grow with high-converting websites and video production." />
-          <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+          <meta property="twitter:image" content="https://g-one-media.vercel.app/G-One.png" />
         </Helmet>
 
         <div className="container-custom">

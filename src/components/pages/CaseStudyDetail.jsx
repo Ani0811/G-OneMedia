@@ -329,18 +329,18 @@ export default function CaseStudyDetail() {
           <title>{`${study.title} Case Study | G-One Media`}</title>
           <meta name="description" content={study.description} />
           <meta name="keywords" content={`G-One Media, ${study.title}, ${study.category}, ${study.project_type || ''}, case study, portfolio, ${study.tech_stack ? study.tech_stack.join(', ') : ''}`} />
-          <link rel="canonical" href={`https://ani0811.github.io/G-OneMedia/portfolio/${id}`} />
+          <link rel="canonical" href={`https://g-one-media.vercel.app/portfolio/${id}`} />
           
           {/* Open Graph / Facebook */}
           <meta property="og:type" content="article" />
-          <meta property="og:url" content={`https://ani0811.github.io/G-OneMedia/portfolio/${id}`} />
+          <meta property="og:url" content={`https://g-one-media.vercel.app/portfolio/${id}`} />
           <meta property="og:title" content={`${study.title} Case Study | G-One Media`} />
           <meta property="og:description" content={study.description} />
           <meta property="og:image" content={heroImage} />
 
           {/* Twitter */}
           <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content={`https://ani0811.github.io/G-OneMedia/portfolio/${id}`} />
+          <meta property="twitter:url" content={`https://g-one-media.vercel.app/portfolio/${id}`} />
           <meta property="twitter:title" content={`${study.title} Case Study | G-One Media`} />
           <meta property="twitter:description" content={study.description} />
           <meta property="twitter:image" content={heroImage} />

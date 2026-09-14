@@ -71,7 +71,7 @@ SUPABASE_CONNECTION_URL=postgresql://postgres.your-ref:your-password@aws-0-regio
 
 # Backend API Configuration (Optional / Express Server)
 PORT=3001
-FRONTEND_ORIGIN=http://localhost:5173,https://ani0811.github.io
+FRONTEND_ORIGIN=http://localhost:5173,https://g-one-media.vercel.app,https://ani0811.github.io
 ```
 
 ### 4. Database Setup & Migration

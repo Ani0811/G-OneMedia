@@ -80,21 +80,21 @@ export default function GetStarted() {
         <title>Get Started | G-One Media</title>
         <meta name="description" content="Let's build something great. Tell us about your project or business goals, and receive a free quote and strategy from G-One Media." />
         <meta name="keywords" content="G-One Media, get started, digital agency quote, contact, build website, hire developer, hire video editor" />
-        <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/get-started" />
+        <link rel="canonical" href="https://g-one-media.vercel.app/get-started" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ani0811.github.io/G-OneMedia/get-started" />
+        <meta property="og:url" content="https://g-one-media.vercel.app/get-started" />
         <meta property="og:title" content="Get Started | G-One Media" />
         <meta property="og:description" content="Let's build something great. Tell us about your project or business goals, and receive a free quote and strategy from G-One Media." />
-        <meta property="og:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+        <meta property="og:image" content="https://g-one-media.vercel.app/G-One.png" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://ani0811.github.io/G-OneMedia/get-started" />
+        <meta property="twitter:url" content="https://g-one-media.vercel.app/get-started" />
         <meta property="twitter:title" content="Get Started | G-One Media" />
         <meta property="twitter:description" content="Let's build something great. Tell us about your project or business goals, and receive a free quote and strategy from G-One Media." />
-        <meta property="twitter:image" content="https://ani0811.github.io/G-OneMedia/G-One.png" />
+        <meta property="twitter:image" content="https://g-one-media.vercel.app/G-One.png" />
       </Helmet>
       {/* Background glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-[140px] -z-10" />

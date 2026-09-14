@@ -41,7 +41,7 @@ export default function ClientLogin() {
           <Helmet>
             <title>Client Portal | G-One Media</title>
             <meta name="description" content="Secure client portal for G-One Media. Access your dashboard, project milestones, and deliverables." />
-            <link rel="canonical" href="https://ani0811.github.io/G-OneMedia/portal" />
+            <link rel="canonical" href="https://g-one-media.vercel.app/portal" />
           </Helmet>
           {/* Header */}
           <motion.div
