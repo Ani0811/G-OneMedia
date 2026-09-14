@@ -27,7 +27,11 @@ app.use(cors({
     if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) {
       return callback(null, true)
     }
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin)) {
+    if (
+      allowedOrigins.indexOf(origin) !== -1 ||
+      allowedOrigins.includes(origin) ||
+      /\.vercel\.app$/i.test(origin)
+    ) {
       return callback(null, true)
     } else {
       return callback(new Error('Not allowed by CORS'))
