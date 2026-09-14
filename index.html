@@ -2,6 +2,16 @@
 <html lang="en" data-theme="dark">
 
 <head>
+  <!-- Forward visitors from GitHub Pages backup to primary Vercel site -->
+  <script type="text/javascript">
+    (function () {
+      if (window.location.hostname === 'ani0811.github.io' && !window.location.search.includes('nobounce')) {
+        var cleanPath = window.location.pathname.replace(/^\/G-OneMedia/, '');
+        if (!cleanPath.startsWith('/')) cleanPath = '/' + cleanPath;
+        window.location.replace('https://g-one-media.vercel.app' + cleanPath + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="%BASE_URL%G-One-favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

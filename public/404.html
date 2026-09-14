@@ -4,11 +4,16 @@
     <meta charset="utf-8">
     <title>G-One Media</title>
     <script type="text/javascript">
+      // Forward visitors from GitHub Pages backup to primary Vercel site
+      if (window.location.hostname === 'ani0811.github.io' && !window.location.search.includes('nobounce')) {
+        var cleanPath = window.location.pathname.replace(/^\/G-OneMedia/, '');
+        if (!cleanPath.startsWith('/')) cleanPath = '/' + cleanPath;
+        window.location.replace('https://g-one-media.vercel.app' + cleanPath + window.location.search + window.location.hash);
+      }
+
       // Single Page Apps for GitHub Pages
       // MIT License
       // https://github.com/rafgraph/spa-github-pages
-      // This script takes the current url and converts the path and query string into query parameters,
-      // and then redirects to the index.html page (which will parse them and restore the original URL)
       var pathSegmentsToKeep = 1;
 
       var l = window.location;
