@@ -64,6 +64,7 @@ const FounderProfile = lazyWithRetry(() => import('./components/pages/FounderPro
 const ResourceVault = lazyWithRetry(() => import('./components/pages/ResourceVault'))
 const AuditWizard = lazyWithRetry(() => import('./components/pages/AuditWizard'))
 const AdminLogin = lazyWithRetry(() => import('./components/pages/admin/AdminLogin'))
+const AdminResetPassword = lazyWithRetry(() => import('./components/pages/admin/AdminResetPassword'))
 const AdminDashboard = lazyWithRetry(() => import('./components/pages/admin/AdminDashboard'))
 
 // Lazy loaded home sections
@@ -208,6 +209,7 @@ export default function App() {
                 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<AdminLogin />} />
+                <Route path="/admin/reset-password" element={<AdminResetPassword />} />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 </Route>
