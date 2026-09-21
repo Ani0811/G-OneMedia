@@ -81,9 +81,11 @@ const defaultFounders = {
       { name: 'Instagram', url: 'https://www.instagram.com/vasudev.sharma5/' },
     ],
     stats: [
+      /*
       { value: '50+', label: 'Projects Managed' },
       { value: '4+', label: 'Years Experience' },
       { value: '1M+', label: 'Reach Generated' },
+      */
     ],
   },
 }

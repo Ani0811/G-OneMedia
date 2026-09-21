@@ -50,14 +50,6 @@ function SoloFounderSpotlight({ member, navigate }) {
     ? member.image
     : `${import.meta.env.BASE_URL}${member.image}`.replace(/\/+/g, '/')
 
-  const stats = (Array.isArray(member.stats) && member.stats.length > 0)
-    ? member.stats
-    : [
-        { value: '50+', label: 'Projects Delivered' },
-        { value: '1M+', label: 'Reach Generated' },
-        { value: '4+ Yrs', label: 'Domain Mastery' }
-      ]
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -138,7 +130,7 @@ function SoloFounderSpotlight({ member, navigate }) {
           </div>
         </div>
 
-        {/* Right Column: Editorial Bio, Stats & CTAs */}
+        {/* Right Column: Editorial Bio, Focus Pillars & CTAs */}
         <div className="lg:col-span-7 flex flex-col justify-center text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 text-[10px] font-black uppercase tracking-[0.25em] w-fit mb-4">
             <Sparkles size={12} />
@@ -154,22 +146,14 @@ function SoloFounderSpotlight({ member, navigate }) {
           </p>
 
           <p className="text-sm sm:text-base leading-relaxed text-[var(--text-secondary)] mb-6 font-normal">
-            Passionate about transforming ambitious brand visions into high-converting digital platforms and visual narratives. Over the past 4+ years, Vasudev has collaborated with creators, founders, and businesses to engineer digital ecosystems that build undeniable authority and drive measurable growth.
+            Dedicated to helping emerging brands, creators, and modern businesses establish a distinctive digital presence. Combining cinematic visual storytelling with bespoke, conversion-focused web design engineered to give your brand a lasting competitive edge.
           </p>
 
-          {/* Impact Stats Grid */}
+          {/* Stats Box Commented Out for new agency stage:
           <div className="grid grid-cols-3 gap-3 sm:gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/5 mb-6">
-            {stats.map((st, i) => (
-              <div key={i} className={`text-left ${i === 1 ? 'border-x border-white/5 px-3 sm:px-4' : i === 2 ? 'pl-1 sm:pl-2' : ''}`}>
-                <div className={`text-2xl sm:text-3xl font-black ${i === 0 ? 'text-white' : i === 1 ? 'text-fuchsia-400' : 'text-cyan-400'}`}>
-                  {st.value}
-                </div>
-                <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mt-0.5">
-                  {st.label}
-                </div>
-              </div>
-            ))}
+            ...
           </div>
+          */}
 
           {/* Core Pillars Pills */}
           <div className="flex flex-wrap gap-2 mb-8">
