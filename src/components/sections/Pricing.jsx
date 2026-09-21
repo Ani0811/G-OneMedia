@@ -14,32 +14,52 @@ const defaultPricingData = {
       {
         id: 1,
         name: 'Starter', icon: Sparkles,
-        originalPrice: { INR: '₹10,999', USD: '$139', EUR: '€129' },
-        price: { INR: '₹5,999', USD: '$79', EUR: '€75' },
+        originalPrice: { INR: '₹32,999', USD: '$409', EUR: '€379' },
+        price: { INR: '₹10,999', USD: '$139', EUR: '€129' },
         period: '/ project',
         duration: '3 - 5 days',
-        description: 'Perfect for local businesses',
-        features: ['Up to 5 Pages', 'Responsive Design', 'Contact Form', 'Basic SEO']
+        description: 'Perfect for local businesses and personal portfolios',
+        features: [
+          'Up to 5–7 Pages',
+          'Modern UI/UX Design',
+          'Mobile, Tablet & Desktop Responsive',
+          'Basic SEO Setup',
+          'Social Media Integration',
+          'Speed & Performance Optimization',
+          'Domain & Hosting Setup Assistance',
+          'SSL & Security Setup',
+          'Website Deployment',
+          'Ongoing Basic Support & Maintenance'
+        ]
       },
       {
         id: 2,
-        name: 'Growth', icon: Zap,
-        originalPrice: { INR: '₹22,999', USD: '$279', EUR: '€259' },
-        price: { INR: '₹12,999', USD: '$169', EUR: '€159' },
+        name: 'ADVANCED SMART WEBSITE', icon: Zap,
+        originalPrice: { INR: '₹48,999', USD: '$599', EUR: '€549' },
+        price: { INR: '₹22,999', USD: '$289', EUR: '€269' },
         period: '/ project',
         duration: '1 - 2 weeks',
-        description: 'For scaling companies',
-        features: ['Custom UI Design', 'CMS Integration', 'Advanced Animations', 'Performance Optimization']
-      },
-      {
-        id: 3,
-        name: 'Premium', icon: Building2,
-        originalPrice: { INR: '₹42,999', USD: '$529', EUR: '€489' },
-        price: { INR: '₹23,999', USD: '$299', EUR: '€279' },
-        period: '/ project',
-        duration: '3 - 4 weeks',
-        description: 'Enterprise level solutions',
-        features: ['Advanced Integrations', 'Custom Dashboards', 'Workflow Automations', 'AI Features']
+        description: 'For businesses that need more than a simple website and want to automate customer interaction and business processes.',
+        features: [
+          'Up to 10–15 Dynamic Pages',
+          'Modern UI/UX Design + Advanced Animations',
+          'Mobile, Tablet & Desktop Responsive',
+          'Advanced Search Engine Optimization (SEO)',
+          'Social Media & Channel Integration',
+          'Speed & Performance Optimization',
+          'Domain & Hosting Setup Assistance',
+          'SSL & Security Setup',
+          'Website Deployment',
+          'Ongoing Priority Support & Maintenance',
+          'Dynamic Website Functionality & Database',
+          'CMS Integration (Content Management)',
+          'WhatsApp / Chatbot Integration',
+          'Payment Gateway Integration (if required)',
+          'Automated Enquiry & Lead Capture Management',
+          'Email Notifications & Workflow Automation',
+          'Custom API Automation & Integrations',
+          'Analytics & Conversion Tracking'
+        ]
       }
     ]
   }
@@ -332,15 +352,39 @@ export default function Pricing({ onScheduleCall }) {
 
                   <p className="text-sm mb-8 font-medium text-[var(--text-secondary)]">{plan.description}</p>
 
-                  <div className="space-y-4 mb-10 grow">
-                    {(plan.features || []).map((feature) => (
-                      <div key={feature} className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                        <div className="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/30 transition-colors">
-                          <Check size={12} className="text-cyan-400" />
+                  <div className="space-y-3.5 mb-10 grow">
+                    {(plan.features || []).map((feature, idx) => {
+                      const isExtra = idx >= 10;
+                      return (
+                        <div key={`${feature}-${idx}`}>
+                          {idx === 10 && (
+                            <div className="pt-4 pb-2 my-2 border-t border-cyan-500/20">
+                              <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                                <Sparkles size={11} className="text-cyan-400 animate-pulse" />
+                                <span>Plus Extra Advanced Features</span>
+                              </div>
+                            </div>
+                          )}
+                          <div className={`flex items-center gap-3 text-sm transition-colors ${
+                            isExtra ? 'text-cyan-100 font-medium' : 'text-[var(--text-secondary)]'
+                          }`}>
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                              isExtra 
+                                ? 'bg-cyan-400/25 ring-1 ring-cyan-400/40 text-cyan-300' 
+                                : 'bg-cyan-500/20 group-hover:bg-cyan-500/30 text-cyan-400'
+                            }`}>
+                              <Check size={12} />
+                            </div>
+                            <span className="flex-1">{feature}</span>
+                            {isExtra && (
+                              <span className="text-[9px] font-extrabold uppercase tracking-widest text-cyan-300 bg-cyan-400/10 px-2 py-0.5 rounded-full border border-cyan-400/20 shrink-0">
+                                Extra
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        {feature}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   <button

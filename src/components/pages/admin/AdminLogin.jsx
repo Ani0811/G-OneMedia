@@ -68,7 +68,12 @@ export default function AdminLogin() {
 
       setSuccessMessage('Password recovery link sent! Please check your inbox and follow the instructions.')
     } catch (err) {
-      setError(err.message || 'Failed to send recovery email. Please check the email address and try again.')
+      const errMsg = err.message || ''
+      if (errMsg.toLowerCase().includes('rate limit')) {
+        setError('Email rate limit exceeded: Supabase imposes a temporary cooldown (3–4 emails/hr) on auth requests. Please check your inbox/spam for earlier emails or wait a few minutes before trying again.')
+      } else {
+        setError(errMsg || 'Failed to send recovery email. Please check the email address and try again.')
+      }
     } finally {
       setLoading(false)
     }
