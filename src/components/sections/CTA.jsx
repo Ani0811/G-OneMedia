@@ -4,7 +4,7 @@ import { Send, MessageCircle, CheckCircle, AlertCircle, Loader, Instagram, Linke
 
 // Replace with actual WhatsApp numbers in international format (no + or spaces)
 const FOUNDERS_WHATSAPP = {
-  anirudha: '919875417275',
+  // anirudha: '919875417275',
   vasudev: '918017790952'
 }
 

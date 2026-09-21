@@ -30,6 +30,7 @@ const getSocialIcon = (name) => {
 }
 
 const defaultFounders = {
+  /*
   anirudha: {
     slug: 'anirudha',
     name: 'Anirudha Basu Thakur',
@@ -57,6 +58,7 @@ const defaultFounders = {
       { value: '90+', label: 'Avg Lighthouse Score' },
     ],
   },
+  */
   vasudev: {
     slug: 'vasudev',
     name: 'Vasudev Sharma',
@@ -87,6 +89,7 @@ const defaultFounders = {
 }
 
 const defaultTeamList = [
+  /*
   {
     slug: 'anirudha',
     name: 'Anirudha Basu Thakur',
@@ -94,6 +97,7 @@ const defaultTeamList = [
     image: 'Anirudha.jpeg',
     accent_color: 'cyan'
   },
+  */
   {
     slug: 'vasudev',
     name: 'Vasudev Sharma',
@@ -112,6 +116,12 @@ export default function FounderProfile() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    // If navigating to Anirudha while details are commented out, redirect to Vasudev
+    if (slug === 'anirudha') {
+      navigate('/about/vasudev', { replace: true })
+      return
+    }
+
     async function loadData() {
       try {
         // Fetch all active team members for navigation
@@ -122,7 +132,9 @@ export default function FounderProfile() {
           .order('sort_order', { ascending: true })
 
         if (roster && roster.length > 0) {
-          setAllMembers(roster)
+          // Temporarily filter out Anirudha to keep Vasudev Sharma central
+          const filteredRoster = roster.filter((m) => m.slug !== 'anirudha')
+          setAllMembers(filteredRoster.length > 0 ? filteredRoster : defaultTeamList)
         }
 
         // Fetch current member details

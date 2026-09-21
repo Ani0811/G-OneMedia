@@ -38,11 +38,11 @@
   </url>
 
   <!-- Founder Profiles -->
-  <url>
+  <!-- <url>
     <loc>https://g-one-media.vercel.app/about/anirudha</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
+  </url> -->
   <url>
     <loc>https://g-one-media.vercel.app/about/vasudev</loc>
     <changefreq>monthly</changefreq>

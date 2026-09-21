@@ -162,7 +162,8 @@ export default function Footer() {
           <div className="flex flex-col gap-4 col-span-2 md:col-span-1 lg:col-span-1">
             <h4 className="font-bold mb-2 uppercase tracking-widest text-base">Connect</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-              <a 
+              {/* Chat with Anirudha (temporarily commented out) */}
+              {/* <a 
                 href="https://wa.me/919875417275" 
                 target="_blank" 
                 rel="noopener noreferrer"
@@ -173,7 +174,7 @@ export default function Footer() {
                   <MessageCircle size={15} className="text-cyan-400" />
                 </div>
                 <span className="font-medium tracking-wide">Chat with Anirudha</span>
-              </a>
+              </a> */}
               <a 
                 href="https://wa.me/918017790952" 
                 target="_blank" 
