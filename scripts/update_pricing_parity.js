@@ -27,15 +27,19 @@ async function run() {
 
     const advancedFeatures = JSON.stringify([
       'Up to 10–15 Dynamic Pages',
-      'Advanced Animations & Micro-Interactions',
-      'Dynamic Website Functionality & Database',
-      'CMS Integration (Content Management)',
+      'Modern UI/UX Design & Advanced Animations',
+      'Mobile, Tablet & Desktop Responsive',
+      'Advanced SEO Setup',
+      'Social Media Integration',
+      'Speed & Performance Optimization',
+      'Domain & Hosting Setup Assistance',
+      'SSL / Security Setup',
+      'Website Deployment',
+      'Priority Support & Maintenance',
+      'Dynamic Website Functionality & CMS',
       'WhatsApp / Chatbot Integration',
-      'Payment Gateway Integration (if required)',
-      'Automated Enquiry & Lead Capture Management',
-      'Email Notifications & Workflow Automation',
-      'Custom API Automation & Integrations',
-      'Advanced SEO, Analytics & Conversion Tracking'
+      'Payment Gateway Integration',
+      'Lead Capture & Workflow Automation'
     ]);
 
     const res1 = await pool.query(
