@@ -66,11 +66,13 @@ export default function AdminLogin() {
         throw resetError
       }
 
-      setSuccessMessage('Password recovery link sent! Please check your inbox and follow the instructions.')
+      setSuccessMessage(
+        'Password recovery link dispatched! If this account is an authorized administrator, please check your Inbox and Spam/Junk folder. Follow the link to choose your new password.'
+      )
     } catch (err) {
       const errMsg = err.message || ''
       if (errMsg.toLowerCase().includes('rate limit')) {
-        setError('Email rate limit exceeded: Supabase imposes a temporary cooldown (3–4 emails/hr) on auth requests. Please check your inbox/spam for earlier emails or wait a few minutes before trying again.')
+        setError('Email rate limit exceeded: Supabase imposes an hourly cooldown on auth requests. Please check your spam folder for previous emails or contact the Super Admin to reset your password.')
       } else {
         setError(errMsg || 'Failed to send recovery email. Please check the email address and try again.')
       }
@@ -243,6 +245,9 @@ export default function AdminLogin() {
                     className="w-full pl-11 pr-4 py-3.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-blue)] focus:ring-1 focus:ring-[var(--accent-blue)] transition-all"
                   />
                 </div>
+                <p className="text-[11px] text-[var(--text-muted)] leading-relaxed px-1">
+                  Note: A secure recovery link will be sent (passwords are never sent in plain text). Only emails already added by a Super Admin can receive recovery links.
+                </p>
               </div>
 
               <button

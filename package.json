@@ -13,7 +13,9 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "create-admin": "node scripts/create_admin.js",
+    "create-admin": "node scripts/manage_admin.js create",
+    "reset-admin": "node scripts/manage_admin.js reset",
+    "manage-admin": "node scripts/manage_admin.js",
     "seed": "node scripts/seed_database.js"
   },
   "dependencies": {
