@@ -71,10 +71,27 @@ export default function ReviewsManager() {
     setSaving(true)
 
     try {
-      const { error } = await supabase.from('reviews').insert([formData])
+      const payload = {
+        name: formData.name.trim(),
+        role: formData.role?.trim() || null,
+        rating: formData.rating || 5,
+        review: formData.review.trim(),
+        image_url: formData.image_url?.trim() || null,
+        is_approved: formData.is_approved ?? true,
+      }
+
+      const { error } = await supabase.from('reviews').insert([payload])
       if (error) throw error
 
       setIsModalOpen(false)
+      setFormData({
+        name: '',
+        role: '',
+        rating: 5,
+        review: '',
+        image_url: '',
+        is_approved: true,
+      })
       fetchReviews()
     } catch (err) {
       console.error('Error creating review:', err)
@@ -288,6 +305,19 @@ export default function ReviewsManager() {
                     placeholder="Enter the client testimonial text here..."
                     className="w-full px-3.5 py-2.5 bg-black/20 border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] outline-none focus:border-cyan-400 resize-none"
                   />
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="checkbox"
+                    id="is_approved_check"
+                    checked={formData.is_approved}
+                    onChange={(e) => setFormData({ ...formData, is_approved: e.target.checked })}
+                    className="w-4 h-4 rounded text-cyan-400 focus:ring-cyan-400 bg-black/20 border-white/10 cursor-pointer"
+                  />
+                  <label htmlFor="is_approved_check" className="text-xs text-[var(--text-secondary)] font-medium cursor-pointer">
+                    Approve immediately and display publicly on the website
+                  </label>
                 </div>
 
                 <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10 shrink-0">

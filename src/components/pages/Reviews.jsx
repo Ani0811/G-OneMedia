@@ -17,6 +17,7 @@ const REVIEWS_PER_PAGE = 6
 function LazyImage({ src, alt, className, fallback }) {
   const [loaded, setLoaded] = useState(false)
   const [inView, setInView] = useState(false)
+  const [error, setError] = useState(false)
   const imgRef = useRef(null)
 
   useEffect(() => {
@@ -30,7 +31,7 @@ function LazyImage({ src, alt, className, fallback }) {
 
   return (
     <div ref={imgRef} className={className + ' overflow-hidden'}>
-      {inView && src ? (
+      {inView && src && !error ? (
         <>
           {!loaded && (
             <div className="w-full h-full animate-pulse rounded-full" style={{ background: 'var(--bg-secondary)' }} />
@@ -39,6 +40,7 @@ function LazyImage({ src, alt, className, fallback }) {
             src={src}
             alt={alt}
             onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
             className={`w-full h-full object-cover rounded-full transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           />
         </>
@@ -48,15 +50,10 @@ function LazyImage({ src, alt, className, fallback }) {
           {fallback}
         </div>
       )}
-      {!src && (
-        <div className="w-full h-full flex items-center justify-center rounded-full text-lg font-bold"
-          style={{ background: 'var(--bg-secondary)', color: 'var(--accent-blue)' }}>
-          {fallback}
-        </div>
-      )}
     </div>
   )
 }
+
 
 // ── Star Rating input ─────────────────────────────────────────────────────────
 function StarRatingInput({ value, onChange }) {
