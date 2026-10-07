@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Star, ArrowRight, ShieldCheck, Quote, Sparkles, MessageSquarePlus, MessageSquare } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Star, ArrowRight, ShieldCheck, Quote, Sparkles, MessageSquarePlus, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,6 +21,8 @@ const defaultFeaturedReview = {
   is_approved: true,
 }
 
+const REVIEWS_PER_PAGE = 3
+
 function StarDisplay({ rating }) {
   return (
     <div className="flex gap-1">
@@ -37,7 +39,7 @@ function StarDisplay({ rating }) {
 
 function SkeletonCard() {
   return (
-    <div className="glass-card p-8 animate-pulse flex flex-col h-full rounded-2xl border border-[var(--border-subtle)]">
+    <div className="glass-card p-8 animate-pulse flex flex-col h-full rounded-2xl border border-[var(--border-subtle)] w-full">
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-1">
           {[...Array(5)].map((_, i) => (
@@ -90,6 +92,7 @@ function TestimonialAvatar({ imageUrl, name, index }) {
 export default function Testimonials() {
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
   const [hoverRating, setHoverRating] = useState(0)
   const navigate = useNavigate()
 
@@ -104,7 +107,6 @@ export default function Testimonials() {
           .eq('is_approved', true)
           .order('rating', { ascending: false })
           .order('created_at', { ascending: false })
-          .limit(3)
 
         if (!isMounted) return
 
@@ -133,6 +135,29 @@ export default function Testimonials() {
     navigate(`/reviews?write=true&rating=${rating}`)
   }
 
+  // Pagination calculation
+  const totalPages = Math.ceil(reviews.length / REVIEWS_PER_PAGE)
+  const safeCurrentPage = Math.min(currentPage, totalPages || 1)
+  const startIndex = (safeCurrentPage - 1) * REVIEWS_PER_PAGE
+  const displayedReviews = reviews.slice(startIndex, startIndex + REVIEWS_PER_PAGE)
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+    const element = document.getElementById('testimonials')
+    if (element) {
+      const yOffset = -80
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
+
+  // Dynamic container class: 1 card -> centered max-w-xl / max-w-2xl, 2 cards -> 2-col max-w-4xl, 3 cards -> 3-col max-w-7xl
+  const getContainerLayoutClass = (count) => {
+    if (count === 1) return 'flex justify-center max-w-xl lg:max-w-2xl mx-auto w-full'
+    if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto w-full'
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full'
+  }
+
   return (
     <section id="testimonials" className="relative overflow-hidden py-24 bg-[var(--bg-secondary)]">
       {/* Background Ambient Glows */}
@@ -153,67 +178,134 @@ export default function Testimonials() {
           </p>
         </div>
 
-        {/* Testimonials Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 items-stretch">
-          {loading ? (
-            [...Array(3)].map((_, i) => <SkeletonCard key={i} />)
-          ) : reviews.length === 0 ? (
-            <div className="col-span-full p-12 text-center rounded-2xl glass-card border border-[var(--border-subtle)]">
-              <p className="text-base text-[var(--text-muted)] mb-4">No reviews yet.</p>
+        {/* Testimonials Cards Container */}
+        {loading ? (
+          <div className="flex justify-center max-w-xl mx-auto w-full mb-16">
+            <SkeletonCard />
+          </div>
+        ) : displayedReviews.length === 0 ? (
+          <div className="max-w-xl mx-auto p-12 text-center rounded-2xl glass-card border border-[var(--border-subtle)] mb-16">
+            <p className="text-base text-[var(--text-muted)] mb-4">No reviews yet.</p>
+            <button
+              onClick={() => navigate('/reviews?write=true')}
+              className="btn-primary text-sm py-2 px-5 inline-flex items-center gap-2"
+            >
+              Be the first to leave a review <ArrowRight size={14} />
+            </button>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`testimonials-page-${safeCurrentPage}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35 }}
+              className={`${getContainerLayoutClass(displayedReviews.length)} mb-12 items-stretch`}
+            >
+              {displayedReviews.map((t, index) => {
+                const isSingle = displayedReviews.length === 1
+                return (
+                  <motion.div
+                    key={t.id || index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.08, duration: 0.4 }}
+                    className={`glass-card rounded-2xl relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300 flex flex-col h-full border border-white/5 ${
+                      isSingle ? 'w-full p-8 sm:p-10' : 'w-full p-8'
+                    }`}
+                  >
+                    {/* Background Quote Watermark */}
+                    <div className="absolute top-6 right-6 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
+                      <Quote size={44} />
+                    </div>
+
+                    {/* Rating & Verified Badge */}
+                    <div className="mb-5 flex items-center justify-between relative z-10">
+                      <StarDisplay rating={t.rating || 5} />
+                      <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/90 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                        <ShieldCheck size={11} className="text-emerald-400" />
+                        Verified Client
+                      </span>
+                    </div>
+
+                    {/* Review Quote */}
+                    <p
+                      className={`leading-relaxed mb-6 italic relative z-10 font-medium flex-1 ${
+                        isSingle ? 'text-base sm:text-lg' : 'text-sm sm:text-base'
+                      }`}
+                      style={{ color: 'var(--text-primary)' }}
+                    >
+                      "{t.review}"
+                    </p>
+
+                    {/* Client Profile Info */}
+                    <div className="flex items-center gap-3.5 relative z-10 pt-4 border-t border-white/5 mt-auto">
+                      <TestimonialAvatar imageUrl={t.image_url} name={t.name} index={index} />
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-sm truncate" style={{ color: 'var(--text-primary)' }}>
+                          {t.name}
+                        </h4>
+                        {t.role && (
+                          <p className="text-[11px] text-[var(--text-muted)] line-clamp-1 mt-0.5">
+                            {t.role}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </motion.div>
+          </AnimatePresence>
+        )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2.5 mb-14">
+            <button
+              onClick={() => handlePageChange(safeCurrentPage - 1)}
+              disabled={safeCurrentPage === 1}
+              className={`w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center transition-all duration-300 ${
+                safeCurrentPage === 1
+                  ? 'opacity-30 cursor-not-allowed bg-white/[0.02]'
+                  : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 cursor-pointer text-white'
+              }`}
+              style={{ color: safeCurrentPage === 1 ? 'var(--text-muted)' : 'var(--text-primary)' }}
+              aria-label="Previous Page"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
-                onClick={() => navigate('/reviews?write=true')}
-                className="btn-primary text-sm py-2 px-5 inline-flex items-center gap-2"
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`w-10 h-10 rounded-xl text-xs font-black transition-all duration-300 border cursor-pointer ${
+                  safeCurrentPage === page
+                    ? 'bg-cyan-400 border-cyan-400 text-black shadow-[0_0_20px_rgba(0,240,255,0.4)]'
+                    : 'border-white/10 text-[var(--text-muted)] hover:border-white/20 hover:text-white hover:scale-105 hover:bg-white/5'
+                }`}
               >
-                Be the first to leave a review <ArrowRight size={14} />
+                {page}
               </button>
-            </div>
-          ) : (
-            reviews.map((t, index) => (
-              <motion.div
-                key={t.id || index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="glass-card p-8 rounded-2xl relative group hover:shadow-[0_8px_30px_rgba(0,240,255,0.15)] transition-all duration-300 flex flex-col h-full border border-white/5"
-              >
-                {/* Background Quote Watermark */}
-                <div className="absolute top-6 right-6 text-cyan-400/5 group-hover:text-cyan-400/10 transition-colors pointer-events-none">
-                  <Quote size={44} />
-                </div>
+            ))}
 
-                {/* Rating & Verified Badge */}
-                <div className="mb-5 flex items-center justify-between relative z-10">
-                  <StarDisplay rating={t.rating || 5} />
-                  <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-emerald-400/90 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                    <ShieldCheck size={11} className="text-emerald-400" />
-                    Verified Client
-                  </span>
-                </div>
-
-                {/* Review Quote */}
-                <p className="text-sm sm:text-base leading-relaxed mb-6 italic relative z-10 font-medium flex-1" style={{ color: 'var(--text-primary)' }}>
-                  "{t.review}"
-                </p>
-
-                {/* Client Profile Info */}
-                <div className="flex items-center gap-3.5 relative z-10 pt-4 border-t border-white/5 mt-auto">
-                  <TestimonialAvatar imageUrl={t.image_url} name={t.name} index={index} />
-                  <div className="min-w-0">
-                    <h4 className="font-bold text-sm truncate" style={{ color: 'var(--text-primary)' }}>
-                      {t.name}
-                    </h4>
-                    {t.role && (
-                      <p className="text-[11px] text-[var(--text-muted)] line-clamp-1 mt-0.5">
-                        {t.role}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))
-          )}
-        </div>
+            <button
+              onClick={() => handlePageChange(safeCurrentPage + 1)}
+              disabled={safeCurrentPage === totalPages}
+              className={`w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center transition-all duration-300 ${
+                safeCurrentPage === totalPages
+                  ? 'opacity-30 cursor-not-allowed bg-white/[0.02]'
+                  : 'hover:border-cyan-400 hover:text-cyan-400 hover:scale-105 hover:bg-cyan-400/5 cursor-pointer text-white'
+              }`}
+              style={{ color: safeCurrentPage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)' }}
+              aria-label="Next Page"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
 
         {/* Bottom Interactive Bar & CTA */}
         <motion.div
@@ -279,4 +371,3 @@ export default function Testimonials() {
     </section>
   )
 }
-
