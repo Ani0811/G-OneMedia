@@ -11,16 +11,6 @@ const AVATAR_GRADIENTS = [
   'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
 ]
 
-const defaultFeaturedReview = {
-  id: 4,
-  name: 'Adarsh Pillai',
-  role: 'Co-founder @ Dominating YouTube | Scaling YouTube Channels into Passive Income Streams',
-  rating: 5,
-  review: 'It was a great experience working with G-One media agency. The website was just like I had expected and my instructions and references were followed precisely.\n\nThe G-One media team also went a step ahead to include API automation on my website and all of this at a special discounted package.\n\nReally reliable guys who know what they are doing.',
-  image_url: '/adarsh-pillai.png',
-  is_approved: true,
-}
-
 const REVIEWS_PER_PAGE = 3
 
 function StarDisplay({ rating }) {
@@ -110,14 +100,14 @@ export default function Testimonials() {
 
         if (!isMounted) return
 
-        if (!error && data && data.length > 0) {
+        if (!error && data) {
           setReviews(data)
         } else {
-          setReviews([defaultFeaturedReview])
+          setReviews([])
         }
       } catch {
         if (isMounted) {
-          setReviews([defaultFeaturedReview])
+          setReviews([])
         }
       } finally {
         if (isMounted) setLoading(false)
