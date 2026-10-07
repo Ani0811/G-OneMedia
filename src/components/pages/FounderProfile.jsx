@@ -80,13 +80,7 @@ const defaultFounders = {
       { name: 'LinkedIn', url: 'https://linkedin.com/in/vasudev-sharma-a8b4ab22a' },
       { name: 'Instagram', url: 'https://www.instagram.com/vasudev.sharma5/' },
     ],
-    stats: [
-      /*
-      { value: '50+', label: 'Projects Managed' },
-      { value: '4+', label: 'Years Experience' },
-      { value: '1M+', label: 'Reach Generated' },
-      */
-    ],
+    stats: [],
   },
 }
 
