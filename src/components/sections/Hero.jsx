@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Instagram, Linkedin, Youtube, Download, Calendar } from 'lucide-react'
+import { ArrowRight, Instagram, Linkedin, Youtube, Download, Calendar, Sparkles } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 
 export default function Hero({ onScheduleCall }) {
@@ -27,6 +27,11 @@ export default function Hero({ onScheduleCall }) {
     fetchHero()
   }, [])
 
+  // Default to founder visual (Vasudev.jpeg), unless a custom non-workspace image is configured
+  const founderImage = (heroData.image_url && !heroData.image_url.includes('workspace'))
+    ? (heroData.image_url.startsWith('http') ? heroData.image_url : `${import.meta.env.BASE_URL}${heroData.image_url}`.replace(/\/+/g, '/'))
+    : `${import.meta.env.BASE_URL}Vasudev.jpeg`.replace(/\/+/g, '/')
+
   return (
     <section className="relative overflow-hidden min-h-[82vh] lg:min-h-[85vh] flex items-center pt-24 pb-4">
       {/* Background Ambient Glow */}
@@ -35,29 +40,71 @@ export default function Hero({ onScheduleCall }) {
 
       <div className="container-custom relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
-          {/* Visual - First on Mobile */}
+          {/* Visual - Founder Showcase */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative lg:ml-auto max-w-xl w-full order-1 lg:order-2 mt-8 sm:mt-12 lg:mt-0"
+            className="relative lg:ml-auto max-w-lg w-full order-1 lg:order-2 mt-8 sm:mt-12 lg:mt-0"
           >
             <div 
-              className="relative z-10 rounded-[48px] overflow-hidden shadow-2xl shadow-cyan-500/20 p-2.5 transition-all duration-700 hover:shadow-cyan-500/30 group" 
+              className="relative z-10 rounded-[44px] sm:rounded-[48px] overflow-hidden shadow-2xl shadow-cyan-500/20 p-2 sm:p-2.5 transition-all duration-700 hover:shadow-cyan-500/30 group" 
               style={{ background: 'var(--bg-glass)', border: '1px solid var(--border-subtle)' }}
             >
-              <div className="rounded-[40px] overflow-hidden aspect-4/3 relative bg-slate-950/40">
+              <div className="rounded-[36px] sm:rounded-[40px] overflow-hidden aspect-[4/4.8] lg:aspect-[4/5] relative bg-slate-950/60">
                 <img
-                  src={heroData.image_url || `${import.meta.env.BASE_URL}hero-agency-workspace.jpg`.replace(/\/+/g, '/')}
-                  alt="G-One Media Workspace"
-                  className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-out"
+                  src={founderImage}
+                  alt="Vasudev Sharma — Founder of G-One Media"
+                  className="w-full h-full object-cover profile-crop opacity-95 group-hover:scale-105 transition-transform duration-700 ease-out"
+                  onError={(e) => {
+                    e.target.src = `${import.meta.env.BASE_URL}Vasudev.jpeg`.replace(/\/+/g, '/')
+                  }}
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Gradient vignette overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/15 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/25 pointer-events-none" />
+
+                {/* Top Badge: Role / Availability */}
+                <div className="absolute top-4 left-4 sm:top-5 sm:left-5 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/15 flex items-center gap-2 shadow-lg z-20">
+                  <span className="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white">Agency Owner & Director</span>
+                </div>
+
+                {/* Top-Right Badge: Creative tag */}
+                <div className="absolute top-4 right-4 sm:top-5 sm:right-5 px-3 py-1.5 rounded-full bg-cyan-500/10 backdrop-blur-md border border-cyan-400/25 flex items-center gap-1.5 shadow-lg z-20">
+                  <Sparkles size={11} className="text-cyan-400" />
+                  <span className="text-[10px] font-bold text-cyan-300 uppercase tracking-wider">Creative Vision</span>
+                </div>
+
+                {/* Bottom Overlay Card: Founder Info + One-Click Bio Link */}
+                <Link
+                  to="/about/vasudev"
+                  className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-2xl transition-all duration-300 hover:border-fuchsia-400/60 group/founderCard z-20 flex items-center justify-between gap-3"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-white font-bold text-sm sm:text-base tracking-tight truncate group-hover/founderCard:text-fuchsia-300 transition-colors">
+                        Vasudev Sharma
+                      </h3>
+                      <span className="text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 shrink-0">
+                        Founder
+                      </span>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] line-clamp-1">
+                      Directing bespoke visual narratives & high-converting builds
+                    </p>
+                  </div>
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/10 flex items-center justify-center text-white group-hover/founderCard:bg-fuchsia-500 group-hover/founderCard:text-black transition-all shrink-0">
+                    <ArrowRight size={15} className="group-hover/founderCard:translate-x-0.5 transition-transform" />
+                  </div>
+                </Link>
               </div>
             </div>
 
             {/* Decorative elements */}
-            <div className="absolute -inset-8 bg-fuchsia-500/20 blur-[100px] -z-10 opacity-50 animate-pulse" />
+            <div className="absolute -inset-8 bg-fuchsia-500/20 blur-[100px] -z-10 opacity-60 animate-pulse" />
+            <div className="absolute top-1/2 -right-8 w-40 h-40 bg-cyan-500/20 blur-[80px] -z-10 pointer-events-none" />
           </motion.div>
 
           {/* Content - Second on Mobile */}
